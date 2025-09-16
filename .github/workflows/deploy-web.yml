@@ -85,7 +85,7 @@ jobs:
       # ===== Ogur (Next.js) =====
       - name: Install deps (Next)
         working-directory: ./ogur-next
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build static (Next → out/)
         working-directory: ./ogur-next
