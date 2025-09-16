@@ -13,7 +13,7 @@ build/
 .next/cache/
 out/
 
-# Env (trzymaj tylko przykłady)
+# Env
 .env
 .env.*
 !.env.example

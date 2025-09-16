@@ -7,5 +7,3 @@ RUN if [ -f package-lock.json ]; then npm ci; \
     elif [ -f yarn.lock ]; then yarn --frozen-lockfile; else npm i; fi
 COPY . .
 RUN npm run build
-
-#
