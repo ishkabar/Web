@@ -1,0 +1,60 @@
+name: Deploy Web
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  BUILD_CMD: npm ci && npm run build
+  BUILD_DIR: dist
+  APP_DIR: /home/ubuntu/apps/web/ogur-next
+  COMPOSE_FILE: docker-compose.prod.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Build static
+        run: $BUILD_CMD
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p artifact/site
+          rsync -a --delete "$BUILD_DIR"/ artifact/site/
+
+      - name: Copy files to VPS (site + compose)
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -o StrictHostKeyChecking=no -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "mkdir -p $APP_DIR"
+          rsync -az -e "ssh -p $SSH_PORT" --delete artifact/site/ "$SSH_USER@$SSH_HOST:$APP_DIR/site/"
+          rsync -az -e "ssh -p $SSH_PORT" "$COMPOSE_FILE" "$SSH_USER@$SSH_HOST:$APP_DIR/$COMPOSE_FILE"
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_KEY:  ${{ secrets.SSH_KEY }}
+
+      - name: Compose up (Traefik deploy)
+        run: |
+          ssh -o StrictHostKeyChecking=no -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "\
+            cd $APP_DIR && \
+            docker compose -f $COMPOSE_FILE pull || true && \
+            docker compose -f $COMPOSE_FILE up -d \
+          "
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_KEY:  ${{ secrets.SSH_KEY }}
