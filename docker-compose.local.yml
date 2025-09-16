@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - --providers.docker
+      - --entrypoints.web.address=:8080
+    ports:
+      - "8080:8080"
+
+  portfolio:
+    build: ./portfolio-astro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portfolio.rule=PathPrefix(`/portfolio`)
+      - traefik.http.routers.portfolio.entrypoints=web
+      - traefik.http.middlewares.portfolio-strip.stripprefix.prefixes=/portfolio
+      - traefik.http.routers.portfolio.middlewares=portfolio-strip
+
+  ogur:
+    build: ./ogur-next
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    expose:
+      - "3000"
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.ogur.loadbalancer.server.port=3000
+      - traefik.http.routers.ogur.rule=PathPrefix(`/ogur`)
+      - traefik.http.routers.ogur.entrypoints=web
+      - traefik.http.middlewares.ogur-strip.stripprefix.prefixes=/ogur
+      - traefik.http.routers.ogur.middlewares=ogur-strip
