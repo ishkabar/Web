@@ -43,3 +43,8 @@ traefik/acme/**
 # Misc
 *.log
 logs/
+
+
+/portfolio/.next
+/portfolio/node_modules
+/portfolio/.env.local
