@@ -90,8 +90,8 @@ jobs:
       - name: Build static (Next → out/)
         working-directory: ./ogur-next
         run: |
-          npm run build
-          npm run export
+          pnpm build
+          pnpm export
 
       - name: Prepare remote dirs (ogur)
         uses: appleboy/ssh-action@v1.2.0
@@ -110,7 +110,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key_path: ${{ github.workspace }}/id_deploy
+          key: ${{ secrets.SSH_KEY }}
           source: "ogur-next/out/*"
           target: "/home/ubuntu/web/ogur/site"
           overwrite: true
@@ -121,7 +121,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key_path: ${{ github.workspace }}/id_deploy
+          key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/web/ogur
             docker compose -f docker-compose.app.yml up -d
