@@ -23,9 +23,9 @@ jobs:
 
       - name: Preflight – check secrets
         run: |
-          test -n "${{ secrets.SSH_HOST }}" || (echo "SSH_HOST missing" && exit 1)
-          test -n "${{ secrets.SSH_USER }}" || (echo "SSH_USER missing" && exit 1)
-          test -n "${{ secrets.SSH_KEY }}"  || (echo "SSH_KEY missing" && exit 1)
+          test -n "${{ secrets.SSH_HOST }}"     || (echo "SSH_HOST missing" && exit 1)
+          test -n "${{ secrets.SSH_USER }}"     || (echo "SSH_USER missing" && exit 1)
+          test -n "${{ secrets.SSH_KEY_B64 }}"  || (echo "SSH_KEY_B64 missing" && exit 1)
 
       # ===== Portfolio (Astro) =====
       - name: Install PNPM
@@ -44,8 +44,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}  # jeśli klucz ma hasło
           script: |
             mkdir -p /home/ubuntu/web/portfolio/site
             rm -rf /home/ubuntu/web/portfolio/site/*
@@ -55,8 +55,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "portfolio-astro/dist/*"
           target: "/home/ubuntu/web/portfolio/site"
           overwrite: true
@@ -66,8 +66,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /home/ubuntu/web/portfolio
             docker compose -f docker-compose.app.yml up -d
@@ -88,8 +88,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             mkdir -p /home/ubuntu/web/ogur/site
             rm -rf /home/ubuntu/web/ogur/site/*
@@ -99,8 +99,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "ogur-next/out/*"
           target: "/home/ubuntu/web/ogur/site"
           overwrite: true
@@ -110,8 +110,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          key_base64: ${{ secrets.SSH_KEY_B64 }}
+          # passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd /home/ubuntu/web/ogur
             docker compose -f docker-compose.app.yml up -d
