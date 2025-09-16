@@ -87,11 +87,10 @@ jobs:
         working-directory: ./ogur-next
         run: pnpm install --frozen-lockfile
 
-      - name: Build static (Next → out/)
+      - name: Build (Next)
         working-directory: ./ogur-next
-        run: |
-          npm run build
-          npm run export
+        run: npm run build
+
 
       - name: Prepare remote dirs (ogur)
         uses: appleboy/ssh-action@v1.2.0
