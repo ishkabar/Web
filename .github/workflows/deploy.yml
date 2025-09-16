@@ -4,11 +4,20 @@ on:
   push:
     branches: [ "main" ]
 
+# (optional but nice) avoid overlapping deploys if you push quickly
+concurrency:
+  group: deploy-web
+  cancel-in-progress: true
+
+# shared defaults
 env:
   BUILD_CMD: npm ci && npm run build
   BUILD_DIR: dist
   APP_DIR: /home/ubuntu/apps/web/ogur-next
   COMPOSE_FILE: docker-compose.prod.yml
+
+permissions:
+  contents: read
 
 jobs:
   deploy:
@@ -32,29 +41,43 @@ jobs:
           mkdir -p artifact/site
           rsync -a --delete "$BUILD_DIR"/ artifact/site/
 
-      - name: Copy files to VPS (site + compose)
+      - name: Setup SSH (key + known_hosts)
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -o StrictHostKeyChecking=no -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "mkdir -p $APP_DIR"
-          rsync -az -e "ssh -p $SSH_PORT" --delete artifact/site/ "$SSH_USER@$SSH_HOST:$APP_DIR/site/"
-          rsync -az -e "ssh -p $SSH_PORT" "$COMPOSE_FILE" "$SSH_USER@$SSH_HOST:$APP_DIR/$COMPOSE_FILE"
+          printf "%s" "$SSH_KEY" > ~/.ssh/github_ishkabar
+          chmod 600 ~/.ssh/github_ishkabar
+
+          # Create a dedicated SSH config entry (cleaner commands below)
+          {
+            echo "Host vps"
+            echo "  HostName $SSH_HOST"
+            echo "  User $SSH_USER"
+            echo "  Port $SSH_PORT"
+            echo "  IdentityFile ~/.ssh/github_ishkabar"
+            echo "  IdentitiesOnly yes"
+            echo "  StrictHostKeyChecking yes"
+          } >> ~/.ssh/config
+          chmod 600 ~/.ssh/config
+
+          # Preload host key to avoid interactive prompt
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_KEY:  ${{ secrets.SSH_KEY }}
 
+      - name: Copy files to VPS (site + compose)
+        run: |
+          ssh vps "mkdir -p $APP_DIR"
+          rsync -az --delete artifact/site/ "vps:$APP_DIR/site/"
+          rsync -az "$COMPOSE_FILE" "vps:$APP_DIR/$COMPOSE_FILE"
+
       - name: Compose up (Traefik deploy)
         run: |
-          ssh -o StrictHostKeyChecking=no -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "\
+          ssh vps "\
             cd $APP_DIR && \
             docker compose -f $COMPOSE_FILE pull || true && \
             docker compose -f $COMPOSE_FILE up -d \
           "
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_KEY:  ${{ secrets.SSH_KEY }}
