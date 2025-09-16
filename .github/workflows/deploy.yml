@@ -1,23 +1,8 @@
-name: Deploy Web
+name: Deploy ogur.dev (static)
 
 on:
   push:
     branches: [ "main" ]
-
-# (optional but nice) avoid overlapping deploys if you push quickly
-concurrency:
-  group: deploy-web
-  cancel-in-progress: true
-
-# shared defaults
-env:
-  BUILD_CMD: npm ci && npm run build
-  BUILD_DIR: dist
-  APP_DIR: /home/ubuntu/apps/web/ogur-next
-  COMPOSE_FILE: docker-compose.prod.yml
-
-permissions:
-  contents: read
 
 jobs:
   deploy:
@@ -27,57 +12,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          node-version: "20"
-          cache: "npm"
+          ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Build static
-        run: $BUILD_CMD
-
-      - name: Prepare artifact
-        run: |
-          mkdir -p artifact/site
-          rsync -a --delete "$BUILD_DIR"/ artifact/site/
-
-      - name: Setup SSH (key + known_hosts)
+      - name: Trust host key
         run: |
           mkdir -p ~/.ssh
-          printf "%s" "$SSH_KEY" > ~/.ssh/github_ishkabar
-          chmod 600 ~/.ssh/github_ishkabar
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-          # Create a dedicated SSH config entry (cleaner commands below)
-          {
-            echo "Host vps"
-            echo "  HostName $SSH_HOST"
-            echo "  User $SSH_USER"
-            echo "  Port $SSH_PORT"
-            echo "  IdentityFile ~/.ssh/github_ishkabar"
-            echo "  IdentitiesOnly yes"
-            echo "  StrictHostKeyChecking yes"
-          } >> ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-          # Preload host key to avoid interactive prompt
-          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_KEY:  ${{ secrets.SSH_KEY }}
-
-      - name: Copy files to VPS (site + compose)
+      - name: Sync files to server
         run: |
-          ssh vps "mkdir -p $APP_DIR"
-          rsync -az --delete artifact/site/ "vps:$APP_DIR/site/"
-          rsync -az "$COMPOSE_FILE" "vps:$APP_DIR/$COMPOSE_FILE"
+          rsync -az --delete \
+            ./site/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/apps/ogur/site/
+          rsync -az ./docker-compose.app.yml \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/apps/ogur/
 
-      - name: Compose up (Traefik deploy)
+      - name: Compose up
         run: |
-          ssh vps "\
-            cd $APP_DIR && \
-            docker compose -f $COMPOSE_FILE pull || true && \
-            docker compose -f $COMPOSE_FILE up -d \
-          "
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+            cd ~/apps/ogur && docker compose -f docker-compose.app.yml pull || true
+            cd ~/apps/ogur && docker compose -f docker-compose.app.yml up -d
+          '
