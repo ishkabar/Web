@@ -1,53 +1,32 @@
 version: "3.9"
+
 services:
-  traefik:
-    image: traefik:v3.1
-    command:
-      - --providers.docker
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.le.acme.email=you@example.com
-      - --certificatesresolvers.le.acme.storage=/acme/acme.json
-      - --certificatesresolvers.le.acme.httpchallenge=true
-      - --certificatesresolvers.le.acme.httpchallenge.entrypoint=web
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/traefik.yml:/traefik.yml:ro
-      - ./traefik/acme:/acme
-
-  portfolio:
-    build: ./portfolio-astro
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.portfolio.rule=Host(`dkarczewski.com`,`www.dkarczewski.com`)
-      - traefik.http.routers.portfolio.entrypoints=websecure
-      - traefik.http.routers.portfolio.tls.certresolver=le
-
-  redirect-dknx:
+  web:
     image: nginx:alpine
-    command: >
-      sh -c 'printf "server{listen 80;server_name dknx.pl www.dknx.pl;
-      return 301 https://dkarczewski.com$request_uri;}" > /etc/nginx/conf.d/default.conf
-      && nginx -g \"daemon off;\"'
+    restart: unless-stopped
+    working_dir: /usr/share/nginx/html
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    networks:
+      - web
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.dknx.rule=Host(`dknx.pl`,`www.dknx.pl`)
-      - traefik.http.routers.dknx.entrypoints=websecure
-      - traefik.http.routers.dknx.tls.certresolver=le
+      traefik.enable: "true"
 
-  ogur:
-    build: ./ogur-next
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-    expose:
-      - "3000"
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.ogur.loadbalancer.server.port=3000
-      - traefik.http.routers.ogur.rule=Host(`ogur.dev`,`www.ogur.dev`)
-      - traefik.http.routers.ogur.entrypoints=websecure
-      - traefik.http.routers.ogur.tls.certresolver=le
+      traefik.http.routers.ogur.rule: Host(`ogur.dev`)
+      traefik.http.routers.ogur.entrypoints: websecure
+      traefik.http.routers.ogur.tls.certresolver: le
+      traefik.http.routers.ogur.middlewares: security-headers@file
+
+      traefik.http.middlewares.redirect-www-ogur.redirectregex.regex: ^https?://www\.ogur\.dev/(.*)
+      traefik.http.middlewares.redirect-www-ogur.redirectregex.replacement: https://ogur.dev/$$1
+      traefik.http.middlewares.redirect-www-ogur.redirectregex.permanent: "true"
+
+      traefik.http.routers.www-ogur.rule: Host(`www.ogur.dev`)
+      traefik.http.routers.www-ogur.entrypoints: websecure
+      traefik.http.routers.www-ogur.tls.certresolver: le
+      traefik.http.routers.www-ogur.middlewares: redirect-www-ogur
+      traefik.http.routers.www-ogur.service: noop@internal
+
+networks:
+  web:
+    external: true

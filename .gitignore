@@ -1,0 +1,45 @@
+# Dependencies & stores
+node_modules/
+.pnpm-store/
+pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*
+
+# Build artifacts
+dist/
+build/
+.astro/
+.next/
+.next/cache/
+out/
+
+# Env (trzymaj tylko przykłady)
+.env
+.env.*
+!.env.example
+
+# Editors/IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Lint/test caches
+.eslintcache
+coverage/
+*.lcov
+
+# Docker/Traefik
+traefik/acme/**
+!traefik/acme/.gitkeep
+
+# Hosts/CI vendors
+.vercel/
+.netlify/
+.turbo/
+
+# Misc
+*.log
+logs/
