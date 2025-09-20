@@ -1,0 +1,5 @@
+﻿packages:
+  - "portfolio"
+  - "portfolio-astro"
+  - "ogur-next"
+  - "traefik"

@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  ogur:
+    image: ghcr.io/ishkabar/web-ogur:latest
+    container_name: ogur_web
+    restart: unless-stopped
+    networks: [ web ]
+    ports:
+      - "3001:3000"
+    environment:
+      NODE_ENV: production
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "web"
+      traefik.http.routers.ogur.rule: Host(ogur.dev,www.ogur.dev)
+      traefik.http.routers.ogur.entrypoints: websecure
+      traefik.http.routers.ogur.tls.certresolver: le
+      traefik.http.services.ogur.loadbalancer.server.port: "3000"
+networks:
+  web:
+    external: true

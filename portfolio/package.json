@@ -2,7 +2,7 @@
   "name": "@once-ui-system/magic-portfolio",
   "version": "2.3.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "export": "next export",
     "build": "next build",
     "biome-write": "npx @biomejs/biome format --write .",

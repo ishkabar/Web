@@ -1,0 +1,14 @@
+{
+  "name": "web-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "pnpm -C portfolio dev",
+    "dev:portfolio": "pnpm -C portfolio dev",
+    "dev:ogur": "pnpm -C ogur-next dev",
+    "dev:both": "concurrently -k -n portfolio,ogur-next -c auto \"pnpm -C portfolio dev\" \"pnpm -C ogur-next dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
