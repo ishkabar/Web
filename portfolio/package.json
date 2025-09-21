@@ -18,6 +18,7 @@
     "gray-matter": "^4.0.3",
     "lint-staged": "^16.1.5",
     "next": "^15.3.1",
+    "next-intl": "^4.3.9",
     "next-mdx-remote": "^5.0.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",

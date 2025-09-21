@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+//import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/navigation"; // ← użyj next-intl
 import { useEffect, useState } from "react";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";

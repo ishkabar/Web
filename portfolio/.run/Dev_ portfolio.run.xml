@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Dev: portfolio" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/portfolio/package.json " />
+    <command value="run" />
+    <scripts>
+      <script value="dev" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs>
+      <env name="CHOKIDAR_USEPOLLING" value="1" />
+      <env name="CHOKIDAR_INTERVAL" value="200" />
+      <env name="VITE_FS_POLLING" value="1" />
+      <env name="1" value="200" />
+    </envs>
+    <EXTENSION ID="com.github.linuxchina.dotenvx.run.configuration.NodeRunConfiguration">
+      <option name="DOTENVX_ENABLED" value="true" />
+      <option name="ENV_FILE" value=".env" />
+    </EXTENSION>
+    <EXTENSION ID="com.intellij.lang.javascript.buildTools.npm.rc.StartBrowserRunConfigurationExtension">
+      <browser name="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" url="http://localhost:3000" />
+    </EXTENSION>
+    <method v="2" />
+  </configuration>
+</component>
