@@ -4,6 +4,8 @@ import { home, about, person, baseURL, routes } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
+export const runtime = 'nodejs';
+
 
 export async function generateMetadata() {
     console.log('📋 generateMetadata START');
@@ -56,7 +58,7 @@ export default function Home() {
                     return (
                         <Column fillWidth horizontal="center" gap="m">
                             <Column maxWidth="s" horizontal="center" align="center">
-                                {/*{home.featured.display && (() => {
+                                {home.featured.display && (() => {
                                     console.log('🎯 Rendering Featured Badge...');
                                     return (
                                         <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
@@ -73,7 +75,7 @@ export default function Home() {
                                             </Badge>
                                         </RevealFx>
                                     );
-                                })()}*/}
+                                })()}
 
                                { (() => {
                                     console.log('📝 Rendering Heading...');
@@ -129,19 +131,20 @@ export default function Home() {
                         </Column>
                     );
                 })()}
-
+                
                 {(() => {
                     console.log('🚀 Rendering Projects 1...');
-                    /*TODO: 404 page*/
+                    
                     return (
                         <RevealFx translateY="16" delay={0.6}>
                             <Projects range={[1, 1]} />
                         </RevealFx>
                     );
                 })()}
-
-                {/*{routes["/blog"] && (() => {
+                
+                {/*routes["/blog"] && (() => {
                     console.log('📰 Rendering Blog section...');
+
                     return (
                         <Column fillWidth gap="24" marginBottom="l">
                             <Row fillWidth paddingRight="64">
@@ -165,17 +168,18 @@ export default function Home() {
                             </Row>
                         </Column>
                     );
-                })()}*/}
+                })()*/}
 
-                {/*{(() => {
+                {(() => {
+                    
                     console.log('🚀 Rendering Projects 2...');
                     return <Projects range={[2]} />;
-                })()}*/}
+                })()}
                 
-                {/*{(() => {
+                {(() => {
                     console.log('📧 Rendering Mailchimp...');
                     return <Mailchimp />;
-                })()}*/}
+                })()}
                 
             </Column>
         );

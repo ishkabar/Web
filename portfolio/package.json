@@ -1,7 +1,7 @@
 {
   "name": "@once-ui-system/magic-portfolio",
   "version": "2.3.0",
-    "scripts": {
+  "scripts": {
     "dev": "next dev -p 3000",
     "dev:fast": "FAST_DEV=1 FAST_LOCALE=pl NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
     "build": "next build",
@@ -13,14 +13,14 @@
   "resolutions": {
     "@opentelemetry/api": "1.4.1",
     "shiki": "0.14.7"
-
-},
+  },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
     "@next/mdx": "^15.3.1",
     "@once-ui-system/core": "^1.4.27",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
+    "flag-icons": "^7.5.0",
     "gray-matter": "^4.0.3",
     "lint-staged": "^16.1.5",
     "next": "^15.3.1",

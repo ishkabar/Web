@@ -1,5 +1,5 @@
 // Central place for locales + helpers
-export const locales = ['pl', 'en'] as const;
+export const locales = ['pl', 'en','ua'] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = 'pl';
 
@@ -13,3 +13,4 @@ export const LOCALE_BYPASS = [
     '^/(?:favicon\\.ico|robots\\.txt|sitemap\\.xml)$',
     '^/(?:icon\\.\\w+|apple-icon\\.\\w+|manifest\\.json)$'
 ];
+

@@ -1,13 +1,17 @@
-import { getPosts } from "@/utils/utils";
+import { getWorkPostsLocaleAware } from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
+import { getLocale } from "next-intl/server";
+import {localeHref} from "@/utils/localeHref";
+
+const locale = await getLocale();
 
 export default async function sitemap() {
-  const blogs = getPosts(["src", "app", "blog", "posts"]).map((post) => ({
+  const blogs = getWorkPostsLocaleAware(locale).map((post) => ({
     url: `${baseURL}/blog/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));
 
-  const works = getPosts(["src", "app", "work", "projects"]).map((post) => ({
+  const works = getWorkPostsLocaleAware(locale).map((post) => ({
     url: `${baseURL}/work/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));

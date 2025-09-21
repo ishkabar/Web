@@ -28,6 +28,7 @@ const display: DisplayConfig = {
   location: true,
   time: true,
   themeSwitcher: true,
+    localeSwitcher: true
 };
 
 // Enable password protection on selected routes

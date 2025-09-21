@@ -1,9 +1,11 @@
-import { getPosts } from "@/utils/utils";
+import { getWorkPostsLocaleAware } from "@/utils/utils";
 import { baseURL, blog, person } from "@/resources";
 import { NextResponse } from "next/server";
+import { getLocale } from "next-intl/server";
 
+const locale = await getLocale();
 export async function GET() {
-  const posts = getPosts(["src", "app", "blog", "posts"]);
+  const posts = getWorkPostsLocaleAware(locale);
 
   // Sort posts by date (newest first)
   const sortedPosts = posts.sort((a, b) => {

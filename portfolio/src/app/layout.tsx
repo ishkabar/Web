@@ -2,6 +2,9 @@
 import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
+import 'flag-icons/css/flag-icons.min.css';
+
+
 
 import classNames from "classnames";
 import { fonts, style, dataStyle } from "@/resources";
@@ -15,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 fonts.label.variable,
                 fonts.code.variable
             )}
-            // SSR: te same domyślne atrybuty, które nadaje Twój skrypt
+            
             data-brand={style.brand}
             data-accent={style.accent}
             data-neutral={style.neutral}

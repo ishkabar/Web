@@ -1,72 +1,63 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-
-type Team = {
-  name: string;
-  role: string;
-  avatar: string;
-  linkedIn: string;
-};
-
-type Metadata = {
-  title: string;
-  publishedAt: string;
-  summary: string;
-  image?: string;
-  images: string[];
-  tag?: string;
-  team: Team[];
-  link?: string;
-};
-
 import { notFound } from "next/navigation";
 
-function getMDXFiles(dir: string) {
-  if (!fs.existsSync(dir)) {
-    notFound();
-  }
+export type Team = { name: string; role: string; avatar: string; linkedIn: string; };
+export type Metadata = {
+    title: string; publishedAt: string; summary: string;
+    image?: string; images: string[]; tag?: string | string[];
+    team: Team[]; link?: string;
+};
+export type ProjectPost = { metadata: Metadata; slug: string; content: string; };
 
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
+function getMDXFiles(dir: string): string[] {
+    if (!fs.existsSync(dir)) return [];
+    return fs.readdirSync(dir).filter((f) => path.extname(f) === ".mdx");
 }
 
-function readMDXFile(filePath: string) {
-  if (!fs.existsSync(filePath)) {
-    notFound();
-  }
-
-  const rawContent = fs.readFileSync(filePath, "utf-8");
-  const { data, content } = matter(rawContent);
-
-  const metadata: Metadata = {
-    title: data.title || "",
-    publishedAt: data.publishedAt,
-    summary: data.summary || "",
-    image: data.image || "",
-    images: data.images || [],
-    tag: data.tag || [],
-    team: data.team || [],
-    link: data.link || "",
-  };
-
-  return { metadata, content };
-}
-
-function getMDXData(dir: string) {
-  const mdxFiles = getMDXFiles(dir);
-  return mdxFiles.map((file) => {
-    const { metadata, content } = readMDXFile(path.join(dir, file));
-    const slug = path.basename(file, path.extname(file));
-
-    return {
-      metadata,
-      slug,
-      content,
+function readMDXFile(filePath: string): Omit<ProjectPost, "slug"> {
+    if (!fs.existsSync(filePath)) notFound();
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const { data, content } = matter(raw);
+    const metadata: Metadata = {
+        title: data.title || "",
+        publishedAt: data.publishedAt || "",
+        summary: data.summary || "",
+        image: data.image || "",
+        images: Array.isArray(data.images) ? data.images : [],
+        tag: data.tag || undefined,
+        team: Array.isArray(data.team) ? data.team : [],
+        link: data.link || "",
     };
-  });
+    return { metadata, content };
 }
 
-export function getPosts(customPath = ["", "", "", ""]) {
-  const postsDir = path.join(process.cwd(), ...customPath);
-  return getMDXData(postsDir);
+function collectPosts(dir: string): ProjectPost[] {
+    const files = getMDXFiles(dir);
+    return files.map((file) => {
+        const slug = path.basename(file, ".mdx");
+        const { metadata, content } = readMDXFile(path.join(dir, file));
+        return { metadata, slug, content };
+    });
+}
+
+/**
+ * Returns posts for a locale with fallback to global.
+ * If a slug exists in locale dir, it overrides the global one.
+ */
+export function getWorkPostsLocaleAware(locale?: string): ProjectPost[] {
+    const base = path.join(process.cwd(), "src", "app");
+    const globalDir = path.join(base, "work", "projects");
+    const localeDir = locale ? path.join(base, locale, "work", "projects") : "";
+
+    const globalPosts = collectPosts(globalDir);
+    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
+
+    const localPosts = collectPosts(localeDir);
+
+    const map = new Map<string, ProjectPost>();
+    for (const p of globalPosts) map.set(p.slug, p);
+    for (const p of localPosts) map.set(p.slug, p); // override by locale
+    return Array.from(map.values());
 }

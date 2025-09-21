@@ -1,6 +1,7 @@
-import { getPosts } from "@/utils/utils";
+import { getWorkPostsLocaleAware } from "@/utils/utils";
 import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
+import { getLocale } from "next-intl/server";
 
 interface PostsProps {
   range?: [number] | [number, number];
@@ -9,7 +10,7 @@ interface PostsProps {
   direction?: "row" | "column";
   exclude?: string[];
 }
-
+const locale = await getLocale();
 export function Posts({
   range,
   columns = "1",
@@ -17,7 +18,7 @@ export function Posts({
   exclude = [],
   direction,
 }: PostsProps) {
-  let allBlogs = getPosts(["src", "app", "blog", "posts"]);
+  let allBlogs = getWorkPostsLocaleAware(locale);
 
   // Exclude by slug (exact match)
   if (exclude.length) {
