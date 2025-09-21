@@ -5,10 +5,13 @@ import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 export const runtime = 'nodejs';
+import { Logo } from "@once-ui-system/core";
+
+import {getTranslations} from "next-intl/server";
+
 
 
 export async function generateMetadata() {
-    console.log('📋 generateMetadata START');
     try {
         return Meta.generate({
             title: home.title,
@@ -18,16 +21,15 @@ export async function generateMetadata() {
             image: home.image,
         });
     } catch (error) {
-        console.error('❌ generateMetadata ERROR:', error);
+        console.error('generateMetadata ERROR:', error);
         throw error;
     }
 }
 
-export default function Home() {
-    console.log('🚨 [locale]/page.tsx RENDERUJE SIĘ!');
-    try {
-        console.log('📦 Rendering Column wrapper...');
+export default async function Home() {
+    const tHome = await getTranslations("home");
 
+    try {
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
                 <div style={{background: 'red', color: 'white', padding: '10px'}}>
@@ -35,7 +37,6 @@ export default function Home() {
                 </div>
 
                 {(() => {
-                    console.log('🔗 Rendering Schema...');
                     return (
                         <Schema
                             as="webPage"
@@ -54,12 +55,10 @@ export default function Home() {
                 })()}
 
                 {(() => {
-                    console.log('📋 Rendering main content Column...');
                     return (
                         <Column fillWidth horizontal="center" gap="m">
                             <Column maxWidth="s" horizontal="center" align="center">
                                 {home.featured.display && (() => {
-                                    console.log('🎯 Rendering Featured Badge...');
                                     return (
                                         <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
                                             <Badge
@@ -78,29 +77,50 @@ export default function Home() {
                                 })()}
 
                                { (() => {
-                                    console.log('📝 Rendering Heading...');
                                     return (
                                         <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
                                             <Heading wrap="balance" variant="display-strong-l">
-                                                {home.headline}
+                                                {tHome("headline")}
                                             </Heading>
                                         </RevealFx>
                                     );
                                 })()}
 
-                               { (() => {
-                                    console.log('📄 Rendering Subline...');
+                                {(() => {
                                     return (
-                                        <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
-                                            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-                                                {home.subline}
+                                        <RevealFx
+                                            translateY="8"
+                                            delay={0.2}
+                                            fillWidth
+                                            horizontal="center"
+                                            paddingBottom="32"
+                                        >
+                                            <Text
+                                                wrap="balance"
+                                                onBackground="neutral-weak"
+                                                variant="heading-default-xl"
+                                            >
+                                                {tHome.rich("sublineRich", {
+                                                    firstName: person.firstName,
+                                                    Logo: () => (
+                                                        <Logo
+                                                            dark
+                                                            icon="/trademarks/wordmark-dark.svg"
+                                                            style={{
+                                                                display: "inline-flex",
+                                                                top: "0.25em",
+                                                                marginLeft: "-0.25em"
+                                                            }}
+                                                        />
+                                                    ),
+                                                    br: () => <br />
+                                                })}
                                             </Text>
                                         </RevealFx>
                                     );
                                 })()}
 
                                 {(() => {
-                                    console.log('🔘 Rendering About Button...');
                                     return (
                                         <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
                                             <Button
@@ -133,8 +153,6 @@ export default function Home() {
                 })()}
                 
                 {(() => {
-                    console.log('🚀 Rendering Projects 1...');
-                    
                     return (
                         <RevealFx translateY="16" delay={0.6}>
                             <Projects range={[1, 1]} />
@@ -142,7 +160,7 @@ export default function Home() {
                     );
                 })()}
                 
-                {/*routes["/blog"] && (() => {
+                {/*routes["/blog"] && (() => { TODO: 404
                     console.log('📰 Rendering Blog section...');
 
                     return (
@@ -171,20 +189,16 @@ export default function Home() {
                 })()*/}
 
                 {(() => {
-                    
-                    console.log('🚀 Rendering Projects 2...');
                     return <Projects range={[2]} />;
                 })()}
                 
                 {(() => {
-                    console.log('📧 Rendering Mailchimp...');
                     return <Mailchimp />;
                 })()}
                 
             </Column>
         );
     } catch (error) {
-        console.error('❌ RENDER ERROR:', error);
         return (
             <div style={{background: 'red', color: 'white', padding: '50px'}}>
                 ERROR: {String(error)}

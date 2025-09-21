@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "English",
+    "flag": "gb",
+    "default": false
+  },
+  "common": {
+    "hello": "Hello"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Switch language to: {locale}"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Español",
+    "flag": "es",
+    "default": false
+  },
+  "common": {
+    "hello": "Hola"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Cambiar idioma a: {locale}"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Português",
+    "flag": "pt",
+    "default": false
+  },
+  "common": {
+    "hello": "Olá"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Mudar idioma para: {locale}"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "label": "@:common.labels.home",
+  "title": "{name}'s Portfolio",
+  "description": "Portfolio website showcasing my work as a {role}",
+  "headline": "Building bridges between design and code",
+
+  "featuredTitleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
+  "featuredHref": "/work/building-once-ui-a-customizable-design-system",
+
+  "sublineRich": "I'm {firstName}, a design engineer at <Logo/> , where I craft intuitive user experiences. After hours, I build my own projects."
+}

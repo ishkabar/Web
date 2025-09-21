@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Français",
+    "flag": "fr",
+    "default": false
+  },
+  "common": {
+    "hello": "Bonjour"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Changer la langue en : {locale}"
+  }
+}

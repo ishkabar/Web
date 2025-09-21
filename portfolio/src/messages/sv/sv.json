@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Svenska",
+    "flag": "se",
+    "default": false
+  },
+  "common": {
+    "hello": "Hej"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Byt språk till: {locale}"
+  }
+}

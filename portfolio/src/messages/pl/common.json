@@ -1,0 +1,15 @@
+{
+  "person": {
+    "role": {
+      "bum": "Żul"
+    }
+  },
+  "labels": {
+    "home": "Start",
+    "about": "O mnie",
+    "work": "Projekty",
+    "blog": "Blog",
+    "gallery": "Galeria",
+    "featured": "Wyróżnione"
+  }
+}

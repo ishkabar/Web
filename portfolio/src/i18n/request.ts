@@ -1,53 +1,62 @@
-/*
 import {getRequestConfig} from 'next-intl/server';
-import {isLocale, defaultLocale, type Locale} from './routing';
+import {defaultLocale, type Locale, isLocale} from './locales.generated';
+
+const NAMESPACES = ['common','home','about','work','blog','gallery','newsletter'] as const;
+
+function normalizeLocale(input: string | undefined): string | undefined {
+    if (!input) return input;
+    return input.toLowerCase().split('-')[0];
+}
+
+async function loadMonolith(loc: Locale) {
+    const mod = await import(`../messages/${loc}.json`);
+    return (mod as any).default ?? mod;
+}
+
+async function loadNamespaces(loc: Locale) {
+    const wrapped = await Promise.all(
+        NAMESPACES.map(async (ns) => {
+            try {
+                const mod = await import(`../messages/${loc}/${ns}.json`);
+                const data = (mod as any).default ?? mod;
+                return {[ns]: data};
+            } catch {
+                return {};
+            }
+        })
+    );
+    return Object.assign({}, ...wrapped);
+}
 
 export default getRequestConfig(async ({requestLocale}) => {
-    const rl = typeof requestLocale === 'string' ? requestLocale : undefined;
-    const locale: Locale = isLocale(rl) ? (rl as Locale) : defaultLocale;
+    // <- KLUCZOWA ZMIANA: await requestLocale (może być undefined)
+    const rl = await requestLocale;
+    const requestedNorm = normalizeLocale(rl);
+    const resolved: Locale = isLocale(requestedNorm ?? '') ? (requestedNorm as Locale) : defaultLocale;
 
-    // Debug
-    console.log('[i18n/request] resolved locale =', locale, 'from', requestLocale);
+    console.log(`[i18n] request: reqLocale="${rl}"`);
+    console.log(`[i18n] request: norm="${requestedNorm}" -> resolved="${resolved}"`);
 
-    const mod = await import(`../messages/${locale}.json`);
-    return {locale, messages: (mod as any).default ?? mod};
+    let messages: Record<string, unknown> | null = null;
+
+    try {
+        messages = await loadMonolith(resolved);
+    } catch {
+        const ns = await loadNamespaces(resolved);
+        messages = Object.keys(ns).length ? ns : null;
+    }
+
+    if (!messages && resolved !== defaultLocale) {
+        try {
+            messages = await loadMonolith(defaultLocale as Locale);
+        } catch {
+            const ns = await loadNamespaces(defaultLocale as Locale);
+            messages = Object.keys(ns).length ? ns : {};
+        }
+    }
+
+    messages ??= {};
+
+    // <- WYMAGANE w nowych wersjach: zwróć też `locale`
+    return {locale: resolved, messages};
 });
-*/
-
-import {getRequestConfig, type GetRequestConfigParams} from 'next-intl/server';
-
-const allLocales = ['en', 'pl'] as const;
-type Locale = typeof allLocales[number];
-const defaultLocale: Locale = 'pl';
-
-const fastLocale =
-    process.env.FAST_DEV === '1'
-        ? ((process.env.FAST_LOCALE as Locale) || defaultLocale)
-        : null;
-
-const activeLocales: readonly Locale[] = fastLocale ? [fastLocale] : allLocales;
-
-/**
- * Default export wymagany przez next-intl.
- * Zwracamy pewny string w polu `locale` (nigdy undefined),
- * żeby naprawić błąd TS2345.
- */
-export default getRequestConfig(async ({locale}: GetRequestConfigParams) => {
-    // Ustal pewne locale
-    const requested = (locale ?? defaultLocale) as string;
-    const resolved: Locale = (activeLocales as readonly string[]).includes(requested)
-        ? (requested as Locale)
-        : defaultLocale;
-
-    // Upewnij się, że ścieżka zgadza się ze strukturą projektu.
-    // Jeśli pliki są w: src/messages/pl.json, użyj ../messages
-    const messages = (await import(`../messages/${resolved}.json`)).default;
-
-    return {
-        locale: resolved,
-        messages
-    };
-});
-
-// (opcjonalne named exports, jeśli chcesz gdzieś użyć)
-export {allLocales, activeLocales, defaultLocale};

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Nederlands",
+    "flag": "nl",
+    "default": false
+  },
+  "common": {
+    "hello": "Hallo"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Taal wijzigen naar: {locale}"
+  }
+}

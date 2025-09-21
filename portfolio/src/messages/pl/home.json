@@ -1,0 +1,11 @@
+{
+  "label": "@:common.labels.home",
+  "title": "Portfolio {name}",
+  "description": "Strona portfolio prezentująca moją pracę jako {role}",
+  "headline": "Buduję mosty między designem a kodem",
+
+  "featuredTitleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
+  "featuredHref": "/work/building-once-ui-a-customizable-design-system",
+
+  "sublineRich": "Jestem {firstName}, design engineer w <Logo/> , gdzie tworzę intuicyjne doświadczenia. Po godzinach buduję własne projekty."
+}

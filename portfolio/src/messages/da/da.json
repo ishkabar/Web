@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Dansk",
+    "flag": "dk",
+    "default": false
+  },
+  "common": {
+    "hello": "Hej"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Skift sprog til: {locale}"
+  }
+}

@@ -1,31 +1,39 @@
 "use client";
 
-
 import { useEffect, useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { routes, protectedRoutes } from "@/resources";
 import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-system/core";
 import NotFound from "@/app/not-found";
+import { isLocale } from '@/i18n/locales.generated';
+import { useLocale } from "next-intl";
 
 interface RouteGuardProps {
     children: React.ReactNode;
 }
 
-const LOCALES = ['pl', 'en'] as const;
+function normalizePath(p: string): string {
+    if (!p) return "/";
+    // usuwamy trailing slash > 1 znak
+    if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
+    return p;
+}
 
 function stripLocalePrefix(pathname: string | null): string {
-    if (!pathname) return '/';
-    const m = pathname.match(/^\/([a-zA-Z-]+)(?=\/|$)/);
-    if (m && (LOCALES as readonly string[]).includes(m[1])) {
-        const stripped = pathname.slice(m[0].length) || '/';
-        return stripped.startsWith('/') ? stripped : `/${stripped}`;
+    if (!pathname) return "/";
+    const seg = pathname.split("/")[1] ?? "";
+    if (isLocale(seg)) {
+        const rest = pathname.slice(1 + seg.length) || "/";
+        return normalizePath(rest.startsWith("/") ? rest : `/${rest}`);
     }
-    return pathname;
+    return normalizePath(pathname);
 }
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
+    const locale = useLocale();
     const pathname = usePathname();
     const path = useMemo(() => stripLocalePrefix(pathname), [pathname]);
+
     const [isRouteEnabled, setIsRouteEnabled] = useState(false);
     const [isPasswordRequired, setIsPasswordRequired] = useState(false);
     const [password, setPassword] = useState("");
@@ -44,25 +52,28 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
             setIsAuthenticated(false);
 
             const checkRouteEnabled = () => {
-                console.log('🔍 FINAL RouteGuard Debug:', {
+                // Debug: ważne, że path to już wersja bez prefiksu locale
+                console.log("🔍 FINAL RouteGuard Debug:", {
+                    locale,
                     pathname,
                     path,
-                    availableRoutes: routes,
                     routeKeys: Object.keys(routes),
-                    pathInRoutes: path in routes,
-                    routeValue: routes[path as keyof typeof routes]
+                    pathInRoutes: Object.prototype.hasOwnProperty.call(routes, path),
+                    routeValue: routes[path as keyof typeof routes],
                 });
-                
-                if (!pathname) return false;
 
-                if (path in routes) {
-                    return routes[path as keyof typeof routes];
+                if (!path) return false;
+
+                // 1) Dokładne dopasowanie
+                if (Object.prototype.hasOwnProperty.call(routes, path)) {
+                    return Boolean(routes[path as keyof typeof routes]);
                 }
 
-                const dynamicRoutes = ["/blog", "/work"] as const;
-                for (const route of dynamicRoutes) {
-                    if (pathname?.startsWith(route) && routes[route]) {
-                        return true;
+                // 2) Prefiksy dla sekcji dynamicznych (UŻYWAJ path, nie pathname)
+                const dynamicPrefixes = ["/blog", "/work"] as const;
+                for (const base of dynamicPrefixes) {
+                    if (path === base || path.startsWith(base + "/")) {
+                        return Boolean(routes[base]);
                     }
                 }
 
@@ -70,9 +81,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
             };
 
             const routeEnabled = checkRouteEnabled();
-            console.log('FINAL Route enabled:', routeEnabled);
-            if (!mounted) return; // ← CHECK BEFORE STATE UPDATE
-
+            if (!mounted) return;
+            console.log("FINAL Route enabled:", routeEnabled);
             setIsRouteEnabled(routeEnabled);
 
             if (protectedRoutes[path as keyof typeof protectedRoutes]) {
@@ -91,11 +101,10 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
         };
 
         performChecks();
-
         return () => {
-            mounted = false; 
+            mounted = false;
         };
-    }, [path]);
+    }, [path, locale, pathname]);
 
     const handlePasswordSubmit = async () => {
         const response = await fetch("/api/authenticate", {
@@ -121,7 +130,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     }
 
     if (!isRouteEnabled) {
-        console.log('RouteGuard blocks - returning NotFound');
+        console.log("RouteGuard blocks - returning NotFound");
         return <NotFound />;
     }
 
@@ -144,8 +153,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
             </Column>
         );
     }
-    console.log('RouteGuard allows - rendering children');
 
+    console.log("RouteGuard allows - rendering children");
     return <>{children}</>;
 };
 

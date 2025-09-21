@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Italiano",
+    "flag": "it",
+    "default": false
+  },
+  "common": {
+    "hello": "Ciao"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Cambia lingua in: {locale}"
+  }
+}

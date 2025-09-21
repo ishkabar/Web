@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Čeština",
+    "flag": "cz",
+    "default": false
+  },
+  "common": {
+    "hello": "Ahoj"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Změnit jazyk na: {locale}"
+  }
+}

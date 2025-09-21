@@ -1,16 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import {usePathname, useRouter, useSearchParams} from 'next/navigation';
-import {ToggleButton} from '@once-ui-system/core';
-import {defaultLocale, type Locale, isLocale} from '@/i18n/routing';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ToggleButton } from '@once-ui-system/core';
+import { locales, defaultLocale, type Locale, isLocale, localeMeta } from '@/i18n/routing';
 
 type LocaleDef = { code: Locale; label: string; flag: string };
-const LOCALES: LocaleDef[] = [
-    {code: 'pl', label: 'Polski',      flag: 'pl'},
-    {code: 'en', label: 'English',     flag: 'gb'},
-    {code: 'ua', label: 'Українська',  flag: 'ua'},
-];
+const LOCALES: LocaleDef[] = locales.map(code => ({
+    code,
+    label: localeMeta[code]?.label ?? code,
+    flag:  localeMeta[code]?.flag  ?? code
+}));
 
 const listHideDelay = 300;
 
@@ -25,7 +25,6 @@ function switchLocalePath(pathname: string, target: Locale) {
     const next = segs.join('/') || `/${target}`;
     return next.replace(/\/{2,}/g, '/');
 }
-
 function useThemeName() {
     const [theme, setTheme] = React.useState<string>(() =>
         typeof document !== 'undefined'
@@ -61,6 +60,8 @@ export default function LocaleSwitcher() {
     const currentIdx = React.useMemo(() => LOCALES.findIndex(l => l.code === current), [current]);
     const [focusIdx, setFocusIdx] = React.useState<number>(currentIdx);
     const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
+    
+    const [listMaxH, setListMaxH] = React.useState(320);
 
     const hideTimerRef = React.useRef<number | null>(null);
     const scheduleHide = (delay = listHideDelay) => {
@@ -80,6 +81,15 @@ export default function LocaleSwitcher() {
         }
     };
 
+    const computeListMaxHeight = () => {
+        if (!wrapperRef.current) return setListMaxH(320);
+        const r = wrapperRef.current.getBoundingClientRect();
+        const gap = 12;
+        const avail = openUp ? (r.top - gap) : (window.innerHeight - r.bottom - gap);
+        const h = Math.max(160, Math.min(avail, 3600));
+        setListMaxH(h);
+    };
+
     const buildTargetHref = (code: Locale) => {
         const base = switchLocalePath(pathname, code);
         const qs = searchParams?.toString();
@@ -87,7 +97,6 @@ export default function LocaleSwitcher() {
         return qs && qs.length > 0 ? `${base}?${qs}${hash}` : `${base}${hash}`;
     };
 
-    // outside click -> close
     React.useEffect(() => {
         const onDoc = (e: MouseEvent) => {
             if (!wrapperRef.current) return;
@@ -103,7 +112,6 @@ export default function LocaleSwitcher() {
         return () => document.removeEventListener('mousedown', onDoc);
     }, [currentIdx]);
 
-    // ESC -> close
     React.useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
@@ -119,7 +127,6 @@ export default function LocaleSwitcher() {
         return () => document.removeEventListener('keydown', onKey);
     }, [currentIdx]);
 
-    // route change -> close
     React.useEffect(() => {
         cancelHide();
         setMenuOpen(false);
@@ -128,7 +135,6 @@ export default function LocaleSwitcher() {
         setFocusIdx(currentIdx);
     }, [pathname, currentIdx]);
 
-    // global mousemove fallback: pointer poza wrapperem -> hide (1s)
     React.useEffect(() => {
         const onMove = (e: MouseEvent) => {
             if (!menuVisible) return;
@@ -140,10 +146,9 @@ export default function LocaleSwitcher() {
         return () => document.removeEventListener('mousemove', onMove);
     }, [menuVisible]);
 
-    // scroll (delay) / resize (immediate)
     React.useEffect(() => {
         if (!menuVisible) return;
-        const onScroll = () => scheduleHide(listHideDelay);
+        const onScroll = () => { scheduleHide(listHideDelay); if (menuVisible) computeListMaxHeight(); };
         const onResize = () => {
             cancelHide();
             setMenuOpen(false);
@@ -160,16 +165,16 @@ export default function LocaleSwitcher() {
         };
     }, [menuVisible, currentIdx]);
 
-    // placement from header
     const decidePlacement = () => {
         if (!wrapperRef.current) return setOpenUp(false);
         const headerEl = wrapperRef.current.closest('[data-header-dock]') as HTMLElement | null;
         const dock = headerEl?.getAttribute('data-header-dock');
-        setOpenUp(dock === 'bottom'); // header bottom -> open up
+        setOpenUp(dock === 'bottom');
     };
 
     const openMenu = () => {
         decidePlacement();
+        computeListMaxHeight();
         setFocusIdx(currentIdx);
         cancelHide();
         setMenuVisible(true);
@@ -181,7 +186,6 @@ export default function LocaleSwitcher() {
         setTimeout(() => setMenuVisible(false), 160);
         triggerRef.current?.blur();
     };
-
     const toggleOpen = () => (menuVisible ? closeMenu() : openMenu());
 
     const onListKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -216,9 +220,9 @@ export default function LocaleSwitcher() {
     return (
         <div
             ref={wrapperRef}
-            style={{position: 'relative'}}
+            style={{ position: 'relative' }}
             onMouseEnter={cancelHide}
-            onMouseLeave={() => scheduleHide(listHideDelay)} // wyjazd z wrappera → hide po 1s
+            onMouseLeave={() => scheduleHide(listHideDelay)}
         >
             <ToggleButton
                 ref={triggerRef as any}
@@ -227,15 +231,13 @@ export default function LocaleSwitcher() {
                 aria-label="Change language"
                 onClick={toggleOpen}
                 onMouseEnter={cancelHide}
-                onMouseLeave={() => menuVisible && scheduleHide(listHideDelay)} // wyjazd z triggera
+                onMouseLeave={() => menuVisible && scheduleHide(listHideDelay)}
                 onFocus={cancelHide}
             >
         <span
             className={`fi fi-${cur.flag}`}
             aria-hidden="true"
-            //style={{ display: 'inline-block', width: 18, height: 13, borderRadius: 2 }}
             style={{ display: 'inline-block', fontSize: 18, borderRadius: 2 }}
-
         />
             </ToggleButton>
 
@@ -247,7 +249,7 @@ export default function LocaleSwitcher() {
                     tabIndex={-1}
                     onKeyDown={onListKeyDown}
                     onMouseEnter={cancelHide}
-                    onMouseLeave={() => { setHoverIdx(null); scheduleHide(listHideDelay); }} // ⬅ ważne
+                    onMouseLeave={() => { setHoverIdx(null); scheduleHide(listHideDelay); }}
                     style={{
                         position: 'absolute',
                         right: 0,
@@ -259,13 +261,14 @@ export default function LocaleSwitcher() {
                         padding: 6,
                         boxShadow: colors.shadow,
                         zIndex: 1000,
-                        // ANIMACJA
                         opacity: menuOpen ? 1 : 0,
-                        transform: menuOpen
-                            ? 'translateY(0)'
-                            : openUp ? 'translateY(4px)' : 'translateY(-4px)',
+                        transform: menuOpen ? 'translateY(0)' : openUp ? 'translateY(4px)' : 'translateY(-4px)',
                         pointerEvents: menuOpen ? 'auto' : 'none',
                         transition: 'opacity .16s ease, transform .16s ease',
+                        maxHeight: listMaxH,
+                        overflowY: 'auto',
+                        overscrollBehavior: 'contain',
+                        WebkitOverflowScrolling: 'touch',
                     }}
                 >
                     {LOCALES.map((l, i) => {
@@ -300,11 +303,11 @@ export default function LocaleSwitcher() {
                                     transition: 'background .12s ease',
                                 }}
                             >
-                <span style={{display: 'inline-flex', alignItems: 'center', gap: 8}}>
-                  <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{display: 'inline-block', width: 18, height: 13, borderRadius: 2}} />
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
                   <span>{l.label}</span>
                 </span>
-                                <span style={{opacity: isActive ? 1 : 0, transition: 'opacity .12s ease'}}>✓</span>
+                                <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
                             </button>
                         );
                     })}

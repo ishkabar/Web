@@ -1,22 +1,25 @@
-import "@once-ui-system/core/css/styles.css";
-import "@once-ui-system/core/css/tokens.css";
-import "@/resources/custom.css";
-
-import classNames from "classnames";
-import Script from "next/script";
-import {ReactNode} from "react";
-import {getLocale, getMessages} from "next-intl/server";
-import {NextIntlClientProvider} from 'next-intl';
-import {Providers} from "@/components/Providers";
-import LocaleSwitcher from '@/components/LocaleSwitcher';
+import '@once-ui-system/core/css/styles.css';
+import '@once-ui-system/core/css/tokens.css';
+import '@/resources/custom.css';
 
 
+
+import classNames from 'classnames';
+import Script from 'next/script';
+import type {ReactNode} from 'react';
+import {getLocale, getMessages, setRequestLocale} from 'next-intl/server';
+import { NextIntlClientProvider} from 'next-intl';
+import {Providers} from '@/components/Providers';
+import {locales} from '@/i18n/locales.generated';
+import {Footer, Header, RouteGuard} from '@/components';
 import {
     Background, Column, Flex, Meta, opacity, RevealFx, SpacingToken
-} from "@once-ui-system/core";
+} from '@once-ui-system/core';
+import {baseURL, effects, fonts, style, dataStyle, home} from '@/resources';
 
-import { Footer, Header, RouteGuard } from "@/components";
-import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
+export function generateStaticParams() {
+    return locales.map((locale) => ({locale}));
+}
 
 export async function generateMetadata() {
     return Meta.generate({
@@ -28,29 +31,34 @@ export async function generateMetadata() {
     });
 }
 
-export default async function LocaleLayout({children}:{children: ReactNode}) {
+export default async function LocaleLayout(
+    {children, params}: {children: React.ReactNode; params: {locale: string}}
+) {
+    setRequestLocale(params.locale);
     const locale = await getLocale();
     const messages = await getMessages();
-
     return (
         <Providers locale={locale} messages={messages}>
-            <Script id="theme-init" strategy="afterInteractive" dangerouslySetInnerHTML={{
-                __html: `
+            <Script
+                id="theme-init"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                    __html: `
           (function() {
             try {
               const root = document.documentElement;
               const config = ${JSON.stringify({
-                    brand: style.brand,
-                    accent: style.accent,
-                    neutral: style.neutral,
-                    solid: style.solid,
-                    "solid-style": style.solidStyle,
-                    border: style.border,
-                    surface: style.surface,
-                    transition: style.transition,
-                    scaling: style.scaling,
-                    "viz-style": dataStyle.variant
-                })};
+                        brand: style.brand,
+                        accent: style.accent,
+                        neutral: style.neutral,
+                        solid: style.solid,
+                        'solid-style': style.solidStyle,
+                        border: style.border,
+                        surface: style.surface,
+                        transition: style.transition,
+                        scaling: style.scaling,
+                        'viz-style': dataStyle.variant
+                    })};
               Object.entries(config).forEach(([k,v]) => root.setAttribute('data-'+k, v));
               const resolveTheme = (t) => !t || t === 'system'
                 ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
@@ -67,7 +75,8 @@ export default async function LocaleLayout({children}:{children: ReactNode}) {
             }
           })();
         `
-            }} />
+                }}
+            />
 
             <div className={classNames(
                 fonts.heading.variable, fonts.body.variable, fonts.label.variable, fonts.code.variable
@@ -75,14 +84,14 @@ export default async function LocaleLayout({children}:{children: ReactNode}) {
                 <Column
                     background="page"
                     fillWidth
-                    style={{ minHeight: "100vh" }}
+                    style={{minHeight: '100vh'}}
                     margin="0"
                     padding="0"
                     horizontal="center"
                 >
                     <RevealFx fill position="absolute">
                         <Background
-                            mask={{ x: effects.mask.x, y: effects.mask.y, radius: effects.mask.radius, cursor: effects.mask.cursor }}
+                            mask={{x: effects.mask.x, y: effects.mask.y, radius: effects.mask.radius, cursor: effects.mask.cursor}}
                             gradient={{
                                 display: effects.gradient.display,
                                 opacity: effects.gradient.opacity as opacity,
@@ -112,14 +121,17 @@ export default async function LocaleLayout({children}:{children: ReactNode}) {
                             }}
                         />
                     </RevealFx>
-                    
-                    <Flex fillWidth minHeight="32" minWidth="24" s={{ hide: true }} />
-                    <Header />
 
+                    <Flex fillWidth minHeight="32" minWidth="24" s={{hide: true}} />
+                    <Header />
 
                     <Flex zIndex={1} fillWidth padding="l" horizontal="center" flex={1}>
                         <Flex horizontal="center" fillWidth minHeight="0">
+                            <NextIntlClientProvider locale={locale} messages={messages}>
+
                             <RouteGuard>{children}</RouteGuard>
+                            </NextIntlClientProvider>
+
                         </Flex>
                     </Flex>
 

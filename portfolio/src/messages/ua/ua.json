@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Українська",
+    "flag": "ua",
+    "default": false
+  },
+  "common": {
+    "hello": "Привіт"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Змінити мову на: {locale}"
+  }
+}

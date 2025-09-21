@@ -1,0 +1,5 @@
+{
+  "label": "@:common.labels.work",
+  "title": "Projects – {name}",
+  "description": "Design and dev projects by {name}"
+}

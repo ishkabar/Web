@@ -2,6 +2,7 @@
   "name": "@once-ui-system/magic-portfolio",
   "version": "2.3.0",
   "scripts": {
+    "gen:locales": "tsx scripts/gen-locales.ts",
     "dev": "next dev -p 3000",
     "dev:fast": "FAST_DEV=1 FAST_LOCALE=pl NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
     "build": "next build",
@@ -39,6 +40,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.25.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.8.3",
     "tzdata": "^1.0.44"
   }
