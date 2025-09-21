@@ -24,7 +24,7 @@ export async function generateMetadata() {
 export default function Home() {
     console.log('🚨 [locale]/page.tsx RENDERUJE SIĘ!');
     try {
-        console.log('📦 Rendering Column wrapper...');
+
 
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">

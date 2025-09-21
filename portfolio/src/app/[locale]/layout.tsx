@@ -5,7 +5,8 @@ import "@/resources/custom.css";
 import classNames from "classnames";
 import Script from "next/script";
 import {ReactNode} from "react";
-import {getLocale, getMessages} from "next-intl/server";
+import {getLocale, getMessages} from 'next-intl/server';
+import {NextIntlClientProvider} from 'next-intl';
 import {Providers} from "@/components/Providers";
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 
@@ -27,8 +28,8 @@ export async function generateMetadata() {
     });
 }
 
-export default async function LocaleLayout({children}:{children: ReactNode}) {
-    const locale = await getLocale();
+export default async function LocaleLayout({children}: {children: ReactNode}) {
+    const locale = await getLocale(); 
     const messages = await getMessages();
 
     return (
@@ -111,6 +112,10 @@ export default async function LocaleLayout({children}:{children: ReactNode}) {
                             }}
                         />
                     </RevealFx>
+                    
+                    <Flex fillWidth minHeight="32" minWidth="24" s={{ hide: true }} />
+                    <Header />
+
                     <Flex
                         zIndex={2}
                         fillWidth
@@ -121,8 +126,6 @@ export default async function LocaleLayout({children}:{children: ReactNode}) {
                     >
                         <LocaleSwitcher />
                     </Flex>
-                    <Flex fillWidth minHeight="32" minWidth="24" s={{ hide: true }} />
-                    <Header />
 
                     <Flex zIndex={1} fillWidth padding="l" horizontal="center" flex={1}>
                         <Flex horizontal="center" fillWidth minHeight="0">

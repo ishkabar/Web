@@ -48,3 +48,6 @@ logs/
 /portfolio/.next
 /portfolio/node_modules
 /portfolio/.env.local.demo/
+portfolio/pnpm-lock.yaml
+ogur-next/pnpm-lock.yaml
+**/node_modules

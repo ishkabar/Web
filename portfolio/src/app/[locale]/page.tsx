@@ -29,7 +29,7 @@ export default function Home() {
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
                 <div style={{background: 'red', color: 'white', padding: '10px'}}>
-                    DEBUG: [locale]/page.tsx works!
+                    DEBUG: [locale]/page.tsx
                 </div>
 
                 {(() => {
@@ -56,7 +56,7 @@ export default function Home() {
                     return (
                         <Column fillWidth horizontal="center" gap="m">
                             <Column maxWidth="s" horizontal="center" align="center">
-                                {home.featured.display && (() => {
+                                {/*{home.featured.display && (() => {
                                     console.log('🎯 Rendering Featured Badge...');
                                     return (
                                         <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
@@ -73,9 +73,9 @@ export default function Home() {
                                             </Badge>
                                         </RevealFx>
                                     );
-                                })()}
+                                })()}*/}
 
-                                {(() => {
+                               { (() => {
                                     console.log('📝 Rendering Heading...');
                                     return (
                                         <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
@@ -86,7 +86,7 @@ export default function Home() {
                                     );
                                 })()}
 
-                                {(() => {
+                               { (() => {
                                     console.log('📄 Rendering Subline...');
                                     return (
                                         <RevealFx translateY="8" delay={0.2} fillWidth horizontal="center" paddingBottom="32">
@@ -132,6 +132,7 @@ export default function Home() {
 
                 {(() => {
                     console.log('🚀 Rendering Projects 1...');
+                    /*TODO: 404 page*/
                     return (
                         <RevealFx translateY="16" delay={0.6}>
                             <Projects range={[1, 1]} />
@@ -139,7 +140,7 @@ export default function Home() {
                     );
                 })()}
 
-                {routes["/blog"] && (() => {
+                {/*{routes["/blog"] && (() => {
                     console.log('📰 Rendering Blog section...');
                     return (
                         <Column fillWidth gap="24" marginBottom="l">
@@ -164,16 +165,18 @@ export default function Home() {
                             </Row>
                         </Column>
                     );
-                })()}
+                })()}*/}
 
-                {(() => {
+                {/*{(() => {
                     console.log('🚀 Rendering Projects 2...');
                     return <Projects range={[2]} />;
-                })()}
-                {(() => {
+                })()}*/}
+                
+                {/*{(() => {
                     console.log('📧 Rendering Mailchimp...');
                     return <Mailchimp />;
-                })()}
+                })()}*/}
+                
             </Column>
         );
     } catch (error) {
