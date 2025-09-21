@@ -47,4 +47,4 @@ logs/
 
 /portfolio/.next
 /portfolio/node_modules
-/portfolio/.env.local
+/portfolio/.env.local.demo/
