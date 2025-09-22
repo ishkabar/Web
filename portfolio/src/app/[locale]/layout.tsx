@@ -32,13 +32,15 @@ export async function generateMetadata() {
 }
 
 export default async function LocaleLayout(
-    {children, params}: {children: React.ReactNode; params: {locale: string}}
+    { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }
 ) {
-    setRequestLocale(params.locale);
-    const locale = await getLocale();
+    const { locale: routeLocale } = await params;
+    setRequestLocale(routeLocale);
+    
     const messages = await getMessages();
+
     return (
-        <Providers locale={locale} messages={messages}>
+        <Providers locale={routeLocale} messages={messages}>
             <Script
                 id="theme-init"
                 strategy="afterInteractive"
@@ -127,7 +129,7 @@ export default async function LocaleLayout(
 
                     <Flex zIndex={1} fillWidth padding="l" horizontal="center" flex={1}>
                         <Flex horizontal="center" fillWidth minHeight="0">
-                            <NextIntlClientProvider locale={locale} messages={messages}>
+                            <NextIntlClientProvider locale={routeLocale} messages={messages}>
 
                             <RouteGuard>{children}</RouteGuard>
                             </NextIntlClientProvider>

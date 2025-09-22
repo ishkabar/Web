@@ -4,8 +4,11 @@ import {defaultLocale, type Locale, isLocale} from './locales.generated';
 const NAMESPACES = ['common','home','about','work','blog','gallery','newsletter'] as const;
 
 function normalizeLocale(input: string | undefined): string | undefined {
-    if (!input) return input;
-    return input.toLowerCase().split('-')[0];
+    return input?.toLowerCase().split('-')[0];
+}
+
+function isThenable<T = unknown>(v: unknown): v is Promise<T> {
+    return !!v && typeof (v as any).then === 'function';
 }
 
 async function loadMonolith(loc: Locale) {
@@ -14,7 +17,7 @@ async function loadMonolith(loc: Locale) {
 }
 
 async function loadNamespaces(loc: Locale) {
-    const wrapped = await Promise.all(
+    const parts = await Promise.all(
         NAMESPACES.map(async (ns) => {
             try {
                 const mod = await import(`../messages/${loc}/${ns}.json`);
@@ -25,18 +28,16 @@ async function loadNamespaces(loc: Locale) {
             }
         })
     );
-    return Object.assign({}, ...wrapped);
+    return Object.assign({}, ...parts);
 }
 
-export default getRequestConfig(async ({requestLocale}) => {
-    // <- KLUCZOWA ZMIANA: await requestLocale (może być undefined)
-    const rl = await requestLocale;
-    const requestedNorm = normalizeLocale(rl);
-    const resolved: Locale = isLocale(requestedNorm ?? '') ? (requestedNorm as Locale) : defaultLocale;
+export default getRequestConfig(async ({locale}) => {
+    // locale can be string or Promise<string> (Next 15) or undefined
+    const raw = typeof locale === 'string' ? locale : (isThenable<string>(locale) ? await locale : undefined);
+    const norm = normalizeLocale(raw);
+    const resolved: Locale = isLocale(norm ?? '') ? (norm as Locale) : defaultLocale;
 
-    console.log(`[i18n] request: reqLocale="${rl}"`);
-    console.log(`[i18n] request: norm="${requestedNorm}" -> resolved="${resolved}"`);
-
+    // Try monolith first; fallback to namespaces; final fallback {}
     let messages: Record<string, unknown> | null = null;
 
     try {
@@ -48,15 +49,15 @@ export default getRequestConfig(async ({requestLocale}) => {
 
     if (!messages && resolved !== defaultLocale) {
         try {
-            messages = await loadMonolith(defaultLocale as Locale);
+            messages = await loadMonolith(defaultLocale);
         } catch {
-            const ns = await loadNamespaces(defaultLocale as Locale);
+            const ns = await loadNamespaces(defaultLocale);
             messages = Object.keys(ns).length ? ns : {};
         }
     }
 
     messages ??= {};
 
-    // <- WYMAGANE w nowych wersjach: zwróć też `locale`
+    // Required: return both locale and messages
     return {locale: resolved, messages};
 });

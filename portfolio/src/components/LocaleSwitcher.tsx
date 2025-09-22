@@ -13,6 +13,7 @@ const LOCALES: LocaleDef[] = locales.map(code => ({
 }));
 
 const listHideDelay = 300;
+const PRIORITY = ['pl','en','de'];
 
 function detectLocaleFromPath(pathname: string): Locale {
     const seg = pathname.split('/')[1] ?? '';
@@ -53,14 +54,13 @@ export default function LocaleSwitcher() {
     const triggerRef = React.useRef<HTMLButtonElement | null>(null);
     const listRef = React.useRef<HTMLDivElement | null>(null);
 
-    // mount + animate
     const [menuVisible, setMenuVisible] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
 
     const currentIdx = React.useMemo(() => LOCALES.findIndex(l => l.code === current), [current]);
     const [focusIdx, setFocusIdx] = React.useState<number>(currentIdx);
     const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
-    
+
     const [listMaxH, setListMaxH] = React.useState(320);
 
     const hideTimerRef = React.useRef<number | null>(null);
@@ -234,11 +234,11 @@ export default function LocaleSwitcher() {
                 onMouseLeave={() => menuVisible && scheduleHide(listHideDelay)}
                 onFocus={cancelHide}
             >
-        <span
-            className={`fi fi-${cur.flag}`}
-            aria-hidden="true"
-            style={{ display: 'inline-block', fontSize: 18, borderRadius: 2 }}
-        />
+                <span
+                    className={`fi fi-${cur.flag}`}
+                    aria-hidden="true"
+                    style={{ display: 'inline-block', fontSize: 18, borderRadius: 2 }}
+                />
             </ToggleButton>
 
             {menuVisible && (
@@ -278,37 +278,48 @@ export default function LocaleSwitcher() {
                         const bg = isActive ? colors.active : isHovered ? colors.hover : isFocused ? colors.focus : 'transparent';
 
                         return (
-                            <button
-                                key={l.code}
-                                role="option"
-                                aria-selected={isActive}
-                                onMouseEnter={() => setHoverIdx(i)}
-                                onMouseDown={e => e.preventDefault()}
-                                onClick={() => {
-                                    if (l.code !== current) router.push(buildTargetHref(l.code));
-                                    closeMenu();
-                                }}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    width: '100%',
-                                    gap: 8,
-                                    padding: 8,
-                                    border: 'none',
-                                    background: bg,
-                                    color: 'inherit',
-                                    borderRadius: 8,
-                                    cursor: 'pointer',
-                                    transition: 'background .12s ease',
-                                }}
-                            >
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                  <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
-                  <span>{l.label}</span>
-                </span>
-                                <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
-                            </button>
+                            <React.Fragment key={l.code}>
+                                <button
+                                    role="option"
+                                    aria-selected={isActive}
+                                    onMouseEnter={() => setHoverIdx(i)}
+                                    onMouseDown={e => e.preventDefault()}
+                                    onClick={() => {
+                                        if (l.code !== current) router.push(buildTargetHref(l.code));
+                                        closeMenu();
+                                    }}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        width: '100%',
+                                        gap: 8,
+                                        padding: 8,
+                                        border: 'none',
+                                        background: bg,
+                                        color: 'inherit',
+                                        borderRadius: 8,
+                                        cursor: 'pointer',
+                                        transition: 'background .12s ease',
+                                    }}
+                                >
+                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                        <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
+                                        <span>{l.label}</span>
+                                    </span>
+                                    <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
+                                </button>
+
+                                {/* separator po ostatnim języku priorytetowym */}
+                                {PRIORITY.includes(l.code) && i < LOCALES.length - 1 && LOCALES[i+1] && !PRIORITY.includes(LOCALES[i+1].code) && (
+                                    <div
+                                        style={{
+                                            borderTop: `1px solid ${colors.border}`,
+                                            margin: '4px 0',
+                                        }}
+                                    />
+                                )}
+                            </React.Fragment>
                         );
                     })}
                 </div>

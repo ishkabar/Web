@@ -6,10 +6,7 @@ import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 export const runtime = 'nodejs';
 import { Logo } from "@once-ui-system/core";
-
 import {getTranslations} from "next-intl/server";
-
-
 
 export async function generateMetadata() {
     try {
@@ -26,14 +23,17 @@ export async function generateMetadata() {
     }
 }
 
-export default async function Home() {
-    const tHome = await getTranslations("home");
+export default async function Home(
+    { params }: { params: Promise<{ locale: string }> }
+) {
+    const { locale } = await params;
+    const tHome = await getTranslations({ locale, namespace: "home" });
 
     try {
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
                 <div style={{background: 'red', color: 'white', padding: '10px'}}>
-                    DEBUG: [locale]/page.tsx
+                    DEBUG: [{locale.toUpperCase()}]/page.tsx
                 </div>
 
                 {(() => {

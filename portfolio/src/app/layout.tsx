@@ -18,7 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 fonts.label.variable,
                 fonts.code.variable
             )}
-            
+
+            data-scroll-behavior="smooth"
             data-brand={style.brand}
             data-accent={style.accent}
             data-neutral={style.neutral}
