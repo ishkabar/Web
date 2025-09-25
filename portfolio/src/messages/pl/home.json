@@ -1,11 +1,18 @@
 {
-  "label": "@:common.labels.home",
-  "title": "Portfolio {name}",
-  "description": "Strona portfolio prezentująca moją pracę jako {role}",
-  "headline": "Buduję mosty między designem a kodem",
+    "path": "/",
+    "image": "/images/og/home.jpg",
 
-  "featuredTitleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
-  "featuredHref": "/work/building-once-ui-a-customizable-design-system",
+    "label": "@:common.labels.home",
+    "title": "Portfolio {name}",
+    "description": "Strona portfolio prezentująca moją pracę jako {role}",
+    "headline": "Buduję mosty między designem a kodem",
+    "subline": "Jestem Selene, inżynierem projektowania w Once UI, gdzie tworzę intuicyjne doświadczenia użytkownika. Po godzinach buduję własne projekty.",
+    "sublineRich": "Jestem {firstName}, design engineer w <Logo/> , gdzie tworzę intuicyjne doświadczenia. Po godzinach buduję własne projekty.",
 
-  "sublineRich": "Jestem {firstName}, design engineer w <Logo/> , gdzie tworzę intuicyjne doświadczenia. Po godzinach buduję własne projekty."
+    "featured": {
+      "display": true,
+      "title": "Wyróżniona praca",
+      "titleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
+      "href": "/work/building-once-ui-a-customizable-design-system"
+    }
 }

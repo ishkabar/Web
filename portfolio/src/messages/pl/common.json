@@ -1,15 +1,48 @@
 {
-  "person": {
-    "role": {
-      "bum": "Żul"
-    }
+  "meta": {
+    "label": "Polski",
+    "flag": "pl",
+    "default": true
   },
-  "labels": {
+  
+  "person": {
+    "firstName": "Twój stary",
+    "lastName": "Najebany",
+    "name": "Twój stary najebany",
+    "role": "rola osoby",
+    "avatar": "/images/avatar.jpg",
+    "email": "example@gmail.com",
+    "location": "Azja/Jakarta",
+    "languages": ["Angielski", "Polski"]
+  },
+  
+  "header": {
     "home": "Start",
     "about": "O mnie",
     "work": "Projekty",
     "blog": "Blog",
-    "gallery": "Galeria",
-    "featured": "Wyróżnione"
+    "gallery": "Galeria"
+  },
+
+  "footer": { },
+
+  "newsletter": {
+    "display": true,
+    "title": "Zapisz się na newsletter {firstName}",
+    "description": "Mój cotygodniowy newsletter o kreatywności i inżynierii"
+  },
+  
+  "social": {
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "threads": "Threads",
+    "email": "Email"
+  },
+  
+  "routeGuard": {
+    "protectedTitle": "Ta strona jest chroniona hasłem",
+    "passwordLabel": "Hasło",
+    "submit": "Zatwierdź",
+    "incorrectPassword": "Nieprawidłowe hasło"
   }
 }

@@ -12,6 +12,8 @@ import { routes, display, person, about, blog, work, gallery } from "@/resources
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 import { locales, defaultLocale, type Locale } from "@/i18n/routing";
+import {useTranslations} from 'next-intl';
+
 
 type TimeDisplayProps = {
   timeZone: string;
@@ -66,6 +68,8 @@ export const Header = () => {
     const pathnameRaw = usePathname() ?? "/";
     const pathname = normalize(pathnameRaw);
     const locale = detectLocaleFromPath(pathnameRaw);
+
+    const t = useTranslations('common.header');
 
     const H = (p: string) => normalize(withLocale(p, locale));
     const isAt = (p: string) => pathname === H(p);
@@ -139,6 +143,9 @@ export const Header = () => {
                                 <ToggleButton
                                     prefixIcon="home"
                                     href={withLocale("/", locale)}
+                                    //label={t('')}
+                                    title={t('home')}
+                                    aria-label={t('home')}
                                     selected={isHomeActive()}
                                 />
                             )}
@@ -151,7 +158,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="person"
                                             href={H("/about")}
-                                            label={about.label}
+                                            label={t('about')}
+                                            title={t('about')}
+                                            aria-label={t('about')}
                                             selected={isAt("/about")}
                                         />
                                     </Row>
@@ -159,6 +168,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="person"
                                             href={H("/about")}
+                                            label={t('about')}
+                                            title={t('about')}
+                                            aria-label={t('about')}
                                             selected={isAt("/about")}
                                         />
                                     </Row>
@@ -171,7 +183,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="grid"
                                             href={H("/work")}
-                                            label={work.label}
+                                            label={t('work')}
+                                            title={t('work')}
+                                            aria-label={t('work')}
                                             selected={isUnder("/work")}
                                         />
                                     </Row>
@@ -179,6 +193,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="grid"
                                             href={H("/work")}
+                                            //label={t('work')}
+                                            title={t('work')}
+                                            aria-label={t('work')}
                                             selected={isUnder("/work")}
                                         />
                                     </Row>
@@ -191,13 +208,18 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="book"
                                             href={H("/blog")}
-                                            label={blog.label}
+                                            label={t('blog')}
+                                            title={t('blog')}
+                                            aria-label={t('blog')}
                                             selected={isUnder("/blog")}
                                         />
                                     </Row>
                                     <Row hide s={{ hide: false }}>
                                         <ToggleButton
                                             prefixIcon="book"
+                                            //label={t('blog')}
+                                            title={t('blog')}
+                                            aria-label={t('blog')}
                                             href={H("/blog")}
                                             selected={isUnder("/blog")}
                                         />
@@ -211,7 +233,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="gallery"
                                             href={H("/gallery")}
-                                            label={gallery.label}
+                                            label={t('gallery')}
+                                            title={t('gallery')}
+                                            aria-label={t('gallery')}
                                             selected={isUnder("/gallery")}
                                         />
                                     </Row>
@@ -219,6 +243,9 @@ export const Header = () => {
                                         <ToggleButton
                                             prefixIcon="gallery"
                                             href={H("/gallery")}
+                                            //label={t('gallery')}
+                                            title={t('gallery')}
+                                            aria-label={t('gallery')}
                                             selected={isUnder("/gallery")}
                                         />
                                     </Row>

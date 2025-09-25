@@ -42,14 +42,50 @@ function collectPosts(dir: string): ProjectPost[] {
     });
 }
 
+
+/*
+export function getWorkPostsLocaleAware(locale?: string): ProjectPost[] {
+    const base = path.join(process.cwd(), "src", "content");
+    const globalDir = path.join(base, "posts", "projects");
+    const localeDir = locale ? path.join(base, locale, "work", "projects") : "";
+
+    const globalPosts = collectPosts(globalDir);
+    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
+
+    const localPosts = collectPosts(localeDir);
+
+    const map = new Map<string, ProjectPost>();
+    for (const p of globalPosts) map.set(p.slug, p);
+    for (const p of localPosts) map.set(p.slug, p); // override by locale
+    return Array.from(map.values());
+}
+*/
 /**
- * Returns posts for a locale with fallback to global.
- * If a slug exists in locale dir, it overrides the global one.
+ * /[locale]/work → loads from src/content/projects (+ optional locale override)
  */
 export function getWorkPostsLocaleAware(locale?: string): ProjectPost[] {
-    const base = path.join(process.cwd(), "src", "app");
-    const globalDir = path.join(base, "work", "projects");
-    const localeDir = locale ? path.join(base, locale, "work", "projects") : "";
+    const base = path.join(process.cwd(), "src", "content");
+    const globalDir = path.join(base, "projects");
+    const localeDir = locale ? path.join(base, locale, "projects") : "";
+
+    const globalPosts = collectPosts(globalDir);
+    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
+
+    const localPosts = collectPosts(localeDir);
+
+    const map = new Map<string, ProjectPost>();
+    for (const p of globalPosts) map.set(p.slug, p);
+    for (const p of localPosts) map.set(p.slug, p); // override by locale
+    return Array.from(map.values());
+}
+
+/**
+ * /[locale]/blog → loads from src/content/posts (+ optional locale override)
+ */
+export function getBlogPostsLocaleAware(locale?: string): ProjectPost[] {
+    const base = path.join(process.cwd(), "src", "content");
+    const globalDir = path.join(base, "posts");
+    const localeDir = locale ? path.join(base, locale, "posts") : "";
 
     const globalPosts = collectPosts(globalDir);
     if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;

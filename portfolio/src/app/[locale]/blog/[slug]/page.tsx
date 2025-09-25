@@ -19,7 +19,7 @@ import {
 import { baseURL, about, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 //import { getPosts } from "@/utils/utils";
-import { getWorkPostsLocaleAware } from "@/utils/utils";
+import {getBlogPostsLocaleAware} from "@/utils/utils";
 import { Metadata } from "next";
 import React from "react";
 import { Posts } from "@/components/blog/Posts";
@@ -28,7 +28,7 @@ import { ShareSection } from "@/components/blog/ShareSection";
 const locale = await getLocale();
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts = getWorkPostsLocaleAware(locale);
+  const posts = getBlogPostsLocaleAware(locale);
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -44,7 +44,7 @@ export async function generateMetadata({
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
 
-  const posts = getWorkPostsLocaleAware(locale);
+  const posts = getBlogPostsLocaleAware(locale);
   let post = posts.find((post) => post.slug === slugPath);
 
   if (!post) return {};
@@ -64,7 +64,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
 
-  let post = getWorkPostsLocaleAware(locale).find((post) => post.slug === slugPath);
+  let post = getBlogPostsLocaleAware(locale).find((post) => post.slug === slugPath);
 
   if (!post) {
     notFound();

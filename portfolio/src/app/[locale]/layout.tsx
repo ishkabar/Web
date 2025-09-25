@@ -6,8 +6,7 @@ import '@/resources/custom.css';
 
 import classNames from 'classnames';
 import Script from 'next/script';
-import type {ReactNode} from 'react';
-import {getLocale, getMessages, setRequestLocale} from 'next-intl/server';
+import {getMessages, setRequestLocale} from 'next-intl/server';
 import { NextIntlClientProvider} from 'next-intl';
 import {Providers} from '@/components/Providers';
 import {locales} from '@/i18n/locales.generated';

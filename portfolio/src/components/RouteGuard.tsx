@@ -7,6 +7,7 @@ import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-
 import NotFound from "@/app/not-found";
 import { isLocale } from '@/i18n/locales.generated';
 import { useLocale } from "next-intl";
+import {useTranslations} from 'next-intl';
 
 interface RouteGuardProps {
     children: React.ReactNode;
@@ -14,7 +15,6 @@ interface RouteGuardProps {
 
 function normalizePath(p: string): string {
     if (!p) return "/";
-    // usuwamy trailing slash > 1 znak
     if (p.length > 1 && p.endsWith("/")) return p.slice(0, -1);
     return p;
 }
@@ -29,6 +29,7 @@ function stripLocalePrefix(pathname: string | null): string {
     return normalizePath(pathname);
 }
 
+
 const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     const locale = useLocale();
     const pathname = usePathname();
@@ -41,6 +42,8 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
 
+    const t = useTranslations('common.routeGuard');
+
     useEffect(() => {
         let mounted = true;
 
@@ -52,24 +55,13 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
             setIsAuthenticated(false);
 
             const checkRouteEnabled = () => {
-                // Debug: ważne, że path to już wersja bez prefiksu locale
-                console.log("🔍 FINAL RouteGuard Debug:", {
-                    locale,
-                    pathname,
-                    path,
-                    routeKeys: Object.keys(routes),
-                    pathInRoutes: Object.prototype.hasOwnProperty.call(routes, path),
-                    routeValue: routes[path as keyof typeof routes],
-                });
 
                 if (!path) return false;
-
-                // 1) Dokładne dopasowanie
+                
                 if (Object.prototype.hasOwnProperty.call(routes, path)) {
                     return Boolean(routes[path as keyof typeof routes]);
                 }
-
-                // 2) Prefiksy dla sekcji dynamicznych (UŻYWAJ path, nie pathname)
+                
                 const dynamicPrefixes = ["/blog", "/work"] as const;
                 for (const base of dynamicPrefixes) {
                     if (path === base || path.startsWith(base + "/")) {
@@ -82,7 +74,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
             const routeEnabled = checkRouteEnabled();
             if (!mounted) return;
-            console.log("FINAL Route enabled:", routeEnabled);
+
             setIsRouteEnabled(routeEnabled);
 
             if (protectedRoutes[path as keyof typeof protectedRoutes]) {
@@ -117,7 +109,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
             setIsAuthenticated(true);
             setError(undefined);
         } else {
-            setError("Incorrect password");
+            setError(t('incorrectPassword'));
         }
     };
 
@@ -129,32 +121,28 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
         );
     }
 
-    if (!isRouteEnabled) {
-        console.log("RouteGuard blocks - returning NotFound");
-        return <NotFound />;
-    }
+    if (!isRouteEnabled) { return <NotFound />; }
 
     if (isPasswordRequired && !isAuthenticated) {
         return (
             <Column paddingY="128" maxWidth={24} gap="24" center>
                 <Heading align="center" wrap="balance">
-                    This page is password protected
+                    {t('protectedTitle')}
                 </Heading>
                 <Column fillWidth gap="8" horizontal="center">
                     <PasswordInput
                         id="password"
-                        label="Password"
+                        label={t('passwordLabel')}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         errorMessage={error}
                     />
-                    <Button onClick={handlePasswordSubmit}>Submit</Button>
+                    <Button onClick={handlePasswordSubmit}>{t('submit')}</Button>
                 </Column>
             </Column>
         );
     }
-
-    console.log("RouteGuard allows - rendering children");
+    
     return <>{children}</>;
 };
 

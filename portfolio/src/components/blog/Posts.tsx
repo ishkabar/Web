@@ -1,4 +1,4 @@
-import { getWorkPostsLocaleAware } from "@/utils/utils";
+import { getBlogPostsLocaleAware } from "@/utils/utils";
 import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
 import { getLocale } from "next-intl/server";
@@ -18,7 +18,7 @@ export function Posts({
   exclude = [],
   direction,
 }: PostsProps) {
-  let allBlogs = getWorkPostsLocaleAware(locale);
+  let allBlogs = getBlogPostsLocaleAware(locale);
 
   // Exclude by slug (exact match)
   if (exclude.length) {

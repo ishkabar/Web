@@ -160,8 +160,7 @@ export default async function Home(
                     );
                 })()}
                 
-                {/*routes["/blog"] && (() => { TODO: 404
-                    console.log('📰 Rendering Blog section...');
+                {routes["/blog"] && (() => { TODO: 404
 
                     return (
                         <Column fillWidth gap="24" marginBottom="l">
@@ -176,7 +175,7 @@ export default async function Home(
                                 </Row>
                                 <Row flex={3} paddingX="20">
                                     {(() => {
-                                        console.log('📃 Rendering Posts...');
+                                        //console.log('📃 Rendering Posts...');
                                         return <Posts range={[1, 2]} columns="2" />;
                                     })()}
                                 </Row>
@@ -186,7 +185,7 @@ export default async function Home(
                             </Row>
                         </Column>
                     );
-                })()*/}
+                })()}
 
                 {(() => {
                     return <Projects range={[2]} />;
