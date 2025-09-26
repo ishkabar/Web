@@ -2,33 +2,29 @@ import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
 import '@/resources/custom.css';
 
-
-
+import type { Metadata } from "next";
+import { Background, Column, Flex, opacity, RevealFx, SpacingToken } from '@once-ui-system/core';
+import { getMessages, setRequestLocale } from 'next-intl/server';
+import { locales } from '@/i18n/locales.generated';
+import { NextIntlClientProvider} from 'next-intl';
+import { Providers } from '@/components/Providers';
+import { Footer, Header, RouteGuard } from '@/components';
+import { fonts, style, effects, dataStyle } from '@/resources/ui-tokens.config';
+import { paths, ogImage } from '@/resources/site.config';
 import classNames from 'classnames';
 import Script from 'next/script';
-import {getMessages, setRequestLocale} from 'next-intl/server';
-import { NextIntlClientProvider} from 'next-intl';
-import {Providers} from '@/components/Providers';
-import {locales} from '@/i18n/locales.generated';
-import {Footer, Header, RouteGuard} from '@/components';
-import {
-    Background, Column, Flex, Meta, opacity, RevealFx, SpacingToken
-} from '@once-ui-system/core';
-import {baseURL, effects, fonts, style, dataStyle, home} from '@/resources';
+import { buildPageMetadata } from "@/lib/seo";
+
+
+
 
 export function generateStaticParams() {
     return locales.map((locale) => ({locale}));
 }
-
-export async function generateMetadata() {
-    return Meta.generate({
-        title: home.title,
-        description: home.description,
-        baseURL,
-        path: home.path,
-        image: home.image
-    });
+export async function generateMetadata(): Promise<Metadata> {
+    return buildPageMetadata("common.meta", paths.home, { image: ogImage });
 }
+
 
 export default async function LocaleLayout(
     { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }

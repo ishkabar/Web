@@ -1,5 +1,8 @@
 {
-  "label": "@:common.labels.blog",
-  "title": "Writing about design and tech...",
-  "description": "Read what {name} has been up to recently"
-}
+    "title": "Blog – artykuły o designie i technologii",
+    "description": "Przeczytaj najnowsze wpisy Dominika",
+    "author": {
+      "name": "Dominik Karczewski"
+    },
+    "earlierPosts": "Starsze wpisy"
+  }

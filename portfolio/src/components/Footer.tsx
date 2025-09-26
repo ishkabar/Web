@@ -1,11 +1,15 @@
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { person, social } from "@/resources";
+import { social } from "@/resources";
 import styles from "./Footer.module.scss";
+import { useTranslations } from "next-intl";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const t = useTranslations("common");
+    const social = t.raw('social') as Array<{name: string; icon: string; link: string}>;
 
-  return (
+
+    return (
     <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
       <Row
         className={styles.mobile}
@@ -23,7 +27,7 @@ export const Footer = () => {
       >
         <Text variant="body-default-s" onBackground="neutral-strong">
           <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
+          <Text paddingX="4">{t('person.name')}</Text>
           <Text onBackground="neutral-weak">
             {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
             / Build your portfolio with{" "}
@@ -31,19 +35,18 @@ export const Footer = () => {
           </Text>
         </Text>
         <Row gap="16">
-          {social.map(
-            (item) =>
-              item.link && (
-                <IconButton
-                  key={item.name}
-                  href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
-                  size="s"
-                  variant="ghost"
-                />
-              ),
-          )}
+            {social.map(item =>
+                item.link ? (
+                    <IconButton
+                        key={item.name}
+                        href={item.link}
+                        icon={item.icon}
+                        tooltip={item.name}
+                        size="s"
+                        variant="ghost"
+                    />
+                ) : null
+            )}
         </Row>
       </Row>
       <Row height="80" hide s={{ hide: false }} />

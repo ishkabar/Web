@@ -1,6 +1,7 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Logo, Row, Text } from "@once-ui-system/core";
 
+/*
 const person: Person = {
   firstName: "Twój stary",
   lastName: "Najebany",
@@ -298,3 +299,4 @@ const gallery: Gallery = {
 };
 
 export { person, social, newsletter, home, about, blog, work, gallery };
+*/

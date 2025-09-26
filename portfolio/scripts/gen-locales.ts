@@ -33,7 +33,6 @@ function main() {
         process.exit(1);
     }
 
-    // Każdy katalog pod src/messages to potencjalny locale
     const dirs = fs.readdirSync(MSG_DIR, { withFileTypes: true })
         .filter(d => d.isDirectory())
         .map(d => d.name);
@@ -43,7 +42,6 @@ function main() {
         process.exit(1);
     }
 
-    // Czytaj meta z pliku: src/messages/<locale>/<locale>.json
     const entries: LocaleEntry[] = [];
     for (const code of dirs) {
         const jsonPath = path.join(MSG_DIR, code, `${code}.json`);
@@ -55,10 +53,6 @@ function main() {
         entries.push({ code, meta });
     }
 
-    // Ustal defaultLocale:
-    // 1) meta.default === true
-    // 2) pierwszy z PRIORITY, który istnieje
-    // 3) pierwszy po sortowaniu
     const present = new Set(entries.map(e => e.code));
     const explicitDefaults = entries.filter(e => e.meta?.default);
     let defaultLocale: string | undefined = explicitDefaults[0]?.code;
@@ -66,7 +60,6 @@ function main() {
         defaultLocale = PRIORITY.find(p => present.has(p)) ?? undefined;
     }
 
-    // Kolejność: priorytety (jeśli istnieją) + reszta alfabetycznie
     const head = PRIORITY.filter(p => present.has(p));
     const tail = entries
         .map(e => e.code)
@@ -76,7 +69,6 @@ function main() {
 
     if (!defaultLocale) defaultLocale = locales[0];
 
-    // Meta map do eksportu
     const metaMap: Record<string, { label: string; flag: string }> = {};
     for (const e of entries) {
         metaMap[e.code] = {
@@ -100,7 +92,8 @@ export function isLocale(x: string): x is Locale {
 }
 `;
     fs.writeFileSync(OUT_FILE, content, 'utf-8');
-    console.log(`[i18n] Generated: ${path.relative(ROOT, OUT_FILE)} (${locales.length} locales, default=${defaultLocale})`);
+    console.info(`[i18n] Generated: ${path.relative(ROOT, OUT_FILE)} (${locales.length} locales, default=${defaultLocale})`);
+
 }
 
 main();

@@ -1,6 +1,6 @@
 import { Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Meta, Line,} 
     from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
+import { home, about, baseURL, routes, paths } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
@@ -8,19 +8,33 @@ export const runtime = 'nodejs';
 import { Logo } from "@once-ui-system/core";
 import {getTranslations} from "next-intl/server";
 
-export async function generateMetadata() {
-    try {
-        return Meta.generate({
-            title: home.title,
-            description: home.description,
-            baseURL: baseURL,
-            path: home.path,
-            image: home.image,
-        });
-    } catch (error) {
-        console.error('generateMetadata ERROR:', error);
-        throw error;
-    }
+import type { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("common.meta");
+    const title = t("title");
+    const description = t("description");
+    const url = new URL(paths.about, baseURL).toString();
+    const ogImage = `/api/og/generate?title=${encodeURIComponent(title)}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: {
+            url,
+            title,
+            description,
+            images: [ogImage],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [ogImage],
+        },
+        metadataBase: new URL(baseURL),
+    };
 }
 
 export default async function Home(
@@ -28,6 +42,9 @@ export default async function Home(
 ) {
     const { locale } = await params;
     const tHome = await getTranslations({ locale, namespace: "home" });
+    const t = await getTranslations("home");
+    const tPerson = await getTranslations("common.person");
+    const title = t("title");
 
     try {
         return (
@@ -41,13 +58,13 @@ export default async function Home(
                         <Schema
                             as="webPage"
                             baseURL={baseURL}
-                            path={home.path}
-                            title={home.title}
-                            description={home.description}
-                            image={`/api/og/generate?title=${encodeURIComponent(home.title)}`}
+                            path={paths.home}
+                            title={title}
+                            description={t('description')}
+                            image={`/api/og/generate?title=${encodeURIComponent(title)}`}
                             author={{
-                                name: person.name,
-                                url: `${baseURL}${about.path}`,
+                                name: tPerson('name'),
+                                url: `${baseURL}${paths.about}`,
                                 image: `${baseURL}${person.avatar}`,
                             }}
                         />
@@ -58,7 +75,7 @@ export default async function Home(
                     return (
                         <Column fillWidth horizontal="center" gap="m">
                             <Column maxWidth="s" horizontal="center" align="center">
-                                {home.featured.display && (() => {
+                                {t('featured.display') && (() => {
                                     return (
                                         <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
                                             <Badge
@@ -68,9 +85,9 @@ export default async function Home(
                                                 onBackground="neutral-strong"
                                                 textVariant="label-default-s"
                                                 arrow={false}
-                                                href={home.featured.href}
+                                                href={t('featured.href')}
                                             >
-                                                <Row paddingY="2">{home.featured.title}</Row>
+                                                <Row paddingY="2">{t('featured.title')}</Row>
                                             </Badge>
                                         </RevealFx>
                                     );
@@ -101,7 +118,7 @@ export default async function Home(
                                                 variant="heading-default-xl"
                                             >
                                                 {tHome.rich("sublineRich", {
-                                                    firstName: person.firstName,
+                                                    firstName: tPerson('firstName'),
                                                     Logo: () => (
                                                         <Logo
                                                             dark
@@ -126,7 +143,7 @@ export default async function Home(
                                             <Button
                                                 id="about"
                                                 data-border="rounded"
-                                                href={about.path}
+                                                href={paths.about}
                                                 variant="secondary"
                                                 size="m"
                                                 weight="default"
@@ -160,7 +177,7 @@ export default async function Home(
                     );
                 })()}
                 
-                {routes["/blog"] && (() => { TODO: 404
+                {routes["/blog"] && (() => { //TODO: 404
 
                     return (
                         <Column fillWidth gap="24" marginBottom="l">
@@ -175,7 +192,6 @@ export default async function Home(
                                 </Row>
                                 <Row flex={3} paddingX="20">
                                     {(() => {
-                                        //console.log('📃 Rendering Posts...');
                                         return <Posts range={[1, 2]} columns="2" />;
                                     })()}
                                 </Row>

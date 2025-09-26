@@ -1,18 +1,81 @@
 {
-    "path": "/",
-    "image": "/images/og/home.jpg",
+  "path": "/",
+  "image": "/images/og/home.jpg",
 
-    "label": "@:common.labels.home",
-    "title": "Portfolio {name}",
-    "description": "Strona portfolio prezentująca moją pracę jako {role}",
-    "headline": "Buduję mosty między designem a kodem",
-    "subline": "Jestem Selene, inżynierem projektowania w Once UI, gdzie tworzę intuicyjne doświadczenia użytkownika. Po godzinach buduję własne projekty.",
-    "sublineRich": "Jestem {firstName}, design engineer w <Logo/> , gdzie tworzę intuicyjne doświadczenia. Po godzinach buduję własne projekty.",
+  "label": "@:common.labels.home",
+  "title": "Portfolio {name}",
+  "description": "Strona portfolio prezentująca moją pracę jako {role}",
+  "headline": "Buduję mosty między designem a kodem",
+  "sublineRich": "Jestem {firstName}, tworzę intuicyjne doświadczenia. Po godzinach buduję własne projekty.",
 
-    "featured": {
-      "display": true,
-      "title": "Wyróżniona praca",
-      "titleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
-      "href": "/work/building-once-ui-a-customizable-design-system"
-    }
+  "calendar": {
+    "cta": "Umów rozmowę"
+  },
+
+  "featured": {
+    "display": true,
+    "title": "Wyróżniona praca",
+    "titleRich": "<b>Once UI</b><sep/><small>@:common.labels.featured</small>",
+    "href": "/work/building-once-ui-a-customizable-design-system"
+  },
+
+  "intro": {
+    "display": true,
+    "title": "Wprowadzenie",
+    "description": "Selene to inżynierka projektowania z Dżakarty z pasją do przekształcania złożonych wyzwań w proste, eleganckie rozwiązania. Jej prace obejmują interfejsy cyfrowe, doświadczenia interaktywne i połączenie designu z technologią."
+  },
+  "work": {
+    "display": true,
+    "title": "Doświadczenie zawodowe",
+    "experiences": [
+      {
+        "company": "FLY",
+        "timeframe": "2022 – obecnie",
+        "role": "Starsza inżynierka projektowania",
+        "achievements": [
+          "Przeprojektowała UI/UX platformy FLY, co przyniosło 20% wzrost zaangażowania użytkowników i 30% szybsze ładowanie.",
+          "Zainicjowała integrację narzędzi AI w procesach projektowych, umożliwiając projektantom iterację o 50% szybciej."
+        ]
+      },
+      {
+        "company": "Creativ3",
+        "timeframe": "2018 – 2022",
+        "role": "Główna projektantka",
+        "achievements": [
+          "Stworzyła system projektowy, który ujednolicił markę na wielu platformach, poprawiając spójność designu o 40%.",
+          "Poprowadziła zespół międzydziałowy przy wprowadzeniu nowej linii produktów, co przyczyniło się do 15% wzrostu przychodów firmy."
+        ]
+      }
+    ]
+  },
+  "studies": {
+    "display": true,
+    "title": "Edukacja",
+    "institutions": [
+      {
+        "name": "Uniwersytet w Dżakarcie",
+        "description": "Studia z inżynierii oprogramowania."
+      },
+      {
+        "name": "Build the Future",
+        "description": "Studia z marketingu online i budowania marki osobistej."
+      }
+    ]
+  },
+  "technical": {
+    "display": true,
+    "title": "Umiejętności techniczne",
+    "skills": [
+      {
+        "title": "Figma",
+        "description": "Potrafię prototypować w Figmie z Once UI w nienaturalnym tempie.",
+        "tags": ["Figma"]
+      },
+      {
+        "title": "Next.js",
+        "description": "Buduję aplikacje nowej generacji w Next.js + Once UI + Supabase.",
+        "tags": ["JavaScript", "Next.js", "Supabase"]
+      }
+    ]
+  }
 }

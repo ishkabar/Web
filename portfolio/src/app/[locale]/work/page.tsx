@@ -1,15 +1,36 @@
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
+import { baseURL, about, person, work, paths } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 
-export async function generateMetadata() {
-  return Meta.generate({
-    title: work.title,
-    description: work.description,
-    baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(work.title)}`,
-    path: work.path,
-  });
+import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
+
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("common.meta");
+    const title = t("title");
+    const description = t("description");
+    const url = new URL(paths.about, baseURL).toString();
+    const ogImage = `/api/og/generate?title=${encodeURIComponent(title)}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: {
+            url,
+            title,
+            description,
+            images: [ogImage],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [ogImage],
+        },
+        metadataBase: new URL(baseURL),
+    };
 }
 
 export default function Work() {

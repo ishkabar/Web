@@ -2,7 +2,10 @@
   "meta": {
     "label": "Polski",
     "flag": "pl",
-    "default": true
+    "default": true,
+    "siteName": "Dominik – Portfolio",
+    "title": "Portfolio - Dominik Karczewski",
+    "description": "Programista programujący ęóąśłżźćń€"
   },
   
   "person": {
@@ -12,7 +15,7 @@
     "role": "rola osoby",
     "avatar": "/images/avatar.jpg",
     "email": "example@gmail.com",
-    "location": "Azja/Jakarta",
+    "location": "Europe/Warsaw",
     "languages": ["Angielski", "Polski"]
   },
   
@@ -24,20 +27,20 @@
     "gallery": "Galeria"
   },
 
-  "footer": { },
+  "footer": { "copyright": "© {year} Dominik"},
 
   "newsletter": {
     "display": true,
     "title": "Zapisz się na newsletter {firstName}",
     "description": "Mój cotygodniowy newsletter o kreatywności i inżynierii"
   },
-  
-  "social": {
-    "github": "GitHub",
-    "linkedin": "LinkedIn",
-    "threads": "Threads",
-    "email": "Email"
-  },
+
+  "social": [
+    { "name": "GitHub",   "icon": "github",   "link": "https://github.com/once-ui-system" },
+    { "name": "LinkedIn", "icon": "linkedin", "link": "https://www.linkedin.com/company/once-ui/" },
+    { "name": "Threads",  "icon": "threads",  "link": "https://www.threads.com/@once_ui" },
+    { "name": "Email",    "icon": "email",    "link": "mailto:example@gmail.com" }
+  ],
   
   "routeGuard": {
     "protectedTitle": "Ta strona jest chroniona hasłem",

@@ -70,6 +70,7 @@ export const Header = () => {
     const locale = detectLocaleFromPath(pathnameRaw);
 
     const t = useTranslations('common.header');
+    const tPerson = useTranslations('common.person');
 
     const H = (p: string) => normalize(withLocale(p, locale));
     const isAt = (p: string) => pathname === H(p);
@@ -125,7 +126,7 @@ export const Header = () => {
                 s={{ position: "fixed" }}
             >
                 <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-                    {display.location && <Row s={{ hide: true }}>{person.location}</Row>}
+                    {display.location && <Row s={{ hide: true }}>{tPerson('location')}</Row>}
                 </Row>
 
                 <Row fillWidth horizontal="center">
@@ -271,7 +272,7 @@ export const Header = () => {
                 <Flex fillWidth horizontal="end" vertical="center">
                     <Flex paddingRight="12" horizontal="end" vertical="center" textVariant="body-default-s" gap="20">
                         <Flex s={{ hide: true }}>
-                            {display.time && <TimeDisplay timeZone={person.location} />}
+                            {display.time && <TimeDisplay timeZone={tPerson('location')} />}
                         </Flex>
                     </Flex>
                 </Flex>
