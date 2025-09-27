@@ -2,7 +2,8 @@
 
 import { Card, Column, Media, Row, Avatar, Text } from "@once-ui-system/core";
 import { formatDate } from "@/utils/formatDate";
-import { person } from "@/resources";
+import {useTranslations} from 'next-intl';
+
 
 interface PostProps {
   post: any;
@@ -11,6 +12,19 @@ interface PostProps {
 }
 
 export default function Post({ post, thumbnail, direction }: PostProps) {
+    
+
+    //const tHome = useTranslations('home' );
+    //const tAbout = useTranslations('about');
+    const tPerson = useTranslations('common.person');
+    
+    //const aboutAvatar = (tAbout.raw("avatar") as { display: boolean } | undefined)?.display === true;
+    //const aboutTitle = tAbout("title", { name: tPerson("name") });
+    const personAvatar = tPerson("avatar");
+    const personName = tPerson("name");
+    
+    
+    
   return (
     <Card
       fillWidth
@@ -41,8 +55,8 @@ export default function Post({ post, thumbnail, direction }: PostProps) {
         <Column maxWidth={28} paddingY="24" paddingX="l" gap="20" vertical="center">
           <Row gap="24" vertical="center">
             <Row vertical="center" gap="16">
-              <Avatar src={person.avatar} size="s" />
-              <Text variant="label-default-s">{person.name}</Text>
+              <Avatar src={personAvatar} size="s" />
+              <Text variant="label-default-s">{personName}</Text>
             </Row>
             <Text variant="body-default-xs" onBackground="neutral-weak">
               {formatDate(post.metadata.publishedAt, false)}

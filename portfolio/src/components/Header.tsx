@@ -8,7 +8,7 @@ import LocaleSwitcher from "@/components/LocaleSwitcher";
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
-import { routes, display, person, about, blog, work, gallery } from "@/resources";
+import { routes, display } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 import { locales, defaultLocale, type Locale } from "@/i18n/routing";

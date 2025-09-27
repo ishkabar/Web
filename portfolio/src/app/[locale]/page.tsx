@@ -1,81 +1,73 @@
-import { Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Meta, Line,} 
-    from "@once-ui-system/core";
-import { home, about, baseURL, routes, paths } from "@/resources";
+import {
+  Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Line,
+} from "@once-ui-system/core";
+import { baseURL, routes, paths } from "@/resources";
 import { Mailchimp } from "@/components";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
-export const runtime = 'nodejs';
+export const runtime = "nodejs";
 import { Logo } from "@once-ui-system/core";
 import {getTranslations} from "next-intl/server";
-
 import type { Metadata } from "next";
+import {buildPageMetadata} from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("common.meta");
-    const title = t("title");
-    const description = t("description");
-    const url = new URL(paths.about, baseURL).toString();
-    const ogImage = `/api/og/generate?title=${encodeURIComponent(title)}`;
-
-    return {
-        title,
-        description,
-        alternates: { canonical: url },
-        openGraph: {
-            url,
-            title,
-            description,
-            images: [ogImage],
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [ogImage],
-        },
-        metadataBase: new URL(baseURL),
-    };
+    return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
 }
 
 export default async function Home(
-    { params }: { params: Promise<{ locale: string }> }
+  { params }: { params: Promise<{ locale: string }> }
 ) {
-    const { locale } = await params;
-    const tHome = await getTranslations({ locale, namespace: "home" });
-    const t = await getTranslations("home");
-    const tPerson = await getTranslations("common.person");
-    const title = t("title");
+  const { locale } = await params;
 
-    try {
+  const tHome = await getTranslations({ locale, namespace: "home" });
+  const tAbout = await getTranslations({ locale, namespace: "about" });
+  const t = await getTranslations({ locale, namespace: "common" });
+
+  const featured = tHome.raw("featured") as {
+    display: boolean;
+    titleRich?: string;
+    href: string;
+  };
+
+  const aboutAvatar = (tAbout.raw("avatar") as { display: boolean } | undefined)?.display === true;
+  const aboutTitle = tAbout("title", { name: t("person.name") });
+
+  const personAvatar = t("person.avatar");
+  const personName = t("person.name");
+
+  try {
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
-                <div style={{background: 'red', color: 'white', padding: '10px'}}>
+            <div style={{ background: "red", color: "white", padding: "10px" }}>
                     DEBUG: [{locale.toUpperCase()}]/page.tsx
                 </div>
 
+            {/* Schema.org */}
                 {(() => {
                     return (
                         <Schema
-                            as="webPage"
-                            baseURL={baseURL}
-                            path={paths.home}
-                            title={title}
-                            description={t('description')}
-                            image={`/api/og/generate?title=${encodeURIComponent(title)}`}
-                            author={{
-                                name: tPerson('name'),
-                                url: `${baseURL}${paths.about}`,
-                                image: `${baseURL}${person.avatar}`,
-                            }}
+                          as="webPage"
+                          baseURL={baseURL}
+                          path={paths.home}
+                          title={tHome("title", { name: personName })}
+                          description={tHome("description", { role: t("person.role") })}
+                          image={`/api/og/generate?title=${encodeURIComponent(tHome("title", { name: personName }))}`}
+                          author={{
+                            name: personName,
+                            url: `${baseURL}${paths.about}`,
+                            image: `${baseURL}${personAvatar}`,
+                          }}
                         />
                     );
                 })()}
 
+                {/* Hero */}
                 {(() => {
                     return (
                         <Column fillWidth horizontal="center" gap="m">
                             <Column maxWidth="s" horizontal="center" align="center">
-                                {t('featured.display') && (() => {
+                                {featured?.display && (() => {
                                     return (
                                         <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
                                             <Badge
@@ -85,9 +77,24 @@ export default async function Home(
                                                 onBackground="neutral-strong"
                                                 textVariant="label-default-s"
                                                 arrow={false}
-                                                href={t('featured.href')}
+                                                href={featured.href}
                                             >
-                                                <Row paddingY="2">{t('featured.title')}</Row>
+
+                                                <Row gap="12" vertical="center" paddingY="2">
+                                                    {tHome.rich("featured.titleRich", {
+                                                        featured: t("header.featured"),
+                                                        b: (c) => <strong className="ml-4">{c}</strong>,
+                                                        sep: () => (
+                                                            <div style={{ width: 1, height: 20, background: "var(--brand-alpha-strong)" }} />
+                                                        ),
+                                                        small: (c) => (
+                                                            <Text as="span" marginRight="4" onBackground="brand-medium">
+                                                                {c}
+                                                            </Text>
+                                                        ),
+                                                    })}
+                                                </Row>
+
                                             </Badge>
                                         </RevealFx>
                                     );
@@ -118,7 +125,7 @@ export default async function Home(
                                                 variant="heading-default-xl"
                                             >
                                                 {tHome.rich("sublineRich", {
-                                                    firstName: tPerson('firstName'),
+                                                    firstName: t('person.firstName'),
                                                     Logo: () => (
                                                         <Logo
                                                             dark
@@ -150,15 +157,15 @@ export default async function Home(
                                                 arrowIcon
                                             >
                                                 <Row gap="8" vertical="center" paddingRight="4">
-                                                    {about.avatar.display && (
+                                                    {aboutAvatar && (
                                                         <Avatar
                                                             marginRight="8"
                                                             style={{ marginLeft: "-0.75rem" }}
-                                                            src={person.avatar}
+                                                            src={personAvatar}
                                                             size="m"
                                                         />
                                                     )}
-                                                    {about.title}
+                                                    {aboutTitle}
                                                 </Row>
                                             </Button>
                                         </RevealFx>
@@ -187,7 +194,7 @@ export default async function Home(
                             <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
                                 <Row flex={1} paddingLeft="l" paddingTop="24">
                                     <Heading as="h2" variant="display-strong-xs" wrap="balance">
-                                        Latest from the blog
+                                        {tHome("blog.latest")}
                                     </Heading>
                                 </Row>
                                 <Row flex={3} paddingX="20">

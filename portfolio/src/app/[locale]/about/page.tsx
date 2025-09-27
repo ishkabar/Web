@@ -19,88 +19,122 @@ import { buildPageMetadata } from "@/lib/seo";
 import { useTranslations } from "next-intl";
 
 import type { Metadata } from "next";
-import { paths, ogImage } from '@/resources/site.config';
-
+import { paths } from '@/resources/site.config';
 
 export async function generateMetadata(): Promise<Metadata> {
-    return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
+  return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
 }
 
 export default function About() {
-    const t = useTranslations("about");
-    
-    const intro = t.raw("intro") as {
-        display: boolean;
-        title: string;
-        description: string;
-    };
+  const t = useTranslations("about");
+    const tCommon = useTranslations("common");
 
-    const work = t.raw("work") as {
-        display: boolean;
-        title: string;
-        experiences: Array<{
-            company: string;
-            timeframe: string;
-            role: string;
-            achievements: string[];
-            images: Array<{ src: string; alt: string; width: number; height: number }>;
-        }>;
-    };
+  const intro = t.raw("intro") as {
+    display: boolean;
+    title: string;
+    description: string;
+  };
 
-    const studies = t.raw("studies") as {
-        display: boolean;
-        title: string;
-        institutions: Array<{ name: string; description: string }>;
-    };
+  const work = t.raw("work") as {
+    display: boolean;
+    title: string;
+    experiences: Array<{
+      company: string;
+      timeframe: string;
+      role: string;
+      achievements: string[];
+      images?: Array<{ src: string; alt: string; width: number; height: number }>;
+    }>;
+  };
 
-    const technical = t.raw("technical") as {
-        display: boolean;
-        title: string;
-        skills: Array<{
-            title: string;
-            description: string;
-            tags: Array<{ name: string; icon?: string }>;
-            images: Array<{ src: string; alt: string; width: number; height: number }>;
-        }>;
-    };
+  const studies = t.raw("studies") as {
+    display: boolean;
+    title: string;
+    institutions: Array<{ name: string; description: string }>;
+  };
 
+  const technical = t.raw("technical") as {
+    display: boolean;
+    title: string;
+    skills: Array<{
+      title: string;
+      description: string;
+      tags?: Array<{ name: string; icon?: string }>;
+      images?: Array<{ src: string; alt: string; width: number; height: number }>;
+    }>;
+  };
+
+  //const tableOfContent = (t.raw("tableOfContent") || { display: false }) as { display: boolean; subItems?: boolean; };
+    const tocRaw = (t.raw("tableOfContent") ?? {}) as Partial<{ display: boolean; subItems: boolean }>;
+    const tableOfContent: { display: boolean; subItems: boolean } = {
+        display: !!tocRaw.display,
+        subItems: tocRaw.subItems ?? false
+    };
+    const aboutForToc: { tableOfContent: { display: boolean; subItems: boolean } } = { tableOfContent };
+
+
+    const avatar = (t.raw("avatar") || { display: false }) as {
+    display: boolean;
+  };
+
+  const calendar = (t.raw("calendar") || { display: false, link: "" }) as {
+    display: boolean;
+    link: string;
+  };
+
+  const person = (tCommon.raw("person") || {
+    name: "",
+    avatar: "",
+    location: "",
+    languages: [] as string[],
+  }) as {
+    name: string;
+    avatar: string;
+    location: string;
+    languages: string[];
+  };
+
+  const social =
+    (tCommon.raw("social") as Array<{ name: string; icon: string; link?: string }>) || [];
 
     const structure = [
-        { title: intro.title, display: intro.display, items: [] },
-        { title: work.title, display: work.display, items: work.experiences.map((x) => x.company) },
-        { title: studies.title, display: studies.display, items: studies.institutions.map((x) => x.name) },
-        { title: technical.title, display: technical.display, items: technical.skills.map((x) => x.title) },
+        { title: intro.title,     display: intro.display,     items: [] as string[] },
+        { title: work.title,      display: work.display,      items: work.experiences?.map(x => x.company) ?? [] },
+        { title: studies.title,   display: studies.display,   items: studies.institutions?.map(x => x.name) ?? [] },
+        { title: technical.title, display: technical.display, items: technical.skills?.map(x => x.title) ?? [] },
     ];
-    
+
   return (
     <Column maxWidth="m">
       <Schema
         as="webPage"
         baseURL={baseURL}
-        title={t('title')}
-        description={t('description')}
+        title={t("title", { name: person.name })}
+        description={t("description")}
         path={paths.about}
-        image={`/api/og/generate?title=${encodeURIComponent(t('title'))}`}
+        image={`/api/og/generate?title=${encodeURIComponent(t("title"))}`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
+          url: `${baseURL}${paths.about}`,
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      {about.tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          s={{ hide: true }}
-        >
-          <TableOfContents structure={structure} about={about} />
-        </Column>
-      )}
-      <Row fillWidth s={{ direction: "column"}} horizontal="center">
-        {about.avatar.display && (
+
+        {tableOfContent.display && (
+            <Column
+                left="0"
+                style={{ top: "50%", transform: "translateY(-50%)" }}
+                position="fixed"
+                paddingLeft="24"
+                gap="32"
+                s={{ hide: true }}
+            >
+                <TableOfContents structure={structure} about={aboutForToc} />
+            </Column>
+        )}
+
+      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+        {avatar.display && (
           <Column
             className={styles.avatar}
             top="64"
@@ -120,7 +154,7 @@ export default function About() {
               <Icon onBackground="accent-weak" name="globe" />
               {person.location}
             </Row>
-            {person.languages && person.languages.length > 0 && (
+            {person.languages?.length > 0 && (
               <Row wrap gap="8">
                 {person.languages.map((language, index) => (
                   <Tag key={index} size="l">
@@ -131,15 +165,10 @@ export default function About() {
             )}
           </Column>
         )}
+
         <Column className={styles.blockAlign} flex={9} maxWidth={40}>
-          <Column
-            id={about.intro.title}
-            fillWidth
-            minHeight="160"
-            vertical="center"
-            marginBottom="32"
-          >
-            {about.calendar.display && (
+          <Column id={intro.title} fillWidth minHeight="160" vertical="center" marginBottom="32">
+            {calendar.display && (
               <Row
                 fitWidth
                 border="brand-alpha-medium"
@@ -150,14 +179,12 @@ export default function About() {
                 marginBottom="m"
                 vertical="center"
                 className={styles.blockAlign}
-                style={{
-                  backdropFilter: "blur(var(--static-space-1))",
-                }}
+                style={{ backdropFilter: "blur(var(--static-space-1))" }}
               >
                 <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Row paddingX="8">Schedule a call</Row>
+                <Row paddingX="8">{t("calendar.cta")}</Row>
                 <IconButton
-                  href={about.calendar.link}
+                  href={calendar.link}
                   data-border="rounded"
                   variant="secondary"
                   icon="chevronRight"
@@ -167,13 +194,10 @@ export default function About() {
             <Heading className={styles.textAlign} variant="display-strong-xl">
               {person.name}
             </Heading>
-            <Text
-              className={styles.textAlign}
-              variant="display-default-xs"
-              onBackground="neutral-weak"
-            >
-              {person.role}
+            <Text className={styles.textAlign} variant="display-default-xs" onBackground="neutral-weak">
+              {t("role", { default: "" }) || person["role" as keyof typeof person] || ""}
             </Text>
+
             {social.length > 0 && (
               <Row
                 className={styles.blockAlign}
@@ -210,25 +234,25 @@ export default function About() {
                           />
                         </Row>
                       </React.Fragment>
-                    ),
+                    )//,
                 )}
               </Row>
             )}
           </Column>
 
-          {about.intro.display && (
+          {intro.display && (
             <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
+              {intro.description}
             </Column>
           )}
 
-          {about.work.display && (
+          {work.display && (
             <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
-                {about.work.title}
+              <Heading as="h2" id={work.title} variant="display-strong-s" marginBottom="m">
+                {work.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
-                {about.work.experiences.map((experience, index) => (
+                {work.experiences.map((experience, index) => (
                   <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
                     <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
                       <Text id={experience.company} variant="heading-strong-l">
@@ -242,23 +266,17 @@ export default function About() {
                       {experience.role}
                     </Text>
                     <Column as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
-                          <Text
-                            as="li"
-                            variant="body-default-m"
-                            key={`${experience.company}-${index}`}
-                          >
-                            {achievement}
-                          </Text>
-                        ),
-                      )}
+                      {experience.achievements.map((achievement, i) => (
+                        <Text as="li" variant="body-default-m" key={`${experience.company}-${i}`}>
+                          {achievement}
+                        </Text>
+                      ))}
                     </Column>
                     {experience.images && experience.images.length > 0 && (
                       <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
-                        {experience.images.map((image, index) => (
+                        {experience.images.map((image, i) => (
                           <Row
-                            key={index}
+                            key={i}
                             border="neutral-medium"
                             radius="m"
                             minWidth={image.width}
@@ -270,6 +288,7 @@ export default function About() {
                               sizes={image.width.toString()}
                               alt={image.alt}
                               src={image.src}
+                              priority
                             />
                           </Row>
                         ))}
@@ -281,13 +300,13 @@ export default function About() {
             </>
           )}
 
-          {about.studies.display && (
+          {studies.display && (
             <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
-                {about.studies.title}
+              <Heading as="h2" id={studies.title} variant="display-strong-s" marginBottom="m">
+                {studies.title}
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
-                {about.studies.institutions.map((institution, index) => (
+                {studies.institutions.map((institution, index) => (
                   <Column key={`${institution.name}-${index}`} fillWidth gap="4">
                     <Text id={institution.name} variant="heading-strong-l">
                       {institution.name}
@@ -301,19 +320,14 @@ export default function About() {
             </>
           )}
 
-          {about.technical.display && (
+          {technical.display && (
             <>
-              <Heading
-                as="h2"
-                id={about.technical.title}
-                variant="display-strong-s"
-                marginBottom="40"
-              >
-                {about.technical.title}
+              <Heading as="h2" id={technical.title} variant="display-strong-s" marginBottom="40">
+                {technical.title}
               </Heading>
               <Column fillWidth gap="l">
-                {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
+                {technical.skills.map((skill, index) => (
+                  <Column key={`${skill.title}-${index}`} fillWidth gap="4">
                     <Text id={skill.title} variant="heading-strong-l">
                       {skill.title}
                     </Text>
@@ -331,9 +345,9 @@ export default function About() {
                     )}
                     {skill.images && skill.images.length > 0 && (
                       <Row fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
+                        {skill.images.map((image, i) => (
                           <Row
-                            key={index}
+                            key={i}
                             border="neutral-medium"
                             radius="m"
                             minWidth={image.width}
@@ -345,6 +359,7 @@ export default function About() {
                               sizes={image.width.toString()}
                               alt={image.alt}
                               src={image.src}
+                              priority
                             />
                           </Row>
                         ))}

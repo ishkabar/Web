@@ -1,5 +1,4 @@
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
-import { social } from "@/resources";
 import styles from "./Footer.module.scss";
 import { useTranslations } from "next-intl";
 

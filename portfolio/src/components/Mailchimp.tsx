@@ -1,9 +1,10 @@
 "use client";
 
-import { mailchimp, newsletter } from "@/resources";
+import { mailchimp } from "@/resources";
 import { Button, Heading, Input, Text, Background, Column, Row } from "@once-ui-system/core";
 import { opacity, SpacingToken } from "@once-ui-system/core";
 import { useState } from "react";
+import {useTranslations} from 'next-intl';
 
 function debounce<T extends (...args: any[]) => void>(func: T, delay: number): T {
   let timeout: ReturnType<typeof setTimeout>;
@@ -17,6 +18,15 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [touched, setTouched] = useState<boolean>(false);
+
+    const t = useTranslations("common");
+    
+    const newsletter = t.raw("newsletter") as {
+        display: boolean;
+        description?: string;
+        subscribe?: string;
+    };
+    const tPerson = useTranslations('common.person' );
 
   const validateEmail = (email: string): boolean => {
     if (email === "") {
@@ -47,7 +57,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
     }
   };
 
-  if (newsletter.display === false) return null;
+  if (!newsletter?.display) return null;
 
   return (
     <Column
@@ -106,7 +116,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       />
       <Column maxWidth="xs" horizontal="center">
         <Heading marginBottom="s" variant="display-strong-xs">
-          {newsletter.title}
+            {t("newsletter.title", { firstName: t("person.name") })}
         </Heading>
         <Text wrap="balance" marginBottom="l" variant="body-default-l" onBackground="neutral-weak">
           {newsletter.description}
@@ -173,7 +183,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           <div className="clear">
             <Row height="48" vertical="center">
               <Button id="mc-embedded-subscribe" value="Subscribe" size="m" fillWidth>
-                Subscribe
+                  <li>{newsletter.subscribe}</li>
               </Button>
             </Row>
           </div>

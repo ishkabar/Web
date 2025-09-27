@@ -1,56 +1,51 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { baseURL, about, person, work, paths } from "@/resources";
+import { Column, Heading, Schema } from "@once-ui-system/core";
+import { baseURL, paths } from "@/resources";
 import { Projects } from "@/components/work/Projects";
+
 
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { buildPageMetadata } from "@/lib/seo";
+import {useTranslations} from "next-intl";
+
 
 
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("common.meta");
-    const title = t("title");
-    const description = t("description");
-    const url = new URL(paths.about, baseURL).toString();
-    const ogImage = `/api/og/generate?title=${encodeURIComponent(title)}`;
-
-    return {
-        title,
-        description,
-        alternates: { canonical: url },
-        openGraph: {
-            url,
-            title,
-            description,
-            images: [ogImage],
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [ogImage],
-        },
-        metadataBase: new URL(baseURL),
-    };
+    return buildPageMetadata("blog.meta", paths.work, { titleKey: "title" });
+    //return buildPageMetadata("common.meta", paths.home, { image: ogImage });
 }
 
 export default function Work() {
+    const t = useTranslations("work");
+    const title = t('title');
+    const person = (t.raw("common.person") || {
+        name: "",
+        avatar: "",
+        location: "",
+        languages: [] as string[],
+    }) as {
+        name: string;
+        avatar: string;
+        location: string;
+        languages: string[];
+    };
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema
         as="webPage"
         baseURL={baseURL}
-        path={work.path}
-        title={work.title}
-        description={work.description}
-        image={`/api/og/generate?title=${encodeURIComponent(work.title)}`}
+        path={paths.work}
+        title={title}
+        description={t('description')}
+        image={`/api/og/generate?title=${encodeURIComponent(title)}`}
         author={{
           name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
+          url: `${baseURL}${paths.about}`,
+            image: `${baseURL}${person.avatar}`,
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
+        {title}
       </Heading>
       <Projects />
     </Column>

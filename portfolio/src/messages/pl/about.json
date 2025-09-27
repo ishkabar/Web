@@ -1,0 +1,83 @@
+{
+  "path": "/about",
+  "label": "@:common.labels.about",
+  "title": "O mnie – {name}",
+  "description": "Poznaj {name}, {role} z {location}",
+  "tableOfContent": { "display": true, "subItems": false },
+  "avatar": { "display": true },
+  "calendar": { "display": true, "link": "https://cal.com", "cta": "Umów rozmowę" },
+
+  "intro": {
+    "display": true,
+    "title": "Wprowadzenie",
+    "description": "Selene to inżynierka projektowania z Dżakarty z pasją do przekształcania złożonych wyzwań w proste, eleganckie rozwiązania. Jej praca obejmuje interfejsy cyfrowe, doświadczenia interaktywne oraz łączenie designu z technologią."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Doświadczenie zawodowe",
+    "experiences": [
+      {
+        "company": "FLY",
+        "timeframe": "2022 – obecnie",
+        "role": "Starsza inżynierka projektowania",
+        "achievements": [
+          "Przeprojektowała UI/UX platformy FLY, co przyniosło 20% wzrost zaangażowania użytkowników i 30% szybsze ładowanie.",
+          "Zainicjowała integrację narzędzi AI w procesach projektowych, umożliwiając projektantom iterację o 50% szybciej."
+        ],
+        "images": [
+          { "src": "/images/projects/project-01/cover-01.jpg", "alt": "Projekt Once UI", "width": 16, "height": 9 }
+        ]
+      },
+      {
+        "company": "Creativ3",
+        "timeframe": "2018 – 2022",
+        "role": "Główna projektantka",
+        "achievements": [
+          "Stworzyła system projektowy ujednolicający markę na wielu platformach, poprawiając spójność o 40%.",
+          "Poprowadziła zespół międzydziałowy przy wdrożeniu nowej linii produktów, co przyczyniło się do 15% wzrostu przychodów."
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Edukacja",
+    "institutions": [
+      { "name": "Uniwersytet w Dżakarcie", "description": "Studia z inżynierii oprogramowania." },
+      { "name": "Build the Future", "description": "Marketing online i budowanie marki osobistej." }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Umiejętności techniczne",
+    "skills": [
+      {
+        "title": "Figma",
+        "description": "Prototypuję w Figmie z Once UI w nienaturalnym tempie.",
+        "tags": [
+          { "name": "Figma", "icon": "figma" }
+        ],
+        "images": [
+          { "src": "/images/projects/project-01/cover-02.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 },
+          { "src": "/images/projects/project-01/cover-03.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 }
+        ]
+      },
+      {
+        "title": "Next.js",
+        "description": "Buduję aplikacje nowej generacji w Next.js + Once UI + Supabase.",
+        "tags": [
+          { "name": "JavaScript", "icon": "javascript" },
+          { "name": "Next.js", "icon": "nextjs" },
+          { "name": "Supabase", "icon": "supabase" }
+        ],
+        "images": [
+          { "src": "/images/projects/project-01/cover-04.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 }
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import { getWorkPostsLocaleAware } from "@/utils/utils";
-import { baseURL, blog, person } from "@/resources";
+import { baseURL } from "@/resources";
 import { NextResponse } from "next/server";
 import { getLocale } from "next-intl/server";
 
