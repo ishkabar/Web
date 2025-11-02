@@ -11,7 +11,13 @@ export async function POST(req: NextRequest) {
         }
 
         const key = ["pageviews", "projects", slug].join(":");
-        await redis.incr(key);
+
+        const redisClient = redis();
+        if (redisClient.status !== "ready") {
+            await redisClient.connect();
+        }
+
+        await redisClient.incr(key);
 
         return NextResponse.json({ success: true }, { status: 200 });
     } catch (error) {
