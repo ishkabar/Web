@@ -4,7 +4,6 @@ const { withContentlayer } = require('next-contentlayer');
 const nextConfig = {
     output: 'standalone',
     experimental: {
-        // Pozwól na build bez dostępu do Google Fonts
         nextScriptWorkers: false,
     },
 };

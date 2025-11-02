@@ -7,7 +7,8 @@ import {Card} from '../components/card';
 import {Article} from './article';
 import {Eye} from 'lucide-react';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 30;
 
 export default async function ProjectsPage() {
     // Tylko poprawne rekordy Project

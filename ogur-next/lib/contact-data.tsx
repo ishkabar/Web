@@ -13,7 +13,7 @@ export const contactData = {
     },
     email: {
         href: "mailto:test@ogur.dev",
-        handle: "test2@ogur.dev",
+        handle: "kontakt@ogur.dev",
     },
     linkedin: {
         href: "https://www.linkedin.com/in/dominik-karczewski-1b850b209/",
