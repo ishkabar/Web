@@ -69,11 +69,14 @@ export default async function PostPage({ params }: Props) {
     let views = 0;
     try {
         const redisClient = redis();
-        await redisClient.connect();
+        if (redisClient.status !== "ready") {
+            await redisClient.connect();
+        }
         const result = await redisClient.get(["pageviews", "projects", slug].join(":"));
         views = parseInt(result || "0");
     } catch (error) {
-        console.log("Redis unavailable during build, defaulting to 0 views");
+        console.log("Redis unavailable, defaulting to 0 views");
+        views = 0;
     }
 
     return (
