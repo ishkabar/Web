@@ -125,7 +125,11 @@ jobs:
                 environment:
                   - NODE_ENV=production
                   - PORT=3000
-                networks: [ web ]
+                  - REDIS_URL=redis://bot-redis:6379
+                  - HOSTNAME=0.0.0.0
+                networks:
+                  - web
+                  - ogursentinel_internal
                 labels:
                   traefik.enable: "true"
                   traefik.docker.network: "web"
@@ -144,6 +148,8 @@ jobs:
                   traefik.http.middlewares.www2apex.redirectregex.permanent: "true"
             networks:
               web:
+                external: true
+              ogursentinel_internal:
                 external: true
             YML
             cat > ~/web/ogur/.env <<EOF

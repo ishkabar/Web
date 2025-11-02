@@ -6,18 +6,31 @@ import {Navigation} from '../components/nav';
 import {Card} from '../components/card';
 import {Article} from './article';
 import {Eye} from 'lucide-react';
+import { redis } from '@/lib/redis';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 30;
 
 export default async function ProjectsPage() {
-    // Tylko poprawne rekordy Project
     const projects: Project[] = allProjects.filter(
         (p): p is Project => !!p && typeof p.slug === 'string',
     );
     
-    const views: Record<string, number> = Object.fromEntries(projects.map((p) => [p.slug, 0]));
-    
+    const views: Record<string, number> = {};
+    try {
+        const redisClient = redis();
+        if (redisClient.status !== "ready") {
+            await redisClient.connect();
+        }
+        for (const project of projects) {
+            const result = await redisClient.get(`pageviews:projects:${project.slug}`);
+            views[project.slug] = parseInt(result || "0");
+        }
+    } catch (error) {
+        console.log("Redis unavailable on /projects, defaulting to 0");
+        projects.forEach(p => views[p.slug] = 0);
+    }
+
     const featured = projects.find((p) => p.slug === 'SentinelDevexpress') ?? null;
     const top2 = projects.find((p) => p.slug === 'OgurFishing') ?? null;
     const top3 = projects.find((p) => p.slug === 'Portfolio') ?? null;
