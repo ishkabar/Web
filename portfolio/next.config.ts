@@ -11,9 +11,13 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const withMDX = mdx({extension: /\.mdx?$/});
 
 const config: NextConfig = {
+    output: 'standalone',
     pageExtensions: ['ts','tsx','md','mdx'],
     transpilePackages: ['next-mdx-remote'],
-    images: { remotePatterns: [{protocol:'https', hostname:'www.google.com', pathname:'**'}] },
+    images: {
+        unoptimized: true, 
+        remotePatterns: [{protocol:'https', hostname:'www.google.com', pathname:'**'}]
+    },
     sassOptions: { compiler:'modern', silenceDeprecations:['legacy-js-api'] },
 
     outputFileTracingRoot: path.join(__dirname, '..')

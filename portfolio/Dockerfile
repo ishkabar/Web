@@ -1,17 +1,24 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine AS build
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
-RUN corepack enable && pnpm install --frozen-lockfile
-COPY . .
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY portfolio/package.json ./portfolio/
+
+RUN corepack enable && corepack prepare pnpm@latest --activate && \
+    pnpm install --frozen-lockfile --filter portfolio
+
+COPY portfolio ./portfolio
+
+WORKDIR /app/portfolio
 RUN pnpm build
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/package.json pnpm-lock.yaml ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.mjs ./next.config.mjs
+
+COPY --from=build /app/portfolio/.next/standalone ./
+COPY --from=build /app/portfolio/.next/static ./.next/static
+COPY --from=build /app/portfolio/public ./public
+
 EXPOSE 3000
-CMD ["pnpm","start"]
+CMD ["node", "server.js"]
