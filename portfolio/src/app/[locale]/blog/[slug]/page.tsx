@@ -24,14 +24,12 @@ import React from "react";
 import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { paths } from '@/resources/site.config';
-import {useTranslations} from "next-intl";
 import { buildPageMetadata } from "@/lib/seo";
 
 
-const locale = await getLocale();
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-    const locale = await getLocale(); // ✅ Przenieś tutaj
+    const locale = await getLocale();
     const posts = getBlogPostsLocaleAware(locale);
     return posts.map((post) => ({
         slug: post.slug,

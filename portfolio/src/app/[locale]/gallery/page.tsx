@@ -3,17 +3,16 @@ import GalleryView from "@/components/gallery/GalleryView";
 import { baseURL, paths } from "@/resources";
 import type { Metadata } from "next";
 import {buildPageMetadata} from "@/lib/seo";
-import {useTranslations} from "next-intl";
+import {getTranslations} from "next-intl/server";  
 
 
 export async function generateMetadata(): Promise<Metadata> {
     return buildPageMetadata("common.meta", paths.gallery);
-    //return buildPageMetadata("blog.meta", paths.blog, { titleKey: "pageTitle" });
 }
 
-export default function Gallery() {
-    const t = useTranslations("gallery");
-    const tCommon = useTranslations("common");
+export default async function Gallery() { 
+    const t = await getTranslations("gallery");  
+    const tCommon = await getTranslations("common"); 
     const person = (tCommon.raw("person") || {
         name: "",
         avatar: "",

@@ -15,9 +15,9 @@ import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import type { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import {buildPageMetadata} from "@/lib/seo";
-import {useTranslations} from "next-intl";
+
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
     const posts = getWorkPostsLocaleAware(undefined);
@@ -43,8 +43,8 @@ export default async function Project({
     const avatars =
         post.metadata.team?.map((m) => ({ src: m.avatar })) ?? [];
 
-    const t = useTranslations("work");
-    const tCommon = useTranslations("common");
+    const t = await getTranslations("work");
+    const tCommon = await getTranslations("common");
     const person = (tCommon.raw("person") || {
         name: "",
         avatar: "",
