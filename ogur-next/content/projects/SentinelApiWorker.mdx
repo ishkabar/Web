@@ -1,0 +1,214 @@
+---
+title: "Sentinel Api & Worker"
+description: "Kompleksowy system monitorowania respawnów z Discord bot, konfigurowalnymi timerami, WebSocket API w czasie rzeczywistym i zaawansowanym systemem autoryzacji"
+date: "2024-10-01"
+url: https://respy.ogur.dev
+repository: ishkabar/ogurbot-sentinel
+published: true
+---
+
+![Ogur Sentinel Web Panel](https://files.ogur.dev/public/sentinelWebPanel.png)
+
+Kompleksowy system monitorowania respawnów i automatyzacji timerów, stworzony specjalnie dla społeczności gamingowych. Ogur Sentinel łączy Discord bot z głosowymi powiadomieniami, WebSocket API dla aplikacji desktopowych, oraz intuicyjny panel webowy do zarządzania. System zapewnia precyzyjne zarządzanie timerami z konfigurowalnymi interwałami, automatyczne powiadomienia dźwiękowe na kanałach głosowych Discord oraz zaawansowany system ról z pełną kontrolą dostępu.
+
+## Główne funkcje
+
+###### Discord Bot z Powiadomieniami Głosowymi
+Bot Discord wykorzystujący Netcord automatycznie łączy się na skonfigurowane kanały głosowe i odtwarza dźwięki alertów przed respawnem. Obsługuje wielokanałową dystrybucję do 10 kanałów jednocześnie, własne pliki audio WAV, oraz konfigurowalne powtórzenia odtwarzania z przerwami czasowymi dla każdego typu timera. Bot wchodzi na kanał, odtwarza dźwięk, wychodzi i przechodzi do kolejnego.
+
+###### Komendy Slash do Zarządzania
+Pełny zestaw komend slash do konfiguracji: /respawn add-channel dodaje kanały głosowe, /respawn set-base ustawia czas bazowy HH:MM:SS, /respawn set-lead określa lead seconds przed eventem, /respawn on/off przełącza timery, /respawn test-voice testuje audio, /respawn remove-channel usuwa kanały. Wszystkie zmiany synchronizowane z panelem webowym w czasie rzeczywistym.
+
+###### Panel Webowy Zarządzania
+Intuicyjny interfejs webowy z ASP.NET Core Razor Pages do pełnej konfiguracji systemu. Panel oferuje zarządzanie użytkownikami z rolami Admin/Operator/Timer, konfigurację timerów i kanałów przez drag and drop, upload własnych dźwięków, test playback, oraz monitoring statusu w czasie rzeczywistym. Dostępny pod respy.ogur.dev z autoryzacją tokenową.
+
+###### WebSocket API dla Synchronizacji Real-Time
+Czysta implementacja WebSocket od zera bez zewnętrznych frameworków, zapewniająca komunikację w czasie rzeczywistym między Worker a API. Aplikacje desktopowe otrzymują natychmiastowe aktualizacje o zmianach w timerach, ustawieniach i statusie systemu przez dedykowane proxy endpoints.
+
+###### Automatyczna Synchronizacja z Wiki
+WikiSyncService automatycznie pobiera i aktualizuje dane respawnów z zewnętrznych źródeł wiki Metin2 w konfigurowalnych interwałach. Funkcja use_synced_time pozwala na automatyczne dostosowanie czasu bazowego bez ręcznej interwencji, z fallback do manualnej konfiguracji.
+
+###### Architektura Rozproszona
+Separacja API i Worker umożliwia skalowanie i niezawodność - każdy komponent może działać niezależnie. API obsługuje interfejs webowy i proxy requests, Worker zarządza botem Discord i logiką schedulera, komunikacja przez wewnętrzne endpointy HTTP z health checks.
+
+![Discord Bot Commands](https://files.ogur.dev/public/sentinelBotCommands.png)
+
+## Architektura Systemu
+
+System składa się z trzech głównych komponentów działających w architekturze rozproszonej z orkiestracją Docker Compose.
+
+**API (ASP.NET Core Razor Pages)** - frontend webowy z autoryzacją tokenową przez InMemoryTokenStore lub Redis fallback. Proxy endpoints do komunikacji z Worker pod ścieżką /worker/*, health checks, Content Security Policy headers, ASP.NET Data Protection z persistent keys. Razor Pages dla login, zarządzania respawnami, downloadów. Serwowanie plików statycznych z cache control i wymuszonym downloadem dla plików wykonywalnych.
+
+**Worker (Background Service + Discord Bot)** - .NET Generic Host z BackgroundService pattern. DiscordBotHostedService integruje Netcord Gateway API, RespawnWorker wykonuje pętlę schedulingu z collision detection gdzie timery 2h mają priorytet nad 10m, VoiceService3 zarządza połączeniami głosowymi i odtwarzaniem audio. Wewnętrzne endpointy HTTP na porcie 9090 dla komunikacji z API.
+
+**Discord Bot (Netcord Integration)** - pełna implementacja Discord Gateway API przez Netcord. Slash commands rejestrowane przez CommandRegistrationService, zarządzanie kanałami głosowymi przez VoiceService3 z automatycznym cyklem join/play/leave. Bot iteruje przez listę kanałów ze state, odtwarza odpowiedni plik dźwiękowy 10m lub 2h, wspiera powtórzenia odtwarzania z konfigurowalną przerwą, następnie disconnect i przejście do następnego kanału.
+
+Komunikacja API ↔ Worker odbywa się przez proxy endpointy HTTP. API przekierowuje requesty do Worker:9090, Worker zwraca responses. Persistence ustawień przez SettingsStore z JSON file backend respawn.settings.json. RespawnState jako in-memory singleton współdzielony między serwisami, z eventem NotifySettingsChanged dla propagacji w czasie rzeczywistym.
+
+## Serwisy Worker
+
+**RespawnSchedulerService** - podstawowa logika schedulingu z kalkulacjami SchedulingMath. Oblicza następne timestampy 10m i 2h bazując na base_hhmm plus lead_seconds. RecalculateNext po zmianie ustawień, PlayAsync wywołuje VoiceService3 dla odtwarzania audio na wszystkich skonfigurowanych kanałach. Collision detection zapobiega nakładaniu się timerów.
+
+**WikiSyncService** - automatyczna synchronizacja z zewnętrznymi źródłami danych. Pobiera czasy respawnów z API wiki, parsuje polskie formaty dat przez PolishDateParser, aktualizuje SyncedBaseTime w state. Opcjonalne auto-enable przez flagę use_synced_time. Pętla synchronizacji w tle z konfigurowalnym interwałem.
+
+**LeaveService** - zarządzanie rekordami nieobecności dla użytkowników. Przechowuje LeaveRecord z username, datami, powodem. Integracja z Discord leave channel dla ogłoszeń. Planowane: automatyczne zarządzanie rolami, powiadomienia o powrocie, widok kalendarza.
+
+**VoiceService3** - niskopoziomowa obsługa połączeń głosowych Discord przez Netcord Voice Gateway. JoinAndPlayAsync łączy się na kanał, streamuje plik WAV przez UDP voice connection, wspiera powtórzenia odtwarzania z timing gap, graceful disconnect. Iteracja przez wiele kanałów z error handling i retry logic.
+
+**SettingsStore** - warstwa persistence dla RespawnState. Load/Save JSON z modelem PersistedSettings zawierającym channels, base_hhmm, lead_seconds, flagi enabled, synced time, ustawienia repeat. Atomiczny zapis plików z backupem, reload na żądanie.
+
+## Komendy Discord Slash
+
+Wszystkie komendy w namespace /respawn:
+
+**/respawn add-channel** `channel_id` - dodaje ID kanału głosowego do listy timerów. Walidacja czy kanał istnieje i czy jest VoiceGuildChannel. Limit MaxChannels domyślnie 10.
+
+**/respawn on** - włącza przypomnienia respawnów dla obu timerów 10m i 2h. Natychmiastowy efekt z aktualizacją state i recalculation schedulera.
+
+**/respawn off** - wyłącza przypomnienia respawnów. Bot przestaje triggerować alerty audio ale pozostaje scheduled time w pamięci.
+
+**/respawn set-base** `time` - ustawia czas bazowy w formacie HH:MM:SS na przykład 14:30:00. Wszystkie timery kalkulowane od tego momentu plus intervals. RecalculateNext po zmianie.
+
+**/respawn set-lead** `seconds` - ustawia lead seconds przed eventem czyli ile wcześniej bot ma powiadomić. Domyślnie często 600s czyli 10 minut przed. Offset applying w SchedulingMath.
+
+**/respawn test-voice** `sound` `use_settings` - testuje odtwarzanie audio. Parametry: sound to 10m lub 2h, use_settings to true/false czy użyć repeat plays z ustawień czy single play. Fire-and-forget async task.
+
+**/respawn remove-channel** `channel_id` - usuwa kanał z listy timerów. Soft remove przez filtrowanie z channels list w state.
+
+Planowane komendy: /respawn status dla info o aktualnych timerach, /respawn list-channels dla wszystkich skonfigurowanych kanałów, /timer custom add dla własnych timerów użytkownika, /timer custom remove.
+
+## Funkcje Panelu Webowego
+
+**Strona Zarządzania Respawnami** - główny dashboard z wyświetlaniem timerów w czasie rzeczywistym. Pokazuje next 10m i 2h czasy respawnów z countdownem, color-coded warnings czerwony/pomarańczowy/biały, konfigurowalne progi ostrzeżeń. Drag and drop kolejności kanałów z SortableJS, dodawanie/usuwanie kanałów z autocomplete, toggle włącz/wyłącz per typ timera.
+
+**Konfiguracja Ustawień** - panel z inputami dla base time time picker, lead seconds spin edit, repeat plays 10m/2h numeric, repeat gap milliseconds numeric. Przyciski test sound z preview przed zapisem. Upload własnych plików WAV z walidacją maksymalnie 5MB, check formatu. Save wywołuje API PATCH /worker/settings.
+
+**Zarządzanie Użytkownikami (tylko Admin)** - zarządzanie users.json przez UserStore. Dodawanie/edycja/usuwanie użytkowników z username/password/role. Role-based access control: Admin pełny dostęp, Operator zarządzanie timerami, Timer tylko odczyt. Autoryzacja tokenowa z wygaśnięciem po 24h.
+
+**Strona Downloadów** - linki do downloadów aplikacji desktopowej exe i rar packages z informacjami o wersji i changelogiem. Pliki statyczne serwowane z Content-Disposition: attachment wymuszającym download. Galeria screenshotów z lightbox.
+
+**Przeglądarka Kanałów Głosowych** - real-time lista wszystkich kanałów głosowych z połączonych guildów. Pokazuje nazwę guilda, kategorię, liczbę użytkowników, pozycję. Kliknięcie dodaje do listy timerów. Endpoint API /worker/channels/voice z query Netcord Cache.
+
+![Ogur Sentinel Web Panel Add Channels](https://files.ogur.dev/public/sentinelWebAddChannels.png)
+
+## Technologie
+
+- **Framework:** .NET 8.0, C# 12
+- **Backend:** ASP.NET Core Razor Pages, Generic Host, BackgroundService
+- **Discord:** Netcord Gateway API, Voice Gateway, Slash Commands, UDP streaming
+- **Database:** Redis session storage opcjonalnie, JSON files dla persistence
+- **HTTP:** HttpClient factory, Kestrel internal endpoints port 9090, Health Checks API
+- **Security:** Token-based auth, BCrypt password hashing, RBAC, CSP headers, HTTPS + HSTS
+- **Logging:** NLog structured logging z file rotation
+- **Infrastructure:** Docker, Docker Compose, Traefik, GitHub Container Registry, GitHub Actions CI/CD
+- **Audio:** WAV file streaming przez UDP voice, repeat plays z gap timing
+- **Frontend:** Bootstrap dark theme, jQuery, SortableJS drag and drop
+
+## Deployment
+
+System wymaga Docker oraz Docker Compose i konfiguracji Discord Bot Token.
+
+**Docker Compose**
+```yaml
+services:
+  api:
+    image: ghcr.io/username/ogur-sentinel-api:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./appsettings:/app/appsettings
+      - ./keys:/app/keys
+    environment:
+      - Auth__AdminUser=admin
+      - Auth__AdminPassword=changeme
+    depends_on:
+      - worker
+      - redis
+
+  worker:
+    image: ghcr.io/username/ogur-sentinel-worker:latest
+    volumes:
+      - ./appsettings:/app/appsettings
+      - ./assets:/app/assets
+    environment:
+      - Settings__DiscordToken=YOUR_BOT_TOKEN
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data
+```
+
+**Konfiguracja API (appsettings.json)**
+```json
+{
+  "Auth": {
+    "AdminUser": "admin",
+    "AdminPassword": "hashed_password"
+  },
+  "Worker": {
+    "BaseUrl": "http://worker:9090"
+  },
+  "Redis": {
+    "ConnectionString": "redis:6379"
+  }
+}
+```
+
+**Konfiguracja Worker (appsettings.json)**
+```json
+{
+  "Settings": {
+    "DiscordToken": "YOUR_BOT_TOKEN",
+    "BreakChannelId": 123456789,
+    "BreakRoleId": 987654321,
+    "LeaveChannelId": 111222333
+  },
+  "Respawn": {
+    "MaxChannels": 10,
+    "Sound10m": "assets/respawn_10m.wav",
+    "Sound2h": "assets/respawn_2h.wav",
+    "SettingsFile": "appsettings/respawn.settings.json",
+    "SyncEnabled": true,
+    "SyncIntervalMinutes": 60
+  },
+  "Urls": "http://0.0.0.0:9090"
+}
+```
+
+**Discord Bot Setup**
+1. Stwórz Application w Discord Developer Portal
+2. Włącz Intents: Guilds, GuildVoiceStates
+3. Utwórz Bot Token i dodaj do appsettings
+4. Zaproś bota z scope: applications.commands, bot oraz permissions: Connect, Speak, Use Voice Activity
+5. Zarejestruj slash commands przez CommandRegistrationService on startup
+
+## Zaawansowane Funkcje
+
+**Multi-Channel Support** - obsługa do 10 kanałów głosowych jednocześnie z dynamiczną konfiguracją przez panel webowy. Automatyczne wykrywanie zmian w konfiguracji i instant reload bez restartu bota.
+
+**Persistent State** - zachowanie stanu timerów między restartami przez JSON file backend. Automatyczne przywracanie harmonogramu schedulera i kontynuacja od ostatniego saved state. Backup konfiguracji przy każdym zapisie.
+
+**Custom Audio Notifications** - upload własnych dźwięków alertów 10m i 2h z walidacją formatu WAV, maksymalny rozmiar 5MB. Konfigurowalny repeat plays z gap timing, test playback przed zapisem przez /respawn test-voice.
+
+**Role Management** - wielopoziomowy system ról z pełną kontrolą dostępu. Administrator ma pełną kontrolę systemu, Operator zarządza timerami i kanałami, Timer tylko podgląd aktualnych timerów. Token-based sessions z 24h expiration.
+
+**Wiki Synchronization** - automatyczna synchronizacja czasów respawnów z zewnętrznych źródeł wiki Metin2. Parser dla polskich formatów dat, smart detection zmian, fallback do manualnej konfiguracji przy błędach sync.
+
+**Collision Detection** - inteligentna detekcja kolizji timerów w tym samym ~30s oknie czasowym. Timery 2h mają priorytet nad 10m, automatyczne pomijanie 10m trigger przy kolizji, logging wszystkich eventów dla transparency.
+
+## Roadmap
+
+**Własne Timery Użytkowników** - możliwość tworzenia custom timerów przez użytkowników bez zależności od centralnego repo. Manual start/stop/reset controls, persistent storage per user, calendar view.
+
+**Więcej Serwerów dla Central Repo** - rozszerzenie WikiSyncService o support dla wielu serwerów gamingowych jednocześnie. Multi-tenant architecture, per-server configuration, aggregated dashboard.
+
+**Dodatkowe Typy Timerów** - wsparcie dla większej liczby typów timerów niż tylko 10m i 2h. Fully configurable intervals, unlimited timer types, color coding per type.
+
+**Desktop App Enhancements** - rozbudowa aplikacji desktopowej Sentinel Desktop o pełny feature parity z web panelem. Offline mode, local timer management, tray notifications.
+
+**Mobile App** - natywna aplikacja mobilna dla iOS i Android z push notifications o zbliżających się respawnach. Real-time sync z backend, minimal UI dla quick access.
+
+---
+
+*System jest obecnie w fazie rozwoju. Aktualne działanie można zobaczyć na respy.ogur.dev. Publiczne wdrożenia dostępne po uzgodnieniu.*

@@ -51,3 +51,7 @@ logs/
 portfolio/pnpm-lock.yaml
 ogur-next/pnpm-lock.yaml
 **/node_modules
+
+# Windows Zone.Identifier
+*:Zone.Identifier
+*.Zone.Identifier

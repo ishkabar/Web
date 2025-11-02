@@ -1,0 +1,117 @@
+---
+title: "Portfolio"
+description: "Profesjonalna wizytówka online w Next.js z Once UI, prezentująca doświadczenie i projekty w przejrzystym multi-language interface dla klientów biznesowych i kontrahentów"
+date: "2024-10-01"
+url: https://dknx.pl
+repository: ishkabar/Web
+published: true
+---
+
+
+![Portfolio About Section](https://files.ogur.dev/public/portfolioAbout.png)
+
+Profesjonalna strona portfolio stworzona z wykorzystaniem Next.js i systemu projektowego Once UI, zaprojektowana specjalnie dla klientów biznesowych, kontrahentów oraz potencjalnych partnerów współpracy. Serwis prezentuje doświadczenie zawodowe, zrealizowane projekty oraz kompetencje techniczne w eleganckim, responsywnym interfejsie dostępnym w wielu wersjach językowych.
+
+## Główne funkcje
+
+###### System Once UI
+Wykorzystanie profesjonalnego design system Once UI z gotowymi komponentami wysokiej jakości: Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Line. System zapewnia spójny visual design, accessibility, responsywność oraz dark/light theme z automatycznym przełączaniem bazującym na preferencjach użytkownika.
+
+###### Wielojęzyczność
+Pełna internationalization przez next-intl z dedykowanymi tłumaczeniami dla wszystkich sekcji serwisu. Automatyczna detekcja języka użytkownika z możliwością manualnego przełączania, localized routing, oraz SEO-friendly URLs per locale. System wspiera dynamiczne generowanie metadanych dla każdej wersji językowej.
+
+###### SekcjeContentowe
+Strona składa się z kluczowych sekcji: About przedstawiająca profil zawodowy i doświadczenie, Projects z portfolio zrealizowanych projektów, Blog z artykułami branżowymi, Gallery z wizualizacjami prac (planowane usunięcie), oraz przyszła sekcja Services opisująca świadczone usługi.
+
+###### Animacje RevealFx
+Zaawansowane animacje wejścia elementów przez komponent RevealFx z Once UI. Płynne translateY i delay timing dla progressive reveal effectu, fade-in animations dla tekstów i kart projektów, oraz interactive hover states dla buttonów i linków.
+
+###### SEO i Schema.org
+Kompletna optymalizacja pod kątem SEO z dynamicznie generowanymi meta tags przez buildPageMetadata, Schema.org structured data jako webPage z author info, Open Graph images generowane przez API endpoint /api/og/generate, oraz canonical URLs i hreflang tags dla multi-language support.
+
+###### Background Effects System
+Konfigurowalne efekty tła przez Background component: mask z cursor follow effect, gradient overlay z configurable colors i opacity, dots pattern, grid lines, oraz diagonal lines. Wszystkie efekty kontrolowane przez ui-tokens.config z możliwością customization per page.
+
+## Architektura
+
+Aplikacja zbudowana w Next.js 14+ z App Router i Server Components pattern. Layout structure z LocaleLayout jako root wrapper, Provider architecture dla theme management i internationalization, RouteGuard dla protected routes, oraz Header/Footer jako shared components.
+
+Internationalization realizowana przez next-intl z generateStaticParams dla pre-rendering wszystkich locales, setRequestLocale dla server-side locale context, getMessages dla loading translations, oraz NextIntlClientProvider dla client components. Messages organized w namespace strukture: common, home, about, work, blog.
+
+Once UI integration przez importy z @once-ui-system/core, custom CSS tokens w ui-tokens.config definiujące brand colors, accent colors, neutral palette, scaling system oraz effects configuration. Theme persistence przez localStorage z SSR-safe initialization script w Script component.
+
+Component composition z Column/Row/Flex primitives dla layout, RevealFx wrappers dla animations, Badge dla featured content highlighting, oraz Avatar dla personal branding. Projects i Posts jako dedicated feature components z range prop dla pagination.
+
+## Stack Technologiczny
+
+- **Framework:** Next.js 14+ z App Router
+- **Język:** TypeScript z strict mode
+- **Design System:** Once UI (https://once-ui.com/)
+- **Internationalization:** next-intl z static generation
+- **Styling:** CSS Modules, CSS Variables, Custom Tokens
+- **Fonts:** Custom font family variables z next/font
+- **Components:** Server Components, Client Components z use client directive
+- **SEO:** next/metadata, Schema.org, Open Graph API
+- **Animations:** RevealFx animations, CSS transitions
+- **Deployment:** Static export lub Node.js server
+- **Content:** MDX dla blog posts i project descriptions
+
+## Konfiguracja UI
+
+System ui-tokens.config definiuje pełną paletę kolorów i efektów:
+
+**Style Configuration** - brand color (solid lub alpha), accent color, neutral palette (neutral-weak do neutral-strong), solid style (flat, plastic, glass), border styling (playful, conservative), surface elevation (translucent, opaque), transition speed, scaling system.
+
+**Data Visualization** - variant dla charts i graphs (vibrant, highContrast, monochromatic), color schemes per data type.
+
+**Effects Configuration** - mask z cursor follow (x/y position, radius, enable/disable), gradient overlay (display, opacity, position, dimensions, tilt, colorStart/colorEnd), dots pattern, grid lines, diagonal lines. Każdy effect z individual opacity i color control.
+
+**Typography** - cztery font families: heading, body, label, code. Variable fonts z --font-heading, --font-body CSS variables. Font loading optimization przez next/font/local.
+
+## SEO i Metadata
+
+Dynamic metadata generation przez buildPageMetadata helper z parameters: namespace dla i18n keys, path dla canonical URL, titleKey dla custom title override, image dla Open Graph. Function pobiera translations, konstruuje title z fallback, description, keywords, oraz generates full Metadata object.
+
+Schema.org implementation jako Schema component z as="webPage" prop, baseURL i path dla URL construction, title/description z translations, image z OG generator, author object z name/url/image. Structured data w JSON-LD format automatycznie injected do head.
+
+Open Graph images dynamicznie generowane przez API endpoint /api/og/generate z query params: title (URL encoded), optional image, background color. Generator używa Vercel OG library lub custom canvas rendering dla creating social media preview images.
+
+Multi-language SEO przez hreflang tags w head, localized URLs z locale prefix w routing, per-locale sitemaps, oraz language switcher w Header component. Automatic canonical URL generation pointing do primary language version.
+
+## Sekcje Serwisu
+
+**Home** - hero section z heading i subline, featured badge z najnowszym projektem lub announcement, CTA button do About, preview pierwszego projektu z Projects, latest blog posts w 2-column layout, drugi projekt showcase, oraz Mailchimp newsletter signup.
+
+**About** - personal profile z avatar, professional bio, skills i competencies, experience timeline, tech stack z używanymi technologiami, contact information, oraz social links.
+
+**Projects** - portfolio cards z project thumbnails, title i short description, tags dla tech stack, link do case study lub live demo. Range prop dla kontrolowania ile projektów pokazać (np. range=[1,1] dla pierwszego, range=[2] dla drugiego onwards).
+
+**Blog** - article cards z featured image, title, excerpt, publication date, read time estimate, tags/categories. Posts component z columns prop dla responsive grid layout (1/2/3 columns depending on viewport).
+
+**Services** (planowane) - opis świadczonych usług, pricing packages, service categories, CTA do contact form.
+
+**Gallery** (do usunięcia) - wizualizacje projektów, screenshots, design mockups.
+
+## Deployment
+
+Aplikacja deployowana jako static export lub w trybie Node.js server w zależności od wymagań:
+
+**Static Export** - next build && next export dla full static HTML, deployment na CDN (Vercel, Netlify, Cloudflare Pages), brak server-side features, optimal performance.
+
+**Node.js Server** - next build && next start dla SSR support, dynamic routes z revalidation, API routes functionality, deployment na VPS lub PaaS (Vercel, Railway, Render).
+
+Environment variables dla configuration: NEXT_PUBLIC_BASE_URL dla canonical URLs, locale configuration, Mailchimp API keys, analytics tracking IDs.
+
+Build optimization przez treeshaking unused Once UI components, image optimization z next/image, font subsetting dla używanych characters, CSS purging unused styles.
+
+## Dostępność
+
+Strona dostępna pod adresami:
+- **Primary:** dknx.pl
+- **Alternative:** dkarczewski.com
+
+Repository prywatne, dostęp na żądanie dla potencjalnych współpracowników i klientów.
+
+---
+
+*Projekt stworzony z wykorzystaniem Once UI design system - profesjonalnego rozwiązania dla Next.js applications oferującego gotowe komponenty wysokiej jakości i spójny system projektowy.*
