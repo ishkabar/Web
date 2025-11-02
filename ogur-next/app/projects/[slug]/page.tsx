@@ -66,9 +66,15 @@ export default async function PostPage({ params }: Props) {
         notFound();
     }
 
-    const views = parseInt(
-        (await redis.get(["pageviews", "projects", slug].join(":"))) || "0"
-    );
+    let views = 0;
+    try {
+        const redisClient = redis();
+        await redisClient.connect();
+        const result = await redisClient.get(["pageviews", "projects", slug].join(":"));
+        views = parseInt(result || "0");
+    } catch (error) {
+        console.log("Redis unavailable during build, defaulting to 0 views");
+    }
 
     return (
         <div className="bg-zinc-50 min-h-screen">
