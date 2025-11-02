@@ -1,12 +1,23 @@
 import { ImageResponse } from "next/og";
 import { baseURL } from "@/resources";
-import { person } from "@/resources/content";
+import { getTranslations } from "next-intl/server";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   let url = new URL(request.url);
   let title = url.searchParams.get("title") || "Portfolio";
+
+  const tCommon = await getTranslations("common");
+  const person = (tCommon.raw("person") || {
+    name: "",
+    avatar: "",
+    role: "",
+  }) as {
+    name: string;
+    avatar: string;
+    role: string;
+  };
 
   async function loadGoogleFont(font: string) {
     const url = `https://fonts.googleapis.com/css2?family=${font}`;

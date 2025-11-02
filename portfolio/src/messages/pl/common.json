@@ -9,12 +9,12 @@
   },
   
   "person": {
-    "firstName": "Twój stary",
-    "lastName": "Najebany",
-    "name": "Twój stary najebany",
-    "role": "rola osoby",
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": ".NET Developer",
     "avatar": "/avatar.jpg",
-    "email": "example@gmail.com",
+    "email": "dom.karczewski@gmail.com",
     "location": "Europe/Warsaw",
     "languages": ["Angielski", "Polski"]
   },
