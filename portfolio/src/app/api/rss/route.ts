@@ -1,27 +1,74 @@
-import { redis } from "@/lib/redis";
-import { NextRequest, NextResponse } from "next/server";
+import { getWorkPostsLocaleAware } from "@/utils/utils";
+import { baseURL } from "@/resources";
+import { NextResponse } from "next/server";
+import { getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
-export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json();
-        const slug = body.slug;
+const locale = await getLocale();
+export async function GET() {
+  const posts = getWorkPostsLocaleAware(locale);
 
-        if (!slug) {
-            return NextResponse.json({ error: "Slug is required" }, { status: 400 });
-        }
+  // Sort posts by date (newest first)
+  const sortedPosts = posts.sort((a, b) => {
+    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+  });
 
-        const key = ["pageviews", "projects", slug].join(":");
+    const t = await getTranslations({ locale, namespace: "common" });
+    const tBlog = await getTranslations({ locale, namespace: "blog" });
+    const person = (t.raw("person") || {
+        name: "",
+        avatar: "",
+        location: "",
+        email: "",
+        languages: [] as string[],
+    }) as {
+        name: string;
+        avatar: string;
+        location: string;
+        email: string;
+        languages: string[];
+    };
+    
+  // Generate RSS XML
+  const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${tBlog('title')}</title>
+    <link>${baseURL}/blog</link>
+    <description>${tBlog('description')}</description>
+    <language>en</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${baseURL}/api/rss" rel="self" type="application/rss+xml" />
+    <managingEditor>${person.email || "noreply@example.com"} (${person.name})</managingEditor>
+    <webMaster>${person.email || "noreply@example.com"} (${person.name})</webMaster>
+    <image>
+      <url>${baseURL}${person.avatar || "/images/avatar.jpg"}</url>
+      <title>${tBlog('title')}</title>
+      <link>${baseURL}/blog</link>
+    </image>
+    ${sortedPosts
+      .map(
+        (post) => `
+    <item>
+      <title>${post.metadata.title}</title>
+      <link>${baseURL}/blog/${post.slug}</link>
+      <guid>${baseURL}/blog/${post.slug}</guid>
+      <pubDate>${new Date(post.metadata.publishedAt).toUTCString()}</pubDate>
+      <description><![CDATA[${post.metadata.summary}]]></description>
+      ${post.metadata.image ? `<enclosure url="${baseURL}${post.metadata.image}" type="image/jpeg" />` : ""}
+      ${post.metadata.tag ? `<category>${post.metadata.tag}</category>` : ""}
+      <author>${person.email || "noreply@example.com"} (${person.name})</author>
+    </item>`,
+      )
+      .join("")}
+  </channel>
+</rss>`;
 
-        const redisClient = redis();
-        if (redisClient.status !== "ready") {
-            await redisClient.connect();
-        }
-
-        await redisClient.incr(key);
-
-        return NextResponse.json({ success: true }, { status: 200 });
-    } catch (error) {
-        console.error("Error incrementing view:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-    }
+  // Return the RSS XML with the appropriate content type
+  return new NextResponse(rssXml, {
+    headers: {
+      "Content-Type": "application/xml",
+      "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+    },
+  });
 }
