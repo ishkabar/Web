@@ -1,13 +1,11 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Context to ./ogur-next, więc . = ogur-next/
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json ./
 
 RUN corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --frozen-lockfile --ignore-workspace
+    pnpm install --no-frozen-lockfile  # ✅ Bez frozen
 
-# Kopiuj cały source
 COPY . .
 
 RUN pnpm build
