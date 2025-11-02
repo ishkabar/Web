@@ -33,24 +33,19 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Clear buildx cache
-        run: |
-          docker buildx prune -af --filter "until=1h"
-
       - name: Build+Push portfolio (SSR)
         uses: docker/build-push-action@v6
         with:
-          context: .  # ✅ Zmień z ./portfolio na .
-          file: ./portfolio/Dockerfile  # ✅ Dodaj to
+          context: .
+          file: ./portfolio/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/web-portfolio:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/web-portfolio:sha-${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/web-portfolio:latest
           platforms: linux/amd64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           provenance: false
+          no-cache: true
 
       - name: Build+Push ogur (SSR)
         uses: docker/build-push-action@v6
