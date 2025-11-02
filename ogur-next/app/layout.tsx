@@ -41,6 +41,7 @@ export const metadata: Metadata = {
 
 const inter = Inter({
     subsets: ['latin'],
+    variable: '--font-inter',
     display: 'swap',
     fallback: ['system-ui', 'arial'],
     preload: false,
@@ -53,7 +54,7 @@ const calSans = LocalFont({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="pl" className={[inter.variable, calSans.variable].join(' ')}>
+        <html lang="pl" className={`${inter.variable} ${calSans.variable}`}>
         <head>
             <Analytics />
         </head>
