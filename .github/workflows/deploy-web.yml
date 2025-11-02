@@ -26,14 +26,14 @@ jobs:
           test -n "${{ secrets.SSH_HOST }}"     || (echo "SSH_HOST missing" && exit 1)
           test -n "${{ secrets.SSH_USER }}"     || (echo "SSH_USER missing" && exit 1)
           test -n "${{ secrets.SSH_PORT }}"     || (echo "SSH_PORT missing" && exit 1)
-          test -n "${{ secrets.SSH_KEY }}"      || (echo "SSH_KEY missing" && exit 1)
+          test -n "${{ secrets.SSH_KEY_B64 }}"  || (echo "SSH_KEY_B64 missing" && exit 1)
 
       - name: Write SSH key from base64
         shell: bash
         run: |
           KEY_PATH="${{ github.workspace }}/id_deploy"
-          echo "${{ secrets.SSH_KEY }}" | base64 -d > "$KEY_PATH"
-          chmod 600 "$KEY_PATH"
+          echo "${{ secrets.SSH_KEY_B64 }}" | base64 -d > "$KEY_PATH"
+          chmod 644 "$KEY_PATH"
           ls -l "$KEY_PATH"
 
 
@@ -89,7 +89,9 @@ jobs:
 
       - name: Build static (Next → out/)
         working-directory: ./ogur-next
-        run: pnpm build
+        run: |
+          pnpm build
+          pnpm export
 
       - name: Prepare remote dirs (ogur)
         uses: appleboy/ssh-action@v1.2.0
@@ -108,7 +110,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key_path: ${{ github.workspace }}/id_deploy
+          key: ${{ secrets.SSH_KEY }}
           source: "ogur-next/out/*"
           target: "/home/ubuntu/web/ogur/site"
           overwrite: true
@@ -119,7 +121,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key_path: ${{ github.workspace }}/id_deploy
+          key: ${{ secrets.SSH_KEY }}
           script: |
             cd /home/ubuntu/web/ogur
             docker compose -f docker-compose.app.yml up -d
