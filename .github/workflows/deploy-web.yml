@@ -33,6 +33,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Clear buildx cache
+        run: |
+          docker buildx prune -af --filter "until=1h"
+
       - name: Build+Push portfolio (SSR)
         uses: docker/build-push-action@v6
         with:
