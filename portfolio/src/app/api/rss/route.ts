@@ -2,6 +2,7 @@ import { getWorkPostsLocaleAware } from "@/utils/utils";
 import { baseURL } from "@/resources";
 import { NextResponse } from "next/server";
 import { getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 const locale = await getLocale();
 export async function GET() {
@@ -12,13 +13,29 @@ export async function GET() {
     return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
   });
 
+    const t = await getTranslations({ locale, namespace: "common" });
+    const tBlog = await getTranslations({ locale, namespace: "blog" });
+    const person = (t.raw("person") || {
+        name: "",
+        avatar: "",
+        location: "",
+        email: "",
+        languages: [] as string[],
+    }) as {
+        name: string;
+        avatar: string;
+        location: string;
+        email: string;
+        languages: string[];
+    };
+    
   // Generate RSS XML
   const rssXml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${blog.title}</title>
+    <title>${tBlog('title')}</title>
     <link>${baseURL}/blog</link>
-    <description>${blog.description}</description>
+    <description>${tBlog('description')}</description>
     <language>en</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${baseURL}/api/rss" rel="self" type="application/rss+xml" />
@@ -26,7 +43,7 @@ export async function GET() {
     <webMaster>${person.email || "noreply@example.com"} (${person.name})</webMaster>
     <image>
       <url>${baseURL}${person.avatar || "/images/avatar.jpg"}</url>
-      <title>${blog.title}</title>
+      <title>${tBlog('title')}</title>
       <link>${baseURL}/blog</link>
     </image>
     ${sortedPosts

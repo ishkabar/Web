@@ -3,6 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { notFound } from "next/navigation";
 
+
 export type Team = { name: string; role: string; avatar: string; linkedIn: string; };
 export type Metadata = {
     title: string; publishedAt: string; summary: string;

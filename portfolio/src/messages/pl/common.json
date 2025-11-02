@@ -13,7 +13,7 @@
     "lastName": "Najebany",
     "name": "Twój stary najebany",
     "role": "rola osoby",
-    "avatar": "/images/avatar.jpg",
+    "avatar": "/avatar.jpg",
     "email": "example@gmail.com",
     "location": "Europe/Warsaw",
     "languages": ["Angielski", "Polski"]

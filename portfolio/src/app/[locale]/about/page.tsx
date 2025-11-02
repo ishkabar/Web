@@ -1,118 +1,109 @@
 import {
-  Avatar,
-  Button,
-  Column,
-  Heading,
-  Icon,
-  IconButton,
-  Media,
-  Tag,
-  Text,
-  Schema,
-  Row,
+  Avatar, Button, Column, Heading, Icon, IconButton, Media, Tag, Text, Schema, Row,
 } from "@once-ui-system/core";
-import { baseURL } from "@/resources"; //about, person, social
-import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
+import TableOfContents from "@/components/about/TableOfContents";
 import React from "react";
-import { buildPageMetadata } from "@/lib/seo";
-import { useTranslations } from "next-intl";
 
+import { baseURL } from "@/resources";
+import { paths } from "@/resources/site.config";
+import { buildPageMetadata } from "@/lib/seo";
+
+import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { paths } from '@/resources/site.config';
+
+import { loadCommon, resolveObjectWithData, replacePlaceholders } from "@/utils/placeholders";
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
 }
 
-export default function About() {
-  const t = useTranslations("about");
-    const tCommon = useTranslations("common");
+export default async function About() {
+  const locale = await getLocale();
+  const t = await getTranslations("about");
+  const tCommon = await getTranslations("common");
 
-  const intro = t.raw("intro") as {
-    display: boolean;
-    title: string;
-    description: string;
-  };
+  const common = await loadCommon(locale);
 
-  const work = t.raw("work") as {
-    display: boolean;
-    title: string;
-    experiences: Array<{
-      company: string;
-      timeframe: string;
-      role: string;
-      achievements: string[];
-      images?: Array<{ src: string; alt: string; width: number; height: number }>;
-    }>;
-  };
+  const intro = resolveObjectWithData(
+    (t.raw("intro") ?? { display: false, title: "", description: "" }) as {
+      display: boolean; title: string; description: string;
+    },
+    common
+  );
 
-  const studies = t.raw("studies") as {
-    display: boolean;
-    title: string;
-    institutions: Array<{ name: string; description: string }>;
-  };
-
-  const technical = t.raw("technical") as {
-    display: boolean;
-    title: string;
-    skills: Array<{
+  const work = resolveObjectWithData(
+    (t.raw("work") ?? { display: false, title: "", experiences: [] }) as {
+      display: boolean;
       title: string;
-      description: string;
-      tags?: Array<{ name: string; icon?: string }>;
-      images?: Array<{ src: string; alt: string; width: number; height: number }>;
-    }>;
-  };
+      experiences: Array<{
+        company: string;
+        timeframe: string;
+        role: string;
+        achievements: string[];
+        images?: Array<{ src: string; alt: string; width: number; height: number }>;
+      }>;
+    },
+    common
+  );
 
-  //const tableOfContent = (t.raw("tableOfContent") || { display: false }) as { display: boolean; subItems?: boolean; };
-    const tocRaw = (t.raw("tableOfContent") ?? {}) as Partial<{ display: boolean; subItems: boolean }>;
-    const tableOfContent: { display: boolean; subItems: boolean } = {
-        display: !!tocRaw.display,
-        subItems: tocRaw.subItems ?? false
-    };
-    const aboutForToc: { tableOfContent: { display: boolean; subItems: boolean } } = { tableOfContent };
+  const studies = resolveObjectWithData(
+    (t.raw("studies") ?? { display: false, title: "", institutions: [] }) as {
+      display: boolean;
+      title: string;
+      institutions: Array<{ name: string; description: string }>;
+    },
+    common
+  );
 
+  const technical = resolveObjectWithData(
+    (t.raw("technical") ?? { display: false, title: "", skills: [] }) as {
+      display: boolean;
+      title: string;
+      skills: Array<{
+        title: string;
+        description: string;
+        tags?: Array<{ name: string; icon?: string }>;
+        images?: Array<{ src: string; alt: string; width: number; height: number }>;
+      }>;
+    },
+    common
+  );
 
-    const avatar = (t.raw("avatar") || { display: false }) as {
-    display: boolean;
-  };
-
-  const calendar = (t.raw("calendar") || { display: false, link: "" }) as {
-    display: boolean;
-    link: string;
-  };
+  const avatar = ((t.raw("avatar") ?? { display: false }) as { display: boolean });
+  const calendar = ((t.raw("calendar") ?? { display: false, link: "" }) as { display: boolean; link: string });
 
   const person = (tCommon.raw("person") || {
-    name: "",
-    avatar: "",
-    location: "",
-    languages: [] as string[],
-  }) as {
-    name: string;
-    avatar: string;
-    location: string;
-    languages: string[];
-  };
+    name: "", avatar: "", location: "", role: "",languages: [] as string[],
+  }) as { name: string; avatar: string; location: string; role: string; languages: string[] };
 
-  const social =
-    (tCommon.raw("social") as Array<{ name: string; icon: string; link?: string }>) || [];
+  const social = (tCommon.raw("social") || []) as Array<{ name: string; icon: string; link?: string }>;
 
-    const structure = [
-        { title: intro.title,     display: intro.display,     items: [] as string[] },
-        { title: work.title,      display: work.display,      items: work.experiences?.map(x => x.company) ?? [] },
-        { title: studies.title,   display: studies.display,   items: studies.institutions?.map(x => x.name) ?? [] },
-        { title: technical.title, display: technical.display, items: technical.skills?.map(x => x.title) ?? [] },
-    ];
+  const tocRaw = (t.raw("tableOfContent") ?? {}) as Partial<{ display: boolean; subItems: boolean }>;
+  const tableOfContent = { display: !!tocRaw.display, subItems: tocRaw.subItems ?? false };
+  const structure = [
+    { title: intro.title,     display: intro.display,     items: [] as string[] },
+    { title: work.title,      display: work.display,      items: work.experiences?.map(x => x.company) ?? [] },
+    { title: studies.title,   display: studies.display,   items: studies.institutions?.map(x => x.name) ?? [] },
+    { title: technical.title, display: technical.display, items: technical.skills?.map(x => x.title) ?? [] },
+  ];
+  const aboutForToc: { tableOfContent: { display: boolean; subItems: boolean } } = { tableOfContent };
+
+  const pageTitle = replacePlaceholders(t("title", { name: person.name }), common);
+    const rawDescription = t.raw("description") as string | undefined;
+    const pageDescription = rawDescription
+        ? replacePlaceholders(rawDescription, common)
+        : intro.description ?? "";
 
   return (
     <Column maxWidth="m">
       <Schema
         as="webPage"
         baseURL={baseURL}
-        title={t("title", { name: person.name })}
-        description={t("description")}
+        title={pageTitle}
+        description={pageDescription}
         path={paths.about}
-        image={`/api/og/generate?title=${encodeURIComponent(t("title"))}`}
+        image={`/api/og/generate?title=${encodeURIComponent(pageTitle)}`}
         author={{
           name: person.name,
           url: `${baseURL}${paths.about}`,
@@ -120,19 +111,19 @@ export default function About() {
         }}
       />
 
-        {tableOfContent.display && (
-            <Column
-                left="0"
-                style={{ top: "50%", transform: "translateY(-50%)" }}
-                position="fixed"
-                paddingLeft="24"
-                gap="32"
-                s={{ hide: true }}
-            >
-                <TableOfContents structure={structure} about={aboutForToc} />
-            </Column>
-        )}
-
+      {tableOfContent.display && (
+        <Column
+          left="0"
+          style={{ top: "50%", transform: "translateY(-50%)" }}
+          position="fixed"
+          paddingLeft="24"
+          gap="32"
+          s={{ hide: true }}
+        >
+          <TableOfContents structure={structure} about={aboutForToc} />
+        </Column>
+      )}
+      
       <Row fillWidth s={{ direction: "column" }} horizontal="center">
         {avatar.display && (
           <Column
@@ -157,9 +148,7 @@ export default function About() {
             {person.languages?.length > 0 && (
               <Row wrap gap="8">
                 {person.languages.map((language, index) => (
-                  <Tag key={index} size="l">
-                    {language}
-                  </Tag>
+                  <Tag key={index} size="l">{language}</Tag>
                 ))}
               </Row>
             )}
@@ -183,19 +172,14 @@ export default function About() {
               >
                 <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
                 <Row paddingX="8">{t("calendar.cta")}</Row>
-                <IconButton
-                  href={calendar.link}
-                  data-border="rounded"
-                  variant="secondary"
-                  icon="chevronRight"
-                />
+                <IconButton href={calendar.link} data-border="rounded" variant="secondary" icon="chevronRight" />
               </Row>
             )}
             <Heading className={styles.textAlign} variant="display-strong-xl">
               {person.name}
             </Heading>
             <Text className={styles.textAlign} variant="display-default-xs" onBackground="neutral-weak">
-              {t("role", { default: "" }) || person["role" as keyof typeof person] || ""}
+              {person.role}
             </Text>
 
             {social.length > 0 && (
@@ -234,7 +218,7 @@ export default function About() {
                           />
                         </Row>
                       </React.Fragment>
-                    )//,
+                    )
                 )}
               </Row>
             )}
@@ -282,14 +266,7 @@ export default function About() {
                             minWidth={image.width}
                             height={image.height}
                           >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                              priority
-                            />
+                            <Media enlarge radius="m" sizes={image.width.toString()} alt={image.alt} src={image.src} priority />
                           </Row>
                         ))}
                       </Row>
@@ -353,14 +330,7 @@ export default function About() {
                             minWidth={image.width}
                             height={image.height}
                           >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                              priority
-                            />
+                            <Media enlarge radius="m" sizes={image.width.toString()} alt={image.alt} src={image.src} priority />
                           </Row>
                         ))}
                       </Row>

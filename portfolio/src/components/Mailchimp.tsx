@@ -26,7 +26,6 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         description?: string;
         subscribe?: string;
     };
-    const tPerson = useTranslations('common.person' );
 
   const validateEmail = (email: string): boolean => {
     if (email === "") {
