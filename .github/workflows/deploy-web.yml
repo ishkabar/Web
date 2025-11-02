@@ -48,7 +48,8 @@ jobs:
       - name: Build+Push ogur (SSR)
         uses: docker/build-push-action@v6
         with:
-          context: ./ogur-next
+          context: .
+          file: ./ogur-next/Dockerfile
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/web-ogur:${{ github.sha }}
