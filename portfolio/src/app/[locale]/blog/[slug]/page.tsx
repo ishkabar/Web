@@ -31,10 +31,11 @@ import { buildPageMetadata } from "@/lib/seo";
 const locale = await getLocale();
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts = getBlogPostsLocaleAware(locale);
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+    const locale = await getLocale(); // ✅ Przenieś tutaj
+    const posts = getBlogPostsLocaleAware(locale);
+    return posts.map((post) => ({
+        slug: post.slug,
+    }));
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,7 +44,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
-  const routeParams = await params;
+    const locale = await getLocale();
+    const routeParams = await params;
   const slugPath = Array.isArray(routeParams.slug)
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
@@ -54,8 +56,8 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-    const t = useTranslations("blog");
-    const tCommon = useTranslations("common");
+    const t = await getTranslations("blog"); 
+    const tCommon = await getTranslations("common");
     const person = (tCommon.raw("person") || {
         name: "",
         avatar: "",
