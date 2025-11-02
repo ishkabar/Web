@@ -1,18 +1,19 @@
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
 import { Line, Logo, Row, Text } from "@once-ui-system/core";
 
-/*
+
 const person: Person = {
-  firstName: "Twój stary",
-  lastName: "Najebany",
-  name: `Twój stary najebany`,
-  role: "person.role",
+  firstName: "Dominik",
+  lastName: "Karczewski",
+  name: `Dominik Karczewski`,
+  role: ".NET Developer",
   avatar: "/images/avatar.jpg",
-  email: "example@gmail.com",
-  location: "Asia/Jakarta", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  email: "dom.karczewski@gmail.com",
+  location: "Europe/Warsaw", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
   languages: ["English", "Polish"], // optional: Leave the array empty if you don't want to display languages
 };
-
+export { person };
+/*
 const newsletter: Newsletter = {
   display: true,
   title: <>Subscribe to {person.firstName}'s Newsletter</>,
