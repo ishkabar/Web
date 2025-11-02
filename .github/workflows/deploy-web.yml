@@ -35,7 +35,7 @@ jobs:
       - name: Build+Push portfolio (SSR)
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./portfolio
           file: ./portfolio/Dockerfile
           push: true
           tags: |

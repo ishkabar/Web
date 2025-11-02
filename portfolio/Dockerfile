@@ -1,18 +1,16 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Kopiuj workspace config
-COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-COPY portfolio/package.json ./portfolio/
+# Kopiuj workspace files z parent directory
+COPY ../pnpm-workspace.yaml ../pnpm-lock.yaml ../package.json ./
+COPY package.json ./portfolio/
 
-# Install dependencies - USUŃ --filter
 RUN corepack enable && corepack prepare pnpm@latest --activate && \
     pnpm install --frozen-lockfile
 
-# Kopiuj source code
-COPY portfolio ./portfolio
+# Kopiuj portfolio source
+COPY . ./portfolio
 
-# Build portfolio
 WORKDIR /app/portfolio
 RUN pnpm build
 
