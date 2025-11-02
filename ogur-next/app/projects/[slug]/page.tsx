@@ -8,6 +8,8 @@ import { redis } from "@/lib/redis";
 import { Contact } from "@/app/components/contact";
 import { Metadata } from 'next';
 
+export const dynamic = 'force-dynamic';
+
 export const revalidate = 60;
 
 type Props = {
