@@ -1,0 +1,146 @@
+---
+title: "Ogur.dev"
+description: "Minimalistyczna platforma prezentacji projektów Next.js z dynamicznym renderowaniem MDX i Contentlayer, skierowana do społeczności gamingowej i twórców botów"
+date: "2024-10-01"
+url: https://ogur.dev
+repository: ishkabar/Web
+published: true
+---
+
+
+![Ogur.dev Index](https://files.ogur.dev/public/ogurDevIndex.png)
+
+Minimalistyczna platforma prezentacji projektów stworzona w Next.js z wykorzystaniem systemu MDX i Contentlayer, zaprojektowana specjalnie dla społeczności gamingowej, znajomych z internetu oraz twórców botów i narzędzi do automatyzacji. Serwis oferuje przejrzysty ciemny interfejs z animacjami particles, gradientowymi tłami oraz układem kart prezentujących zrealizowane projekty w ekosystemie Ogur.
+
+## Główne funkcje
+
+###### System MDX z Contentlayer
+Automatyczne generowanie stron projektów z plików MDX przez Contentlayer. Frontmatter z polami title, description, date, url, repository, published przekształcany w silnie typowane interfejsy TypeScript. Generowanie w czasie budowy do JSON w katalogu .contentlayer/generated dla błyskawicznej wydajności runtime bez odczytów systemu plików.
+
+###### Dynamiczne Strony Projektów
+Każdy projekt otrzymuje dedykowaną stronę pod adresem /projects/[slug] z pełnym renderowaniem MDX, podświetlaniem składni dla bloków kodu, responsywnymi obrazami oraz własnymi komponentami z małymi nagłówkami i sekcjami Główne funkcje, Architektura, Technologie. Automatyczne generowanie slug z nazwy pliku MDX.
+
+###### System Wyróżnionych Projektów
+Strona główna wyświetla top 3 projekty w sekcji hero z większymi kartami: SentinelDevexpress jako wyróżniony projekt pełnej szerokości, OgurFishing i Portfolio w dwóch kolumnach. Pozostałe projekty w siatce 3-kolumnowej z automatycznym sortowaniem według daty. Ikona oka z licznikami wyświetleń gotowymi do integracji z analytics.
+
+###### Minimalistyczny Ciemny Interfejs
+Gradientowe tła od czerni przez zinc-600 do czerni, karty w stylu glassmorphism z efektami hover, animowane świecące linie, komponent Particles z konfigurowalną gęstością, konturowy tekst na głównym logo oraz paleta kolorów zinc dla spójnej estetyki ciemnego motywu. Ikony Lucide React dla elementów wizualnych.
+
+###### Strona Kontaktu z Kopiowaniem
+Dedykowana strona /contact z siatką linków społecznościowych: Discord, GitHub, Email, LinkedIn. Funkcjonalność kliknij-i-kopiuj dla nicków Discord, powiadomienie toast po skopiowaniu, animacje hover ze zmianą kolorów obramowania oraz efekty cienia. Układ oparty na kartach z gradientowymi elementami i wyświetlaniem ikon.
+
+###### Lekka Nawigacja
+Minimalistyczny górny pasek nawigacji z linkami: Projekty, Kontakt, Regulamin. Design tylko tekstowy, przejścia hover od szarego do jaśniejszego, responsywne zwijanie na mobile. Komponent nawigacji wielokrotnego użytku na wszystkich stronach dla spójności interfejsu.
+
+![Ogur.dev Projects Page](https://files.ogur.dev/public/ogurPageProjects.png)
+
+## Architektura
+
+Aplikacja zbudowana w Next.js 13.5.11 z App Router i Server Components jako domyślne. TypeScript w trybie strict dla bezpieczeństwa typów, ESLint plus Prettier dla jakości kodu, Tailwind CSS dla utility-first stylingu.
+
+Integracja Contentlayer jako procesor w czasie budowy. Konfiguracja w contentlayer.config.js definiuje typ dokumentu Project z wzorcem ścieżki ./projects/**/*.mdx, typ treści mdx, pola z definicjami typów oraz pola obliczane dla generowania slug i contactInfo z lib/contact-data.ts. Wygenerowane typy w .contentlayer/generated/Project jako tablica allProjects i interfejs Project.
+
+Renderowanie stron projektów przez dynamiczną trasę [slug]/page.tsx. Server Component pobiera projekt z allProjects.find, renderuje MDX przez hook useMDXComponent, owija w semantyczny HTML article, wyświetla metadane (datę, wyświetlenia, link do repozytorium, URL na żywo) oraz zawiera header.tsx z linkami kontaktowymi. Obsługa 404 dla nieistniejących slugów.
+
+Strona główna z projektem split screen: górna połowa z animacją particles i wycentrowanym logo ogur.dev z animacją tytułu, dolna połowa z linkami nawigacji. Komponent Slogan z rotującymi hasłami. Animacje CSS (animate-fade-in, animate-glow, animate-fade-left/right) dla progresywnych ujawnień.
+
+Strona listy projektów z filtrowanym allProjects (tylko published: true), sortowaniem według daty malejąco, ekstrakcją sekcji hero (featured plus top2 plus top3) oraz siatką 3-kolumnową dla pozostałych projektów z filtrowaniem modulo (i % 3 === 0/1/2) dla zbalansowanych kolumn. Wrapper Card z efektami hover i integracją Link.
+
+## Workflow Contentlayer
+
+Pliki MDX w /content/projects/ z konwencją nazewnictwa ProjectName.mdx. Blok frontmatter na początku pliku ze składnią YAML, treść body z markdown plus własne nagłówki, obrazy jako osadzenia ![alt](url). Brak nawiasów klamrowych w treści z powodu konfliktu z wyrażeniami JavaScript.
+
+Proces budowy: pnpm contentlayer build czyta wszystkie pliki MDX, waliduje frontmatter względem schematu, generuje typy TypeScript, wyprowadza pakiety JSON do .contentlayer/generated/. Tryb dev: pnpm dev:ogur:watch z flagą --turbo dla szybkiego odświeżania, auto-rebuild przy zmianach MDX.
+
+Pola obliczane: slug wyodrębniany z _raw.flattenedPath z czyszczeniem regex, contactInfo wstrzykiwane z lib/contact-data.ts (obiekty discord, github, email, linkedin z href i handle). Pola dostępne jako project.slug, project.contactInfo.discord.handle w komponentach.
+
+Bezpieczeństwo typów: import type {Project} from 'contentlayer/generated' dla silnie typowanych obiektów project, sprawdzanie w czasie kompilacji dla brakujących pól, autouzupełnianie w IDE dla nazw pól. Filtrowanie projektów ze strażnikami typów (p): p is Project dla bezpieczeństwa runtime.
+
+## Stack Technologiczny
+
+- **Framework:** Next.js 13.5.11 z App Router
+- **Język:** TypeScript w trybie strict
+- **Treść:** MDX, Contentlayer 0.3.x
+- **Stylowanie:** Tailwind CSS 3.x, własne animacje
+- **Komponenty UI:** Ikony Lucide React, własne Card/Navigation
+- **Animacje:** Keyframes CSS, potencjał Framer Motion
+- **Czcionki:** font-display i zmienne własnych czcionek
+- **Deployment:** Eksport statyczny lub serwer Node.js
+- **Build:** Turbopack dla trybu dev, kompilator SWC
+- **Linting:** ESLint, Prettier
+- **Menedżer pakietów:** pnpm ze wsparciem workspace
+
+## Sekcje Serwisu
+
+**Strona Główna** - wycentrowany układ z tłem particles, gigantyczne logo tekstu ogur.dev z gradientem i efektem konturu, poziome świecące linie góra/dół, minimalna nawigacja (Projekty, Kontakt, Regulamin), rotujący komponent slogan. Pełna wysokość viewport z centrowaniem flexbox.
+
+**Lista Projektów (/projects)** - nagłówek z "Projekty" i podtytuł o projektach komercyjnych i osobistych, wyróżniony projekt w dużej karcie (SentinelDevexpress), top2/top3 w mniejszych kartach 2-kolumnowych, pozioma linia rozdzielająca, pozostałe projekty w siatce 3-kolumnowej masonry. Każda karta z datą, liczbą wyświetleń, tytułem, opisem, linkiem "Czytaj więcej".
+
+**Pojedynczy Projekt (/projects/[slug])** - pełne renderowanie MDX z własnym stylem, sekcja nagłówka z ikonami kontaktowymi (Discord, GitHub, Email, LinkedIn), wiersz metadanych (link do repozytorium jeśli jest, URL na żywo jeśli jest), treść article z responsywną typografią, podświetlanie składni kodu, optymalizacja obrazów. Pasek nawigacji u góry.
+
+**Kontakt (/contact)** - układ siatki (1 kolumna mobile, 2 kolumny tablet, 3 kolumny desktop) z kartami społecznościowymi. Każda karta z ikoną w okrągłym obramowaniu, duży tekst handle, mały tekst label, animacje hover (zmiana koloru obramowania, rozjaśnienie tekstu, przesunięcie tła). Click-to-copy dla Discord/Email z powiadomieniem toast.
+
+**Regulamin (/legal)** - regulamin i polityka prywatności z renderowaniem markdown, standardowy układ tekstowy, pasek nawigacji. Treść z pliku legal.mdx w /content/pages/.
+
+![Ogur.dev Contact Page](https://files.ogur.dev/public/ogurPageContact.png)
+
+## System Projektowy
+
+**Paleta Kolorów** - skala zinc jako podstawowa (zinc-50 do zinc-950), przezroczyste nakładki (/0, /20, /50), punkty gradientu (zinc-300/0 przez zinc-300/50 do zinc-300/0), kolory tekstu (zinc-100 dla nagłówków, zinc-400 dla treści, zinc-500 dla wyciszonych).
+
+**Typografia** - font-display dla nagłówków z pogrubioną wagą, responsywne skale text-4xl/6xl/9xl, tracking-tight dla skondensowanego wyglądu, text-transparent plus bg-clip-text dla efektów gradientu tekstu, whitespace-nowrap dla logo.
+
+**Odstępy** - spójne gap-4/8/16 dla siatek, padding p-4/8/16 dla kart, margin my-16 dla sekcji, container max-w-7xl dla ograniczenia szerokości treści, px-6/lg:px-8 dla poziomego paddingu.
+
+**Animacje** - animate-fade-in dla efektów wejścia, animate-glow dla pulsujących linii, animate-title dla ujawnienia logo, duration-500/700/1000 dla przejść hover, właściwości delay w keyframes dla rozłożonych animacji.
+
+**Komponenty** - wrapper Card z pozycjonowaniem relative i efektami group hover, Navigation z opcjami pozycjonowania fixed/sticky, komponent Article dla kart podglądu projektów, nakładka canvas Particles z konfigurowalną gęstością.
+
+## Deployment
+
+System deployowany jako eksport statyczny na VPS z Nginx reverse proxy i Traefik dla terminacji SSL.
+
+**Proces Budowy**
+```bash
+cd ~/source/Web/ogur-next
+rm -rf .contentlayer
+pnpm contentlayer build
+pnpm build
+pnpm export
+```
+
+**GitHub Actions CI/CD** - workflow w deploy-web.yml, trigger przy push do main, checkout repo, setup Node 20, instalacja pnpm globalnie, instalacja zależności z --frozen-lockfile, contentlayer build, next build plus export, upload SCP do VPS:/home/ubuntu/web/ogur/site, restart kontenera Docker z docker-compose.app.yml.
+
+**Zmienne Środowiskowe** - NEXT_PUBLIC_BASE_URL dla kanonicznych URL, ścieżki konfiguracji contentlayer, opcjonalne ID analytics. Konfiguracja produkcyjna w .env.production.
+
+**Pliki Statyczne** - output do katalogu /out, HTML per trasa, _next/static dla assetów, skopiowane pliki public, całe routing po stronie klienta z next/link, brak funkcji server-side w trybie statycznym.
+
+## Kontakt i Dane
+
+Dane kontaktowe w lib/contact-data.ts jako eksportowana stała:
+```typescript
+export const contactData = {
+    discord: { href: "https://discord.com/users/822151223116824588", handle: "7cd_" },
+    github: { href: "https://github.com/ishkabar", handle: "ishkabar" },
+    email: { href: "mailto:kontakt@ogur.dev", handle: "kontakt@ogur.dev" },
+    linkedin: { href: "https://www.linkedin.com/in/dominik-karczewski-1b850b209/", handle: "Dominik Karczewski" },
+};
+```
+
+Komponent Header w projects/[slug]/header.tsx wstrzykuje te dane jako ikony kontaktowe z tooltipami hover. Pola obliczane Contentlayer automatycznie dodają contactInfo do każdego obiektu Project.
+
+## Debugowanie i Development
+
+**Serwer Dev** - pnpm dev:ogur:watch z turbopack dla szybkiego odświeżania, hot reload zmian MDX, sprawdzanie TypeScript w tle, tryb watch contentlayer dla auto-regeneracji.
+
+**Typowe Problemy**
+- Fail Contentlayer: sprawdź składnię frontmatter, brak nawiasów klamrowych w treści, obecne wymagane pola
+- Błędy budowy: rm -rf .contentlayer && pnpm contentlayer build dla czystego startu
+- Błędy typów: regeneruj typy, zrestartuj serwer TypeScript w IDE
+- 404: zweryfikuj czy slug pasuje do nazwy pliku, sprawdź published: true
+
+**Logi** - output Next.js dev, logi generowania contentlayer, ostrzeżenia budowy dla nieużywanych importów/zmiennych, status kompilacji Turbopack.
+
+---
+
+*Projekt ewoluuje z nowo dodawanymi plikami MDX dla kolejnych projektów ekosystemu Ogur. Aktualna lista: Sentinel, SentinelDevexpress, OgurCore, OgurAbstractions, OgurFishing, Portfolio.*
