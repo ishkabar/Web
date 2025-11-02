@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json ./
 
 RUN corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --no-frozen-lockfile  # ✅ Bez frozen
+    pnpm install --no-frozen-lockfile 
 
 COPY . .
 

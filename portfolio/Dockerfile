@@ -17,8 +17,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY --from=build /app/portfolio/.next/standalone ./
-COPY --from=build /app/portfolio/.next/static ./.next/static
-COPY --from=build /app/portfolio/public ./public
+COPY --from=build /app/portfolio/.next/static ./portfolio/.next/static
+COPY --from=build /app/portfolio/public ./portfolio/public
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "portfolio/server.js"]
