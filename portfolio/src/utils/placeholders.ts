@@ -97,7 +97,7 @@ export function resolveObjectWithData<T = any>(
  */
 export async function loadCommon(locale: string): Promise<Record<string, any>> {
     // Next can import JSON dynamically; .default holds the actual object.
-    const mod = await import(`@/messages/${locale}/common.json`);
+    const mod = await import(`@/messages/${locale}/common.json`);  // 
     return (mod as any).default ?? mod;
 }
 
