@@ -31,11 +31,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Project({
                                           params,
                                       }: {
-    params: { slug: string };
+    params: Promise<{ slug: string }>; 
 }) {
+    const { slug } = await params; 
     const locale = await getLocale();
     const posts = getWorkPostsLocaleAware(locale);
-    const post = posts.find((p) => p.slug === params.slug);
+    const post = posts.find((p) => p.slug === slug);
 
     if (!post) notFound();
 
@@ -62,7 +63,7 @@ export default async function Project({
             <Schema
                 as="blogPosting"
                 baseURL={baseURL}
-                path={`${paths.work}/${post.slug}`}
+                path={`${paths.work}/${slug}`}  
                 title={post.metadata.title}
                 description={post.metadata.summary}
                 datePublished={post.metadata.publishedAt}
