@@ -27,7 +27,7 @@ importers:
     dependencies:
       '@next/mdx':
         specifier: ^13.5.4
-        version: 13.5.11(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@18.3.24)(react@18.3.1))
+        version: 13.5.11(@mdx-js/loader@3.1.1(supports-color@10.2.2))(@mdx-js/react@3.1.1(@types/react@18.3.24)(react@18.3.1))
       '@upstash/redis':
         specifier: ^1.23.3
         version: 1.35.4
@@ -36,7 +36,7 @@ importers:
         version: 10.18.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       ioredis:
         specifier: ^5.8.2
-        version: 5.8.2
+        version: 5.8.2(supports-color@10.2.2)
       lucide-react:
         specifier: ^0.284.0
         version: 0.284.0(react@18.3.1)
@@ -69,10 +69,13 @@ importers:
         version: 6.0.0
       remark-gfm:
         specifier: 3.0.1
-        version: 3.0.1
+        version: 3.0.1(supports-color@10.2.2)
       shiki:
         specifier: 0.14.7
         version: 0.14.7
+      supports-color:
+        specifier: ^10.2.2
+        version: 10.2.2
       typescript:
         specifier: ^5.2.2
         version: 5.9.2
@@ -86,9 +89,6 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.10
         version: 0.5.18(tailwindcss@3.4.17)
-      '@types/ioredis':
-        specifier: ^5.0.0
-        version: 5.0.0
       '@types/node':
         specifier: ^20.8.4
         version: 20.19.17
@@ -103,13 +103,13 @@ importers:
         version: 10.4.21(postcss@8.5.6)
       contentlayer:
         specifier: ^0.3.4
-        version: 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+        version: 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       esbuild:
         specifier: 0.18.20
         version: 0.18.20
       next-contentlayer:
         specifier: ^0.3.4
-        version: 0.3.4(contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0))(esbuild@0.18.20)(markdown-wasm@1.2.0)(next@13.5.11(@opentelemetry/api@1.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.93.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 0.3.4(contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2))(esbuild@0.18.20)(markdown-wasm@1.2.0)(next@13.5.11(@opentelemetry/api@1.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.93.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(supports-color@10.2.2)
       postcss:
         specifier: ^8.4.31
         version: 8.5.6
@@ -130,7 +130,7 @@ importers:
     dependencies:
       '@mdx-js/loader':
         specifier: ^3.1.0
-        version: 3.1.1
+        version: 3.1.1(supports-color@10.2.2)
       '@next/mdx':
         specifier: ^15.3.1
         version: 15.5.3(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.1.13)(react@19.0.0))
@@ -1410,10 +1410,6 @@ packages:
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
-
-  '@types/ioredis@5.0.0':
-    resolution: {integrity: sha512-zJbJ3FVE17CNl5KXzdeSPtdltc4tMT3TzC6fxQS0sQngkbFZ6h+0uTafsRqu+eSLIugf6Yb0Ea0SUuRr42Nk9g==}
-    deprecated: This is a stub types definition. ioredis provides its own type definitions, so you do not need this installed.
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3326,6 +3322,10 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
 
+  supports-color@10.2.2:
+    resolution: {integrity: sha512-SS+jx45GF1QjgEXQx4NJZV9ImqmO2NPz5FNsIHrsDjh2YsHnawpan7SNQ1o8NuhrbHZy9AZhIoCUiCeaW/C80g==}
+    engines: {node: '>=18'}
+
   supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
@@ -3635,9 +3635,9 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@contentlayer/cli@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)':
+  '@contentlayer/cli@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)':
     dependencies:
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       '@contentlayer/utils': 0.3.4
       clipanion: 3.2.1(typanion@3.14.0)
       typanion: 3.14.0
@@ -3647,25 +3647,25 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/client@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)':
+  '@contentlayer/client@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)':
     dependencies:
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
       - esbuild
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/core@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)':
+  '@contentlayer/core@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)':
     dependencies:
       '@contentlayer/utils': 0.3.4
       camel-case: 4.1.2
       comment-json: 4.2.5
       gray-matter: 4.0.3
-      mdx-bundler: 9.2.1(esbuild@0.18.20)
+      mdx-bundler: 9.2.1(esbuild@0.18.20)(supports-color@10.2.2)
       rehype-stringify: 9.0.4
       remark-frontmatter: 4.0.1
-      remark-parse: 10.0.2
+      remark-parse: 10.0.2(supports-color@10.2.2)
       remark-rehype: 10.1.0
       source-map-support: 0.5.21
       type-fest: 3.13.1
@@ -3677,9 +3677,9 @@ snapshots:
       - '@effect-ts/otel-node'
       - supports-color
 
-  '@contentlayer/source-files@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)':
+  '@contentlayer/source-files@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)':
     dependencies:
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       '@contentlayer/utils': 0.3.4
       chokidar: 3.6.0
       fast-glob: 3.3.3
@@ -3696,10 +3696,10 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  '@contentlayer/source-remote-files@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)':
+  '@contentlayer/source-remote-files@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)':
     dependencies:
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
-      '@contentlayer/source-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
+      '@contentlayer/source-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       '@contentlayer/utils': 0.3.4
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
@@ -3781,10 +3781,10 @@ snapshots:
   '@emotion/memoize@0.7.4':
     optional: true
 
-  '@esbuild-plugins/node-resolve@0.1.4(esbuild@0.18.20)':
+  '@esbuild-plugins/node-resolve@0.1.4(esbuild@0.18.20)(supports-color@10.2.2)':
     dependencies:
       '@types/resolve': 1.20.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       esbuild: 0.18.20
       escape-string-regexp: 4.0.0
       resolve: 1.22.10
@@ -3945,7 +3945,7 @@ snapshots:
   '@eslint/config-array@0.21.0':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -3959,7 +3959,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -4171,23 +4171,23 @@ snapshots:
       jsbi: 4.3.2
       tslib: 2.8.1
 
-  '@mdx-js/esbuild@2.3.0(esbuild@0.18.20)':
+  '@mdx-js/esbuild@2.3.0(esbuild@0.18.20)(supports-color@10.2.2)':
     dependencies:
-      '@mdx-js/mdx': 2.3.0
+      '@mdx-js/mdx': 2.3.0(supports-color@10.2.2)
       esbuild: 0.18.20
       node-fetch: 3.3.2
       vfile: 5.3.7
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/loader@3.1.1':
+  '@mdx-js/loader@3.1.1(supports-color@10.2.2)':
     dependencies:
-      '@mdx-js/mdx': 3.1.1
+      '@mdx-js/mdx': 3.1.1(supports-color@10.2.2)
       source-map: 0.7.6
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/mdx@2.3.0':
+  '@mdx-js/mdx@2.3.0(supports-color@10.2.2)':
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/mdx': 2.0.13
@@ -4195,11 +4195,11 @@ snapshots:
       estree-util-is-identifier-name: 2.1.0
       estree-util-to-js: 1.2.0
       estree-walker: 3.0.3
-      hast-util-to-estree: 2.3.3
+      hast-util-to-estree: 2.3.3(supports-color@10.2.2)
       markdown-extensions: 1.1.1
       periscopic: 3.1.0
-      remark-mdx: 2.3.0
-      remark-parse: 10.0.2
+      remark-mdx: 2.3.0(supports-color@10.2.2)
+      remark-parse: 10.0.2(supports-color@10.2.2)
       remark-rehype: 10.1.0
       unified: 10.1.2
       unist-util-position-from-estree: 1.1.2
@@ -4209,7 +4209,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/mdx@3.1.1':
+  '@mdx-js/mdx@3.1.1(supports-color@10.2.2)':
     dependencies:
       '@types/estree': 1.0.8
       '@types/estree-jsx': 1.0.5
@@ -4221,14 +4221,14 @@ snapshots:
       estree-util-is-identifier-name: 3.0.0
       estree-util-scope: 1.0.0
       estree-walker: 3.0.3
-      hast-util-to-jsx-runtime: 2.3.6
+      hast-util-to-jsx-runtime: 2.3.6(supports-color@10.2.2)
       markdown-extensions: 2.0.0
       recma-build-jsx: 1.0.0
       recma-jsx: 1.0.1(acorn@8.15.0)
       recma-stringify: 1.0.0
-      rehype-recma: 1.0.0
-      remark-mdx: 3.1.1
-      remark-parse: 11.0.0
+      rehype-recma: 1.0.0(supports-color@10.2.2)
+      remark-mdx: 3.1.1(supports-color@10.2.2)
+      remark-parse: 11.0.0(supports-color@10.2.2)
       remark-rehype: 11.1.2
       source-map: 0.7.6
       unified: 11.0.5
@@ -4256,18 +4256,18 @@ snapshots:
 
   '@next/env@15.5.3': {}
 
-  '@next/mdx@13.5.11(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@18.3.24)(react@18.3.1))':
+  '@next/mdx@13.5.11(@mdx-js/loader@3.1.1(supports-color@10.2.2))(@mdx-js/react@3.1.1(@types/react@18.3.24)(react@18.3.1))':
     dependencies:
       source-map: 0.7.6
     optionalDependencies:
-      '@mdx-js/loader': 3.1.1
+      '@mdx-js/loader': 3.1.1(supports-color@10.2.2)
       '@mdx-js/react': 3.1.1(@types/react@18.3.24)(react@18.3.1)
 
   '@next/mdx@15.5.3(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.1.13)(react@19.0.0))':
     dependencies:
       source-map: 0.7.6
     optionalDependencies:
-      '@mdx-js/loader': 3.1.1
+      '@mdx-js/loader': 3.1.1(supports-color@10.2.2)
       '@mdx-js/react': 3.1.1(@types/react@19.1.13)(react@19.0.0)
 
   '@next/swc-darwin-arm64@13.5.9':
@@ -4639,12 +4639,6 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
-  '@types/ioredis@5.0.0':
-    dependencies:
-      ioredis: 5.8.2
-    transitivePeerDependencies:
-      - supports-color
-
   '@types/json-schema@7.0.15': {}
 
   '@types/mdast@3.0.15':
@@ -4902,13 +4896,13 @@ snapshots:
       tree-kill: 1.2.2
       yargs: 17.7.2
 
-  contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0):
+  contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2):
     dependencies:
-      '@contentlayer/cli': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
-      '@contentlayer/client': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
-      '@contentlayer/source-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
-      '@contentlayer/source-remote-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/cli': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
+      '@contentlayer/client': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
+      '@contentlayer/source-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
+      '@contentlayer/source-remote-files': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       '@contentlayer/utils': 0.3.4
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
@@ -4972,9 +4966,11 @@ snapshots:
 
   date-fns@4.1.0: {}
 
-  debug@4.4.3:
+  debug@4.4.3(supports-color@10.2.2):
     dependencies:
       ms: 2.1.3
+    optionalDependencies:
+      supports-color: 10.2.2
 
   decimal.js-light@2.5.1: {}
 
@@ -5123,7 +5119,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -5410,7 +5406,7 @@ snapshots:
       web-namespaces: 2.0.1
       zwitch: 2.0.4
 
-  hast-util-to-estree@2.3.3:
+  hast-util-to-estree@2.3.3(supports-color@10.2.2):
     dependencies:
       '@types/estree': 1.0.8
       '@types/estree-jsx': 1.0.5
@@ -5420,8 +5416,8 @@ snapshots:
       estree-util-attach-comments: 2.1.1
       estree-util-is-identifier-name: 2.1.0
       hast-util-whitespace: 2.0.1
-      mdast-util-mdx-expression: 1.3.2
-      mdast-util-mdxjs-esm: 1.3.1
+      mdast-util-mdx-expression: 1.3.2(supports-color@10.2.2)
+      mdast-util-mdxjs-esm: 1.3.1(supports-color@10.2.2)
       property-information: 6.5.0
       space-separated-tokens: 2.0.2
       style-to-object: 0.4.4
@@ -5430,7 +5426,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  hast-util-to-estree@3.1.3:
+  hast-util-to-estree@3.1.3(supports-color@10.2.2):
     dependencies:
       '@types/estree': 1.0.8
       '@types/estree-jsx': 1.0.5
@@ -5440,9 +5436,9 @@ snapshots:
       estree-util-attach-comments: 3.0.0
       estree-util-is-identifier-name: 3.0.0
       hast-util-whitespace: 3.0.0
-      mdast-util-mdx-expression: 2.0.1
-      mdast-util-mdx-jsx: 3.2.0
-      mdast-util-mdxjs-esm: 2.0.1
+      mdast-util-mdx-expression: 2.0.1(supports-color@10.2.2)
+      mdast-util-mdx-jsx: 3.2.0(supports-color@10.2.2)
+      mdast-util-mdxjs-esm: 2.0.1(supports-color@10.2.2)
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
       style-to-js: 1.1.17
@@ -5465,7 +5461,7 @@ snapshots:
       stringify-entities: 4.0.4
       zwitch: 2.0.4
 
-  hast-util-to-jsx-runtime@2.3.6:
+  hast-util-to-jsx-runtime@2.3.6(supports-color@10.2.2):
     dependencies:
       '@types/estree': 1.0.8
       '@types/hast': 3.0.4
@@ -5474,9 +5470,9 @@ snapshots:
       devlop: 1.1.0
       estree-util-is-identifier-name: 3.0.0
       hast-util-whitespace: 3.0.0
-      mdast-util-mdx-expression: 2.0.1
-      mdast-util-mdx-jsx: 3.2.0
-      mdast-util-mdxjs-esm: 2.0.1
+      mdast-util-mdx-expression: 2.0.1(supports-color@10.2.2)
+      mdast-util-mdx-jsx: 3.2.0(supports-color@10.2.2)
+      mdast-util-mdxjs-esm: 2.0.1(supports-color@10.2.2)
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
       style-to-js: 1.1.17
@@ -5546,11 +5542,11 @@ snapshots:
       '@formatjs/icu-messageformat-parser': 2.11.2
       tslib: 2.8.1
 
-  ioredis@5.8.2:
+  ioredis@5.8.2(supports-color@10.2.2):
     dependencies:
       '@ioredis/commands': 1.4.0
       cluster-key-slot: 1.1.2
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       denque: 2.1.0
       lodash.defaults: 4.2.0
       lodash.isarguments: 3.1.0
@@ -5664,7 +5660,7 @@ snapshots:
     dependencies:
       chalk: 5.6.2
       commander: 14.0.1
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       lilconfig: 3.1.3
       listr2: 9.0.4
       micromatch: 4.0.8
@@ -5745,13 +5741,13 @@ snapshots:
       unist-util-is: 5.2.1
       unist-util-visit-parents: 5.1.3
 
-  mdast-util-from-markdown@1.3.1:
+  mdast-util-from-markdown@1.3.1(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 3.0.15
       '@types/unist': 2.0.11
       decode-named-character-reference: 1.2.0
       mdast-util-to-string: 3.2.0
-      micromark: 3.2.0
+      micromark: 3.2.0(supports-color@10.2.2)
       micromark-util-decode-numeric-character-reference: 1.1.0
       micromark-util-decode-string: 1.1.0
       micromark-util-normalize-identifier: 1.1.0
@@ -5762,14 +5758,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-from-markdown@2.0.2:
+  mdast-util-from-markdown@2.0.2(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
       decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       mdast-util-to-string: 4.0.0
-      micromark: 4.0.2
+      micromark: 4.0.2(supports-color@10.2.2)
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-decode-string: 2.0.1
       micromark-util-normalize-identifier: 2.0.1
@@ -5803,11 +5799,11 @@ snapshots:
       '@types/mdast': 3.0.15
       mdast-util-to-markdown: 1.5.0
 
-  mdast-util-gfm-table@1.0.7:
+  mdast-util-gfm-table@1.0.7(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 3.0.15
       markdown-table: 3.0.4
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       mdast-util-to-markdown: 1.5.0
     transitivePeerDependencies:
       - supports-color
@@ -5817,47 +5813,47 @@ snapshots:
       '@types/mdast': 3.0.15
       mdast-util-to-markdown: 1.5.0
 
-  mdast-util-gfm@2.0.2:
+  mdast-util-gfm@2.0.2(supports-color@10.2.2):
     dependencies:
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       mdast-util-gfm-autolink-literal: 1.0.3
       mdast-util-gfm-footnote: 1.0.2
       mdast-util-gfm-strikethrough: 1.0.3
-      mdast-util-gfm-table: 1.0.7
+      mdast-util-gfm-table: 1.0.7(supports-color@10.2.2)
       mdast-util-gfm-task-list-item: 1.0.2
       mdast-util-to-markdown: 1.5.0
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-expression@1.3.2:
+  mdast-util-mdx-expression@1.3.2(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 2.3.10
       '@types/mdast': 3.0.15
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       mdast-util-to-markdown: 1.5.0
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-expression@2.0.1:
+  mdast-util-mdx-expression@2.0.1(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@10.2.2)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-jsx@2.1.4:
+  mdast-util-mdx-jsx@2.1.4(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 2.3.10
       '@types/mdast': 3.0.15
       '@types/unist': 2.0.11
       ccount: 2.0.1
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       mdast-util-to-markdown: 1.5.0
       parse-entities: 4.0.2
       stringify-entities: 4.0.4
@@ -5867,7 +5863,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx-jsx@3.2.0:
+  mdast-util-mdx-jsx@3.2.0(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
@@ -5875,7 +5871,7 @@ snapshots:
       '@types/unist': 3.0.3
       ccount: 2.0.1
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@10.2.2)
       mdast-util-to-markdown: 2.1.2
       parse-entities: 4.0.2
       stringify-entities: 4.0.4
@@ -5884,43 +5880,43 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx@2.0.1:
+  mdast-util-mdx@2.0.1(supports-color@10.2.2):
     dependencies:
-      mdast-util-from-markdown: 1.3.1
-      mdast-util-mdx-expression: 1.3.2
-      mdast-util-mdx-jsx: 2.1.4
-      mdast-util-mdxjs-esm: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
+      mdast-util-mdx-expression: 1.3.2(supports-color@10.2.2)
+      mdast-util-mdx-jsx: 2.1.4(supports-color@10.2.2)
+      mdast-util-mdxjs-esm: 1.3.1(supports-color@10.2.2)
       mdast-util-to-markdown: 1.5.0
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdx@3.0.0:
+  mdast-util-mdx@3.0.0(supports-color@10.2.2):
     dependencies:
-      mdast-util-from-markdown: 2.0.2
-      mdast-util-mdx-expression: 2.0.1
-      mdast-util-mdx-jsx: 3.2.0
-      mdast-util-mdxjs-esm: 2.0.1
+      mdast-util-from-markdown: 2.0.2(supports-color@10.2.2)
+      mdast-util-mdx-expression: 2.0.1(supports-color@10.2.2)
+      mdast-util-mdx-jsx: 3.2.0(supports-color@10.2.2)
+      mdast-util-mdxjs-esm: 2.0.1(supports-color@10.2.2)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdxjs-esm@1.3.1:
+  mdast-util-mdxjs-esm@1.3.1(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 2.3.10
       '@types/mdast': 3.0.15
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       mdast-util-to-markdown: 1.5.0
     transitivePeerDependencies:
       - supports-color
 
-  mdast-util-mdxjs-esm@2.0.1:
+  mdast-util-mdxjs-esm@2.0.1(supports-color@10.2.2):
     dependencies:
       '@types/estree-jsx': 1.0.5
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.4
       devlop: 1.1.0
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@10.2.2)
       mdast-util-to-markdown: 2.1.2
     transitivePeerDependencies:
       - supports-color
@@ -5989,12 +5985,12 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
 
-  mdx-bundler@9.2.1(esbuild@0.18.20):
+  mdx-bundler@9.2.1(esbuild@0.18.20)(supports-color@10.2.2):
     dependencies:
       '@babel/runtime': 7.28.4
-      '@esbuild-plugins/node-resolve': 0.1.4(esbuild@0.18.20)
+      '@esbuild-plugins/node-resolve': 0.1.4(esbuild@0.18.20)(supports-color@10.2.2)
       '@fal-works/esbuild-plugin-global-externals': 2.1.2
-      '@mdx-js/esbuild': 2.3.0(esbuild@0.18.20)
+      '@mdx-js/esbuild': 2.3.0(esbuild@0.18.20)(supports-color@10.2.2)
       esbuild: 0.18.20
       gray-matter: 4.0.3
       remark-frontmatter: 4.0.1
@@ -6443,10 +6439,10 @@ snapshots:
 
   micromark-util-types@2.0.2: {}
 
-  micromark@3.2.0:
+  micromark@3.2.0(supports-color@10.2.2):
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       decode-named-character-reference: 1.2.0
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
@@ -6465,10 +6461,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  micromark@4.0.2:
+  micromark@4.0.2(supports-color@10.2.2):
     dependencies:
       '@types/debug': 4.1.12
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       decode-named-character-reference: 1.2.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
@@ -6522,11 +6518,11 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-contentlayer@0.3.4(contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0))(esbuild@0.18.20)(markdown-wasm@1.2.0)(next@13.5.11(@opentelemetry/api@1.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.93.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next-contentlayer@0.3.4(contentlayer@0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2))(esbuild@0.18.20)(markdown-wasm@1.2.0)(next@13.5.11(@opentelemetry/api@1.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.93.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(supports-color@10.2.2):
     dependencies:
-      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      '@contentlayer/core': 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       '@contentlayer/utils': 0.3.4
-      contentlayer: 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)
+      contentlayer: 0.3.4(esbuild@0.18.20)(markdown-wasm@1.2.0)(supports-color@10.2.2)
       next: 13.5.11(@opentelemetry/api@1.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.93.0)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -6549,7 +6545,7 @@ snapshots:
   next-mdx-remote@5.0.0(@types/react@19.1.13)(react@19.0.0):
     dependencies:
       '@babel/code-frame': 7.27.1
-      '@mdx-js/mdx': 3.1.1
+      '@mdx-js/mdx': 3.1.1(supports-color@10.2.2)
       '@mdx-js/react': 3.1.1(@types/react@19.1.13)(react@19.0.0)
       react: 19.0.0
       unist-util-remove: 3.1.1
@@ -6938,11 +6934,11 @@ snapshots:
       unified: 10.1.2
       unist-util-visit: 4.1.2
 
-  rehype-recma@1.0.0:
+  rehype-recma@1.0.0(supports-color@10.2.2):
     dependencies:
       '@types/estree': 1.0.8
       '@types/hast': 3.0.4
-      hast-util-to-estree: 3.1.3
+      hast-util-to-estree: 3.1.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -6967,10 +6963,10 @@ snapshots:
       micromark-extension-frontmatter: 1.1.1
       unified: 10.1.2
 
-  remark-gfm@3.0.1:
+  remark-gfm@3.0.1(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 3.0.15
-      mdast-util-gfm: 2.0.2
+      mdast-util-gfm: 2.0.2(supports-color@10.2.2)
       micromark-extension-gfm: 2.0.3
       unified: 10.1.2
     transitivePeerDependencies:
@@ -6983,32 +6979,32 @@ snapshots:
       js-yaml: 4.1.0
       toml: 3.0.0
 
-  remark-mdx@2.3.0:
+  remark-mdx@2.3.0(supports-color@10.2.2):
     dependencies:
-      mdast-util-mdx: 2.0.1
+      mdast-util-mdx: 2.0.1(supports-color@10.2.2)
       micromark-extension-mdxjs: 1.0.1
     transitivePeerDependencies:
       - supports-color
 
-  remark-mdx@3.1.1:
+  remark-mdx@3.1.1(supports-color@10.2.2):
     dependencies:
-      mdast-util-mdx: 3.0.0
+      mdast-util-mdx: 3.0.0(supports-color@10.2.2)
       micromark-extension-mdxjs: 3.0.0
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@10.0.2:
+  remark-parse@10.0.2(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 3.0.15
-      mdast-util-from-markdown: 1.3.1
+      mdast-util-from-markdown: 1.3.1(supports-color@10.2.2)
       unified: 10.1.2
     transitivePeerDependencies:
       - supports-color
 
-  remark-parse@11.0.0:
+  remark-parse@11.0.0(supports-color@10.2.2):
     dependencies:
       '@types/mdast': 4.0.4
-      mdast-util-from-markdown: 2.0.2
+      mdast-util-from-markdown: 2.0.2(supports-color@10.2.2)
       micromark-util-types: 2.0.2
       unified: 11.0.5
     transitivePeerDependencies:
@@ -7241,6 +7237,8 @@ snapshots:
       mz: 2.7.0
       pirates: 4.0.7
       ts-interface-checker: 0.1.13
+
+  supports-color@10.2.2: {}
 
   supports-color@7.2.0:
     dependencies:
