@@ -1,10 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useLayoutEffect, useRef } from "react";
+import { useEffect, useState, useLayoutEffect, useRef, Suspense } from "react";
 import React from "react";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
-
 
 import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
@@ -255,11 +254,13 @@ export const Header = () => {
                             <Line background="neutral-alpha-medium" vert maxHeight="24" />
 
                             {display.localeSwitcher && (
-                                <>
+                                <Suspense fallback={
+                                    <div style={{ width: 40, height: 40 }} aria-label="Loading language switcher" />
+                                }>
                                     <LocaleSwitcher />
-                                </>
+                                </Suspense>
                             )}
-                            
+
                             {display.themeSwitcher && (
                                 <>
                                     <ThemeToggle />
