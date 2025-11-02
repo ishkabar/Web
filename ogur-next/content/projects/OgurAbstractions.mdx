@@ -1,0 +1,118 @@
+---
+title: "Ogur.Abstractions"
+description: "Publiczne kontrakty i interfejsy dla ekosystemu Ogur - fundament dla pluginów, capabilities i infrastruktury botów"
+date: "2024-09-15"
+repository: ishkabar/ogur.abstractions
+published: true
+---
+
+Biblioteka .NET definiująca publiczne kontrakty i fundamentalne interfejsy współdzielone przez wszystkie moduły i hosty w ekosystemie Ogur. Zapewnia lekkie abstrakcje dla symulacji wejścia, przechwytywania ekranu, OCR, capabilities botów i odczytu pamięci procesów.
+
+## Główne interfejsy
+
+###### Plugin & Capability System
+`IBotPluginV1`, `IBotCapability` - kontrakty dla pluginów i capabilities. Każdy bot może implementować wiele capabilities wykonywanych współbieżnie.
+
+###### Input Abstractions
+`IInput`, `IKeyboardSynthesizer` - symulacja wejścia użytkownika (klawiatura, scan codes) do automatyzacji interakcji z aplikacjami.
+
+###### Screen & OCR
+`IScreenCapture`, `IOcr` - przechwytywanie regionów ekranu i rozpoznawanie tekstu dla capabilities wymagających analizy wizualnej.
+
+###### Memory Reading
+`IProcessMemoryReader`, `IMemoryPatternScanner` - bezpieczny odczyt pamięci procesów z pattern matching dla zaawansowanych capabilities.
+
+###### Process & Window Management
+`ISelectedProcessAccessor`, `IWindowActivator` - zarządzanie procesami docelowymi i aktywacja okien dla precyzyjnej automatyzacji.
+
+###### Configuration & Security
+`ISettingsStore`, `IEncryptionManager` - persystencja konfiguracji i szyfrowanie wrażliwych danych (tokeny API, licencje).
+
+## Architektura
+
+Ogur.Abstractions służy jako **kręgosłup** dla Dependency Injection i modularnego wykrywania capabilities. Wszystkie projekty hostów i capabilities zależą od tej biblioteki.
+
+Struktura projektowa:
+- **Configuration/** - zarządzanie ustawieniami
+- **Input/** - abstrakcje symulacji wejścia
+- **Memory/** - odczyt i skanowanie pamięci
+- **Primitives/** - typy podstawowe (Rect, CaptureRegion)
+- **Security/** - szyfrowanie i bezpieczeństwo
+- **Windows/** - zarządzanie oknami i procesami
+
+## Zastosowanie
+
+Każda capability i infrastructure library referencjonuje `Ogur.Abstractions`. Zapewnia to spójne kontrakty w całym ekosystemie.
+
+```csharp
+using Ogur.Abstractions;
+
+// Implementacja custom capability
+public class ExampleCapability : IBotCapability
+{
+    private readonly IScreenCapture _capture;
+    private readonly IOcr _ocr;
+    private readonly IInput _input;
+    
+    public async Task ExecuteAsync(CapabilityStartContext context)
+    {
+        // Przechwytywanie ekranu
+        var image = await _capture.CaptureAsync(region);
+        
+        // OCR
+        var text = await _ocr.RecognizeAsync(image);
+        
+        // Symulacja akcji
+        await _input.SendKeysAsync(scanCodes);
+    }
+}
+
+// Rejestracja w DI
+services.AddTransient<IBotCapability, ExampleCapability>();
+```
+
+## Modularność i Discovery
+
+System pluginów umożliwia dynamiczne ładowanie capabilities w runtime:
+
+```csharp
+// Plugin discovery
+public class FishingPlugin : IBotPluginV1
+{
+    public string Name => "Ogur.Capabilities.Fishing";
+    public Version Version => new(1, 0, 0);
+    
+    public void RegisterServices(IServiceCollection services)
+    {
+        services.AddSingleton<IFishingSignalSource, SignalDetector>();
+        services.AddTransient<IBotCapability, FishingCapability>();
+    }
+}
+```
+
+## Ekosystem Ogur
+
+Ogur.Abstractions wspiera wizję **centralnego zarządzania botami**:
+
+- **Unified Contracts** - spójne interfejsy dla wszystkich botów
+- **Plugin Architecture** - dynamiczne ładowanie funkcjonalności
+- **Dependency Injection** - luźne powiązanie komponentów
+- **Versioning** - kontrola wersji kontraktów i kompatybilności
+
+Każdy bot stworzony w ekosystemie Ogur dziedziczy te same kontrakty, co umożliwia:
+- Centralne licencjonowanie capabilities
+- Jednolite logowanie i monitoring
+- Współdzielenie komponentów między botami
+- Automatyczne aktualizacje infrastruktury
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12
+- **Architektura:** Class Library (bez zależności)
+- **Target:** netstandard2.1, net8.0
+- **NuGet:** Pakiet wewnętrzny dla ekosystemu Ogur
+
+## Licencja
+
+MIT License © Ogur Project

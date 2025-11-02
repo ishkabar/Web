@@ -1,0 +1,139 @@
+---
+title: "Sentinel Desktop"
+description: "Elegancka aplikacja desktopowa WPF z DevExpress do monitorowania timerów respawnów w czasie rzeczywistym"
+date: "2024-10-19"
+url: https://respy.ogur.dev
+repository: ishkabar/ogurbot-sentinel
+published: true
+---
+
+Profesjonalna aplikacja desktopowa Windows stworzona z wykorzystaniem WPF i biblioteki DevExpress, zapewniająca komfortowy dostęp do systemu monitorowania timerów Sentinel. Aplikacja oferuje minimalistyczny, animowany interfejs z możliwością dostosowania parametrów synchronizacji, offsetu czasowego oraz progów ostrzeżeń. Responsywne okno z custom header bar i dark theme zapewnia wygodne użytkowanie zarówno w trybie kompaktowym jak i rozwiniętym.
+
+![Timer Window](https://files.ogur.dev/public/sentineldevexperesstimerwindow.png)
+
+## Główne funkcje
+
+###### Monitoring Timerów w Czasie Rzeczywistym
+Wyświetlanie dwóch głównych timerów respawnów (10 minut i 2 godziny) z countdown w czasie rzeczywistym, kolorowymi ostrzeżeniami oraz informacją o następnym zdarzeniu. Timery automatycznie synchronizują się z API Sentinel w konfigurowalnych interwałach.
+
+###### Animowany Interfejs DevExpress
+Płynne animacje przejść między widokami, responsywny header z automatycznym chowaniem przy małych rozmiarach okna, oraz profesjonalne kontrolki DevExpress (SimpleButton, SpinEdit, LoadingDecorator, LayoutControl) zapewniające native Windows look & feel.
+
+###### Elastyczna Konfiguracja
+Panel ustawień pozwalający na dostosowanie interwału synchronizacji (5-300 sekund), offsetu czasowego (-180 do +180 sekund), oraz progów ostrzeżeń (czerwone i pomarańczowe alerty). Wszystkie ustawienia zapisywane lokalnie w JSON.
+
+###### Responsywne Okno z Custom Chrome
+Frameless window z custom header bar zawierającym logo, informacje o użytkowniku oraz przyciski akcji (logout, settings, pin on top, minimize, close). Okno automatycznie dostosowuje się do zawartości z animacją hide/show headera.
+
+###### System Autoryzacji
+Integracja z tokenową autoryzacją API Sentinel, zapisywanie sesji lokalnie, oraz automatyczne logowanie przy ponownym uruchomieniu. Panel logowania z walidacją i error handling.
+
+###### Tryb Always On Top
+Możliwość przypięcia okna na wierzchu pozostałych aplikacji, idealne do monitorowania timerów podczas gry lub innej aktywności. Stan pinowania zachowywany między sesjami.
+
+## Architektura
+
+Aplikacja zbudowana w architekturze MVVM z wykorzystaniem Generic Host pattern dla dependency injection i lifecycle management. Główne okno (MainWindow) zarządza nawigacją między trzema widokami: LoginView, TimerView i SettingsView, z mechanizmem cachowania instancji dla optymalizacji wydajności.
+
+Komunikacja z backend API odbywa się przez dedykowany ApiClient wykonujący HTTP requests do Sentinel API Worker. TimerViewModel odpytuje API w konfigurowalnych interwałach przez System.Timers.Timer i aktualizuje countdown w UI przez INotifyPropertyChanged z ObservableObject.
+
+Custom header bar implementuje własną logikę drag-and-drop dla przesuwania okna oraz animacje slide/fade przy hide/show. Animacje realizowane przez WPF DoubleAnimation z EasingFunctions (CubicEase) dla płynnych przejść.
+
+DesktopSettings zarządza lokalnymi ustawieniami w JSON (sync interval, time offset, warning thresholds, window size, always on top) z automatycznym save/load przy starcie i zamknięciu aplikacji.
+
+## Komponenty DevExpress
+
+Aplikacja wykorzystuje następujące kontrolki z biblioteki DevExpress WPF:
+
+**SimpleButton** - wszystkie przyciski w aplikacji (header actions, navigation, settings controls) z custom styling i command binding. Style definiowane w Theme.xaml (PrimaryButton, SecondaryButton, DangerButton, HeaderButton).
+
+**LoadingDecorator** - overlay z animacją ładowania podczas nawigacji między widokami oraz podczas synchronizacji z API, z konfigurowalnym BorderEffect i BorderEffectColor.
+
+**SpinEdit** - numeric input controls w panelu ustawień dla sync interval, time offset i warning thresholds z walidacją MinValue/MaxValue/Increment oraz two-way binding.
+
+**LayoutControl/LayoutGroup/LayoutItem** - zaawansowany layout manager w SettingsView zapewniający responsywną strukturę formularza z custom label templates i automatic spacing.
+
+Wszystkie kontrolki DevExpress skonfigurowane w dark theme z custom colors (#1e1e1e background, #2d2d30 panels, #3e3e42 borders) dla spójnego visual design.
+
+## Widoki Aplikacji
+
+**LoginView** - formularz logowania z polami username/password, custom BindablePassword behavior dla secure input, error messages, oraz auto-login functionality z lokalnie zapisanym tokenem. Fixed window size 330x580px.
+
+**TimerView** - główny widok z dwoma timerami (10m green border, 2h blue border) wyświetlającymi countdown, next time info oraz status. Responsywny layout z animacją hide/show labels przy małych rozmiarach. Minimum 130x50px, z auto-resize grids.
+
+**SettingsView** - panel konfiguracji z sekcjami: Sync Interval (5-300s), Time Offset (-180 do +180s dla adjust timerów), Timer Warnings (red/orange thresholds), oraz footer z buttons (Reset to Defaults, Save, Back to Timers, Logout). Displays app version i build info.
+
+Nawigacja między widokami przez Messenger pattern (NavigateMessage) z cleanup poprzednich instancji i cache reuse dla performance optimization.
+
+## Synchronizacja z API
+
+ApiClient wykonuje HTTP GET requests do Sentinel API Worker endpoint `/api/respawns` w konfigurowalnych interwałach (default 30s). Response deserializowany do RespawnData models z polami: RespawnId, NextTime10m, NextTime2h.
+
+Time offset aplikowany lokalnie na otrzymane timestamps przed wyświetleniem countdown. Negative offset zmniejsza pokazywany czas (np. -30s pokazuje timer 30 sekund przed faktycznym respawnem).
+
+Error handling z fallback do cached data przy network failures. Status bar w TimerView pokazuje aktualny stan synchronizacji (syncing, connected, error) z color coding.
+
+W przyszłości planowane: lokalne tworzenie custom timerów bez bazowania na API, możliwość konfiguracji własnego API endpoint, oraz offline mode z manual timer management.
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12 z nullable reference types
+- **UI:** WPF z XAML
+- **DevExpress:** WPF Controls (Buttons, SpinEdit, LoadingDecorator, LayoutControl)
+- **MVVM:** CommunityToolkit.Mvvm (ObservableObject, RelayCommand, WeakReferenceMessenger)
+- **DI/Hosting:** Microsoft.Extensions (DependencyInjection, Hosting)
+- **HTTP Client:** System.Net.Http.HttpClient
+- **JSON:** System.Text.Json dla settings serialization
+- **Animacje:** WPF DoubleAnimation, ScaleTransform, TranslateTransform, EasingFunctions
+- **Behaviors:** Custom behaviors (BindablePassword, AutoScrollBehavior)
+
+## Zaawansowane Features
+
+**Responsywny Header** - automatyczne chowanie headera przy wysokości okna poniżej 150px z płynną animacją slide/fade (350ms duration, CubicEase). Header zawiera logo, user info, oraz action buttons.
+
+**Window Resizing** - dynamiczne zmiany MinWidth/MinHeight w zależności od aktywnego view. LoginView fixed 330x580, TimerView minimum 130x50 z grip resize, SettingsView minimum 300x400. Window state zachowywany między sesjami.
+
+**Color Coded Countdowns** - timery zmieniają kolor w zależności od pozostałego czasu. Red warning (default 5min), Orange warning (default 15min), White/Green dla longer times. Thresholds konfigurowalne w settings.
+
+**License Management** - wbudowany system sprawdzania license expiration z dedicated LicenseExpiredWindow wyświetlanym przy expired license. Graceful shutdown jeśli license invalid.
+
+**Persistent Sessions** - token autoryzacyjny zapisywany w DesktopSettings.json, automatyczne logowanie przy starcie aplikacji jeśli token valid. Możliwość manual logout z cleanup sesji.
+
+**Pin on Top** - toggle button w headerze dla AlwaysOnTop functionality. Stan pinowania zachowywany między restartami aplikacji w DesktopSettings.
+
+## Deployment
+
+Aplikacja wymaga .NET 8.0 Runtime oraz licencji DevExpress WPF (developer license). Konfiguracja przez DesktopSettings.json:
+
+```json
+{
+  "ApiUrl": "https://respy.ogur.dev",
+  "SyncIntervalSeconds": 30,
+  "TimeOffsetSeconds": 0,
+  "WarningRedMinutes": 5,
+  "WarningOrangeMinutes": 15,
+  "AlwaysOnTop": false,
+  "WindowWidth": 450,
+  "WindowHeight": 850,
+  "Token": "encrypted_token_here"
+}
+```
+
+Aplikacja standalone, nie wymaga instalacji dodatkowych dependencies poza .NET Runtime. Single executable z embedded resources (logo, icons, theme).
+
+## Roadmap
+
+**Powiadomienia Dźwiękowe** - integracja z systemem audio dla alertów o zbliżających się respawnach z konfigurowalnymi dźwiękami dla różnych progów czasowych.
+
+**Custom Timer Management** - możliwość tworzenia własnych timerów lokalnie bez zależności od API, z manual start/stop/reset controls oraz persistent storage.
+
+**Własne API Endpoint** - konfiguracja custom API URL w settings dla integration z prywatnymi instancjami Sentinel API lub innymi kompatybilnymi backends.
+
+**Multiple Timers** - wsparcie dla więcej niż 2 timerów jednocześnie z scrollable container i dynamic grid layout. Możliwość hide/show poszczególnych timerów.
+
+**Tray Icon Mode** - minimalizacja do system tray zamiast taskbar z tray icon menu i balloon notifications dla critical timers.
+
+---
+
+*Aplikacja jest częścią ekosystemu Ogur Sentinel i wymaga dostępu do Sentinel API Worker. Integruje się z systemem autoryzacji i ról zdefiniowanym w backend API.*

@@ -1,0 +1,75 @@
+---
+title: "Ogur.Core"
+description: "Wspólna infrastruktura runtime dla wszystkich botów - scheduler, FSM, event pipeline i zarządzanie cyklem życia capabilities"
+date: "2024-10-01"
+repository: ishkabar/ogur.core
+published: true
+---
+
+Biblioteka .NET dostarczająca wspólną infrastrukturę runtime dla wszystkich botów stworzonych w ekosystemie Ogur. Ogur.Core zapewnia scheduler zadań, maszynę stanów (FSM), pipeline zdarzeń oraz zarządzanie współbieżnym wykonywaniem capabilities.
+
+## Główne komponenty
+
+###### Scheduler
+Orkiestracja zadań w tle z wykorzystaniem `BackgroundService` - umożliwia równoległe wykonywanie wielu capabilities z pełną kontrolą cyklu życia.
+
+###### CapabilityStartContext
+Kontekst runtime oparty na Dependency Injection - każda capability otrzymuje dedykowane środowisko wykonawcze z dostępem do usług systemowych.
+
+###### Event Pipeline
+Zunifikowany model zdarzeń (`BotEvent`) i śledzenie statusu (`CapabilityStatus`) - spójna komunikacja między komponentami systemu.
+
+###### Configuration Store
+Zarządzanie ustawieniami z wykorzystaniem `JsonSettingsStore` - persystencja konfiguracji capabilities i globalnych ustawień botów.
+
+## Architektura
+
+System oparty na modularnej architekturze capabilities:
+
+- **DefaultScheduler** - zarządzanie harmonogramem wykonywania capabilities
+- **Keyboard Synthesizer** - adapter do symulacji wejścia klawiatury
+- **Encryption Manager** - bezpieczne zarządzanie wrażliwymi danymi (tokeny, licencje)
+- **Service Collection Extensions** - integracja z .NET Dependency Injection
+
+## Zastosowanie
+
+Ogur.Core jest automatycznie referencjonowane przez wszystkie projekty capabilities (np. `Ogur.Capabilities.Fishing`). Zapewnia wspólny runtime i standardowe mechanizmy zarządzania botami.
+
+```csharp
+// Rejestracja capability w schedulerze
+await scheduler.ScheduleAsync(fishingCapability, cancellationToken);
+
+// Dostęp do serwisów przez DI
+public class FishingCapability : IBotCapability
+{
+    private readonly IScheduler _scheduler;
+    private readonly ISettingsStore _settings;
+    
+    public FishingCapability(IScheduler scheduler, ISettingsStore settings)
+    {
+        _scheduler = scheduler;
+        _settings = settings;
+    }
+}
+```
+
+## Ekosystem Ogur
+
+Ogur.Core wspiera koncepcję **nadrzędnego kreatora botów** - każdy bot ma centralnego zarządcę odpowiedzialnego za:
+
+- **Licencjonowanie** - weryfikacja uprawnień do używania capabilities
+- **Logowanie centralne** - zunifikowane zbieranie logów ze wszystkich botów
+- **Zarządzanie aktualizacjami** - automatyczne update capabilities
+- **Monitoring** - śledzenie stanu i wydajności wszystkich instancji
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12
+- **Architektura:** Class Library
+- **Zależności:** Ogur.Abstractions
+- **NuGet:** Dostępne jako pakiet wewnętrzny
+
+## Licencja
+
+MIT License © Ogur Project

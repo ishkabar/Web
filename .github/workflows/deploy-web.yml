@@ -33,7 +33,7 @@ jobs:
         run: |
           KEY_PATH="${{ github.workspace }}/id_deploy"
           echo "${{ secrets.SSH_KEY_B64 }}" | base64 -d > "$KEY_PATH"
-          chmod 644 "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
           ls -l "$KEY_PATH"
 
 
@@ -110,7 +110,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key_path: ${{ github.workspace }}/id_deploy  # ✅
           source: "ogur-next/out/*"
           target: "/home/ubuntu/web/ogur/site"
           overwrite: true
@@ -121,7 +121,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          key_path: ${{ github.workspace }}/id_deploy  # ✅
           script: |
             cd /home/ubuntu/web/ogur
             docker compose -f docker-compose.app.yml up -d

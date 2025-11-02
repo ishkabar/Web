@@ -1,0 +1,77 @@
+---
+title: "Fishing Planet"
+description: "Kompleksowy system automatyzacji wędkowania dla Metin2 z interfejsem WPF, modularną architekturą capability i zaawansowanym zarządzaniem stanem przez FSM"
+date: "2024-10-19"
+repository: ishkabar/ogur.fishing
+published: true
+---
+
+Zaawansowany system automatyzacji wędkowania stworzony w architekturze modularnej, wykorzystujący ekosystem Ogur. Projekt składa się z wielu komponentów: capability do wędkowania, hosta WPF z pełnym interfejsem MVVM, oraz warstwy infrastruktury integrującej się z Windows API. System oferuje pełne zarządzanie stanem przez maszynę stanów, detekcję sygnałów przez pamięć procesu, oraz elastyczną konfigurację przez dependency injection.
+
+![Wybór serwera](https://files.ogur.dev/public/fishingChosoServer.png)
+
+## Główne funkcje
+
+###### Modularny System Capability
+Fishing Capability działa jako niezależny plugin implementujący interfejs IBotCapability z Ogur.Abstractions. Wykorzystuje maszynę stanów FSM do zarządzania cyklem wędkowania: Idle → Cast → Wait → Catch, z pełną obsługą błędów i recovery.
+
+###### Interfejs WPF z MVVM
+Kompletny host desktopowy oparty na WPF i CommunityToolkit.Mvvm, oferujący widoki logowania, wyboru serwera oraz główny panel kontrolny. Wszystkie ViewModels wspierają messaging przez WeakReferenceMessenger i pełną integrację z dependency injection.
+
+###### Detekcja Sygnałów
+Zaawansowany system detekcji brania przez MemoryBiteSignalSource, który monitoruje pamięć procesu gry w czasie rzeczywistym. Wspiera konfigurowalną strategię sygnałów oraz fallback do visual cues.
+
+###### Integracja z Windows API
+Warstwa Infrastructure zapewnia natywną integrację z Win32 API: Win32Input dla symulacji klawiatury, WindowActivator do zarządzania oknami, oraz DxgiScreenCapture do przechwytywania ekranu dla potrzeb OCR.
+
+###### Katalog Przynęt
+Wbudowany system zarządzania przynętami z IBaitCatalog, umożliwiający dynamiczne przełączanie między różnymi typami przynęt oraz tracking ich wykorzystania podczas sesji wędkowania.
+
+###### Hotkey System
+Globalny system nasłuchiwania skrótów klawiszowych przez IHotkeyListener, pozwalający na kontrolę bota bez przełączania okien. Wspiera konfigurację przez InputKeyMapper z mapowaniem na abstrakcję EButton.
+
+![Główny interfejs aplikacji](https://files.ogur.dev/public/fishingMainWindow.png)
+
+## Architektura
+
+Projekt zorganizowany jako multi-project solution z wyraźnym podziałem odpowiedzialności. Ogur.Capabilities.Fishing zawiera logikę biznesową wędkowania z FSM, Ogur.Infrastructure dostarcza implementacje platform-dependent (input, memory, OCR), a Ogur.Fishing.Host.Wpf to warstwa prezentacji z pełnym MVVM.
+
+System wykorzystuje Generic Host pattern z Microsoft.Extensions.Hosting, co zapewnia ujednolicony lifecycle management, dependency injection przez IServiceCollection, oraz strukturalną konfigurację przez appsettings.json z bindowaniem do strongly-typed options classes.
+
+Komunikacja między komponentami odbywa się przez dependency injection i messaging. ViewModels komunikują się przez WeakReferenceMessenger, services przez interfejsy z Ogur.Abstractions, a capability przez IFishingRunGate jako gate pattern kontrolujący wykonanie.
+
+Stan sesji zarządzany jest przez ISessionState, który trackuje aktualnie wybrany proces, serwer, oraz runtime configuration. FishingActionExecutor działa jako hosted service wykonujący akcje capability w tle, podczas gdy UI pozostaje responsywny.
+
+## Komponenty Solution
+
+**Ogur.Capabilities.Fishing** - plugin capability implementujący logikę wędkowania z FSM w Stateless, konfiguracją przez FishingMemoryOptions, oraz integracją z signal sources. Dependency na Ogur.Core 0.1.4-alpha i Ogur.Abstractions 0.1.5-alpha.
+
+**Ogur.Fishing.Host.Wpf** - host WPF z Views (LoginView, ServerSelectView, MainView), ViewModels z MVVM Toolkit, oraz Services layer z implementations (BaitCatalog, HotkeyListener, ProcessQueryService). Wykorzystuje ShellWindow jako main window z nawigacją przez INavigationService.
+
+**Ogur.Infrastructure** - warstwa platform integration z Win32Input do SendInput, NullProcessMemoryReader jako placeholder dla ReadProcessMemory, MemoryBiteSignalSource do detekcji sygnałów, DxgiScreenCapture dla screen capture, oraz WindowActivator do foreground management.
+
+Projekt zawiera również local NuGet feed w katalogu local-packages z wersjami alpha Ogur.Abstractions i Ogur.Core, co umożliwia development bez publikacji do publicznego NuGet.
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12 z nullable reference types
+- **UI:** WPF, CommunityToolkit.Mvvm
+- **FSM:** Stateless 5.15.0
+- **DI/Hosting:** Microsoft.Extensions (DependencyInjection, Hosting, Logging, Options, Configuration)
+- **Messaging:** WeakReferenceMessenger z MVVM Toolkit
+- **Platform:** Windows API (SendInput, ReadProcessMemory, DXGI)
+- **OCR:** Tesseract (przez TesseractOcr w Infrastructure)
+- **Logging:** NLog z konfiguracją XML
+
+## Konfiguracja
+
+System wykorzystuje hierarchiczną konfigurację przez appsettings.json z sekcjami Ui, Fishing:Host oraz Infrastructure. UiOptions kontroluje aspekty wizualne, FishingRuntimeOptions określa parametry capability, a FishingMemoryOptions konfiguruje detekcję sygnałów przez pamięć.
+
+Dependency injection konfigurowany w AppStartup.Configure z rejestracją wszystkich services jako singletons lub transients. Capability rejestrowana przez extension method AddFishingCapability, infrastructure przez AddOgurInfrastructure.
+
+NuGet package source mapping w nuget.config zapewnia, że pakiety Ogur.* są rozwiązywane z local feed, podczas gdy reszta z nuget.org. To umożliwia iteracyjny development z local packages bez konfliktów wersji.
+
+## Licencja
+
+MIT License © Ogur Project

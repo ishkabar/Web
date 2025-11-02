@@ -6,6 +6,7 @@
     "dev": "pnpm -C portfolio dev",
     "dev:portfolio": "pnpm -C portfolio dev",
     "dev:ogur": "pnpm -C ogur-next dev",
+    "dev:ogur:watch": "concurrently -k -n contentlayer,next -c blue,green \"pnpm -C ogur-next exec contentlayer dev\" \"pnpm -C ogur-next dev\"",
     "dev:both": "concurrently -k -n portfolio,ogur-next -c auto \"pnpm -C portfolio dev\" \"pnpm -C ogur-next dev\""
   },
   "devDependencies": {
@@ -16,5 +17,9 @@
       "@opentelemetry/api": "1.4.1",
       "shiki": "0.14.7"
     }
+  },
+  "dependencies": {
+    "rehype-pretty-code": "0.10.2",
+    "shiki": "0.14.7"
   }
 }
