@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import LocalFont from 'next/font/local';
 import type { Metadata } from 'next';
 import { Analytics } from './components/analytics';
+import { CookieConsentBanner } from './components/CookieConsentBanner';
 
 export const metadata: Metadata = {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ogur.dev'),
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }`}
         >
         {children}
+        <CookieConsentBanner />
         </body>
         </html>
     );
