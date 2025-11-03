@@ -12,10 +12,10 @@ export function Contact({ website }: ContactProps) {
     return (
         <div className="mt-12 pt-8 border-t border-zinc-800">
             <h2 className="text-xl font-bold text-zinc-900 mb-4">Kontakt</h2>
-            <p className="text-zinc-400 mb-4">
+            <div className="text-zinc-600 mb-4">
                 Masz pytania lub chcesz porozmawiać o projekcie? Skontaktuj się:
-            </p>
-            <ul className="space-y-2 text-zinc-400">
+            </div>
+            <ul className="space-y-2 text-zinc-700">
                 {website && (
                     <li className="flex items-center gap-2">
                         {getIcon('website')} Website:{" "}
