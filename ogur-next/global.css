@@ -8,7 +8,21 @@
     }
 
     .prose a {
+        @apply text-zinc-700 hover:text-zinc-900 underline decoration-zinc-400 hover:decoration-zinc-600 transition-colors;
+    }
+
+    .prose-invert a {
         @apply text-zinc-100 hover:text-white underline decoration-zinc-600 hover:decoration-zinc-400 transition-colors;
+    }
+
+    .prose ul li::marker,
+    .prose ol li::marker {
+        @apply text-zinc-900;
+    }
+
+    .prose-invert ul li::marker,
+    .prose-invert ol li::marker {
+        @apply text-zinc-100;
     }
 } 
 

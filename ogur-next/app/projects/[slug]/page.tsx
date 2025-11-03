@@ -82,11 +82,11 @@ export default async function PostPage({ params }: Props) {
     }
 
     return (
-        <div className="bg-zinc-50 min-h-screen">
+        <div className="bg-gradient-to-br from-zinc-50 via-zinc-100/70 to-zinc-50 min-h-screen">
             <Header project={project} views={views} />
             <ReportView slug={project.slug} />
 
-            <article className="px-4 py-12 mx-auto prose prose-zinc prose-quoteless">
+            <article className="px-4 py-12 mx-auto max-w-4xl prose prose-zinc prose-quoteless">
                 <Mdx code={project.body.code} />
                 <Contact website={project.contactInfo?.website} />
             </article>
