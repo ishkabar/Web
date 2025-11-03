@@ -26,6 +26,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         return {};
     }
 
+    const ogImage = `/og/${project.slug}.png`;
+    const fallbackImage = '/og-image.png';
+    
     return {
         title: project.title,
         description: project.description,
@@ -35,10 +38,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             url: `https://ogur.dev/projects/${project.slug}`,
             images: [
                 {
-                    url: `/og/${project.slug}.png`,
+                    url: ogImage,
                     width: 1200,
                     height: 630,
                     alt: project.title,
+                },
+
+                {
+                    url: fallbackImage,
+                    width: 1200,
+                    height: 630,
+                    alt: 'Ogur - Senior .NET Developer',
                 },
             ],
             type: 'article',
@@ -47,7 +57,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             card: 'summary_large_image',
             title: project.title,
             description: project.description,
-            images: [`/og/${project.slug}.png`],
+            images: [ogImage, fallbackImage], 
         },
     };
 }
