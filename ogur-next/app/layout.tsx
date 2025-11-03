@@ -4,11 +4,17 @@ import LocalFont from 'next/font/local';
 import type { Metadata } from 'next';
 import { Analytics } from './components/analytics';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
+import { Schema } from './components/schema';
 
 export const metadata: Metadata = {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ogur.dev'),
+    icons: {
+        icon: '/icon.png',
+        apple: '/apple-touch-icon.png',
+    },
     title: {
         default: 'ogur - Senior .NET Developer',
+        
         template: '%s | Ogur',
     },
     description: 'Senior .NET Developer specjalizujący się w architekturze systemów, Docker, Discord bots i aplikacjach desktop.',
@@ -55,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="pl" className={`${inter.variable} ${calSans.variable}`}>
         <head>
             <Analytics />
+            <Schema />
         </head>
         <body
             className={`bg-black ${

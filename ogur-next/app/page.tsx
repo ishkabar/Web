@@ -31,6 +31,7 @@ export default function Home() {
             <Particles className="absolute inset-0 -z-10 animate-fade-in" quantity={100}/>
             <h1 className="py-3.5 px-0.5 z-10 text-5xl text-transparent duration-1000 bg-white cursor-default text-edge-outline animate-title font-display sm:text-7xl md:text-[10rem] whitespace-nowrap bg-clip-text">
                 ogur.dev
+                <span className="sr-only"> - Senior .NET Developer specjalizujący się w C#, ASP.NET Core, Docker, Discord Bots i aplikacjach desktop</span>
             </h1>
 
             <div
