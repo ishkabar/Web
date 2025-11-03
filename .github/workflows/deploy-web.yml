@@ -50,6 +50,8 @@ jobs:
         with:
           context: ./ogur-next
           file: ./ogur-next/Dockerfile
+          build-args: |
+            NEXT_PUBLIC_GA_ID=${{ secrets.NEXT_PUBLIC_GA_ID }}
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/web-ogur:${{ github.sha }}
