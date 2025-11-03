@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
     const projects: Project[] = allProjects.filter(
         (p): p is Project => !!p && typeof p.slug === 'string',
     );
-    
+
     const views: Record<string, number> = {};
     try {
         const redisClient = redis();
@@ -37,29 +37,68 @@ export default async function ProjectsPage() {
 
     const hero: Project[] = [featured, top2, top3].filter((p): p is Project => p !== null);
     
-    const heroSlugs = new Set(hero.map((p) => p.slug));
-    const sorted = projects
-        .filter((p) => p.published && !heroSlugs.has(p.slug))
-        .sort(
-            (a, b) =>
-                new Date(b.date ?? Number.POSITIVE_INFINITY).getTime() -
-                new Date(a.date ?? Number.POSITIVE_INFINITY).getTime(),
-        );
+    const commercial = projects
+        .filter((p) => p.published && p.category === 'commercial')
+        .sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+
+    const personal = projects
+        .filter((p) => p.published && p.category === 'personal')
+        .sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+
+    const archived = projects
+        .filter((p) => p.published && p.category === 'archived')
+        .sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime());
+
+    const renderGrid = (items: Project[]) => (
+        <div className="grid grid-cols-1 gap-4 mx-auto lg:mx-0 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4">
+                {items.filter((_, i) => i % 3 === 0).map((project) => (
+                    <Card key={project.slug}>
+                        <Article project={project} views={views[project.slug] ?? 0}/>
+                    </Card>
+                ))}
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+                {items.filter((_, i) => i % 3 === 1).map((project) => (
+                    <Card key={project.slug}>
+                        <Article project={project} views={views[project.slug] ?? 0}/>
+                    </Card>
+                ))}
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+                {items.filter((_, i) => i % 3 === 2).map((project) => (
+                    <Card key={project.slug}>
+                        <Article project={project} views={views[project.slug] ?? 0}/>
+                    </Card>
+                ))}
+            </div>
+        </div>
+    );
 
     return (
         <div className="relative pb-16">
             <Navigation/>
+
+            <div className="fixed inset-x-0 top-0 h-32 bg-gradient-to-b from-black/60 via-black/40 to-transparent z-40 pointer-events-none" />
+
             <div className="px-6 pt-20 mx-auto space-y-8 max-w-7xl lg:px-8 md:space-y-16 md:pt-24 lg:pt-32">
-                <div className="max-w-2xl mx-auto lg:mx-0">
-                    <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">Projekty</h2>
-                    <p className="mt-4 text-zinc-400">
-                        Projekty komercyjne i osobiste - od systemów enterprise po narzędzia deweloperskie.
+            <div className="max-w-2xl mx-auto lg:mx-0 mb-16">
+                    <h2 className="text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl mb-6">Projekty</h2>
+                    <p className="text-lg text-zinc-400">
+                        Od prostych aplikacji na bardzo drogim frameworku przez boty do gry starszej niż połowa wyświetlających, po prawdziwe systemy enterprise.
                     </p>
                 </div>
                 <div className="w-full h-px bg-zinc-800"/>
 
-                <div className="grid grid-cols-1 gap-8 mx-auto lg:grid-cols-2 ">
-                    {/* featured only if present */}
+                {/* WYRÓŻNIONE */}
+                <div className="max-w-2xl mx-auto lg:mx-0">
+                    <h3 className="text-2xl font-bold tracking-tight text-zinc-100">Wyróżnione</h3>
+                    <p className="mt-2 text-sm text-zinc-400">
+                        Moje oczka w głowie - projekty z których jestem dumny i dalej rozwijam (albo po prostu chcę się pochwalić)
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 gap-8 mx-auto lg:grid-cols-2">
                     {featured && (
                         <Card>
                             <Link href={`/projects/${featured.slug}`}>
@@ -77,17 +116,14 @@ export default async function ProjectsPage() {
                                             )}
                                         </div>
                                         <span className="flex items-center gap-1 text-xs text-zinc-500">
-                                        <Eye className="w-4 h-4"/>{' '}
+                                            <Eye className="w-4 h-4"/>{' '}
                                             {Intl.NumberFormat('pl-PL', {notation: 'compact'}).format(
                                                 views[featured.slug] ?? 0,
                                             )}
-                                    </span>
+                                        </span>
                                     </div>
 
-                                    <h2
-                                        id="featured-post"
-                                        className="mt-4 text-3xl font-bold text-zinc-100 group-hover:text-white sm:text-4xl font-display"
-                                    >
+                                    <h2 className="mt-4 text-3xl font-bold text-zinc-100 group-hover:text-white sm:text-4xl font-display">
                                         {featured.title}
                                     </h2>
                                     <p className="mt-4 leading-8 duration-150 text-zinc-400 group-hover:text-zinc-300 pb-12">
@@ -103,7 +139,7 @@ export default async function ProjectsPage() {
                         </Card>
                     )}
 
-                    <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0 ">
+                    <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0">
                         {[top2, top3]
                             .filter((project): project is Project => !!project)
                             .map((project) => (
@@ -123,11 +159,11 @@ export default async function ProjectsPage() {
                                                     )}
                                                 </div>
                                                 <span className="flex items-center gap-1 text-xs text-zinc-500">
-                                                <Eye className="w-4 h-4"/>{' '}
+                                                    <Eye className="w-4 h-4"/>{' '}
                                                     {Intl.NumberFormat('pl-PL', {notation: 'compact'}).format(
                                                         views[project.slug] ?? 0,
                                                     )}
-                                            </span>
+                                                </span>
                                             </div>
 
                                             <h2 className="mt-4 text-3xl font-bold text-zinc-100 group-hover:text-white sm:text-4xl font-display">
@@ -147,37 +183,55 @@ export default async function ProjectsPage() {
                             ))}
                     </div>
                 </div>
-                <div className="hidden w-full h-px md:block bg-zinc-800"/>
 
-                <div className="grid grid-cols-1 gap-4 mx-auto lg:mx-0 md:grid-cols-3">
-                    <div className="grid grid-cols-1 gap-4">
-                        {sorted
-                            .filter((_, i) => i % 3 === 0)
-                            .map((project) => (
-                                <Card key={project.slug}>
-                                    <Article project={project} views={views[project.slug] ?? 0}/>
-                                </Card>
-                            ))}
+                {/* OSOBISTE */}
+                    <>
+                        <div className="hidden w-full h-px md:block bg-zinc-800"/>
+                        <div className="max-w-2xl mx-auto lg:mx-0">
+                            <h3 className="text-2xl font-bold tracking-tight text-zinc-100">Osobiste</h3>
+                            <p className="mt-2 text-sm text-zinc-400">
+                                Rzeczy które robię bo chcę, nie bo muszę
+                            </p>
+                        </div>
+                        {renderGrid(personal)}
+                    </>
+
+                {/* KOMERCYJNE */}
+                    <>
+                        <div className="hidden w-full h-px md:block bg-zinc-800"/>
+                        <div className="max-w-2xl mx-auto lg:mx-0">
+                            <h3 className="text-2xl font-bold tracking-tight text-zinc-100">Komercyjne</h3>
+                            <p className="mt-2 text-sm text-zinc-400">
+                                Projekty realizowane dla klientów i firm (wspominam bo prezes pozwolił)
+                            </p>
+                        </div>
+                        {archived.length > 0 ? (
+                        renderGrid(commercial)
+                    ) : (
+                        <div className="max-w-2xl mx-auto lg:mx-0">
+                            <p className="text-zinc-500 text-center py-8">Brak projektów komercyjnych</p>
+                        </div>
+                    )}
+                    </>
+                
+
+                {/* ARCHIWALNE */}
+                <>
+                    <div className="hidden w-full h-px md:block bg-zinc-800"/>
+                    <div className="max-w-2xl mx-auto lg:mx-0">
+                        <h3 className="text-2xl font-bold tracking-tight text-zinc-100">Archiwum</h3>
+                        <p className="mt-2 text-sm text-zinc-400">
+                            Projekty które spoczywają w pokoju (niektóre zasłużenie)
+                        </p>
                     </div>
-                    <div className="grid grid-cols-1 gap-4">
-                        {sorted
-                            .filter((_, i) => i % 3 === 1)
-                            .map((project) => (
-                                <Card key={project.slug}>
-                                    <Article project={project} views={views[project.slug] ?? 0}/>
-                                </Card>
-                            ))}
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                        {sorted
-                            .filter((_, i) => i % 3 === 2)
-                            .map((project) => (
-                                <Card key={project.slug}>
-                                    <Article project={project} views={views[project.slug] ?? 0}/>
-                                </Card>
-                            ))}
-                    </div>
-                </div>
+                    {archived.length > 0 ? (
+                        renderGrid(archived)
+                    ) : (
+                        <div className="max-w-2xl mx-auto lg:mx-0">
+                            <p className="text-zinc-500 text-center py-8">Brak projektów w archiwum</p>
+                        </div>
+                    )}
+                </>
             </div>
         </div>
     );

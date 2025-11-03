@@ -4,9 +4,8 @@ import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-
 const CONTACTS = {
-    email: "mailto:test@ogur.dev",
+    email: "mailto:kontakt@ogur.dev",
     discord: "https://discord.com/users/822151223116824588",
     linkedin: "https://www.linkedin.com/in/dominik-karczewski-1b850b209/",
     github: "https://github.com/ishkabar",
@@ -35,6 +34,11 @@ export const Project = defineDocumentType(() => ({
         date: { type: "date" },
         url: { type: "string" },
         repository: { type: "string" },
+        category: {
+            type: "enum",
+            options: ["commercial", "personal", "archived"],
+            default: "personal"
+        },
     },
     computedFields: {
         ...computedFields,

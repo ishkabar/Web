@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  .text-edge-outline {
-    -webkit-text-stroke: 1px rgba(255,255,255,0.3);
-  }
+    .text-edge-outline {
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .prose a {
+        @apply text-zinc-100 hover:text-white underline decoration-zinc-600 hover:decoration-zinc-400 transition-colors;
+    }
 } 
 
