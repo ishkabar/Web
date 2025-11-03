@@ -43,10 +43,7 @@ export const metadata: Metadata = {
 const inter = Inter({
     subsets: ['latin'],
     variable: '--font-inter',
-    display: 'swap',
-    fallback: ['system-ui', 'arial'],
-    preload: false,
-})
+});
 
 const calSans = LocalFont({
     src: '../public/fonts/CalSans-SemiBold.ttf',
