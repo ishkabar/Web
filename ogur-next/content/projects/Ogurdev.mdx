@@ -55,7 +55,7 @@ Proces budowy: pnpm contentlayer build czyta wszystkie pliki MDX, waliduje front
 
 Pola obliczane: slug wyodrębniany z _raw.flattenedPath z czyszczeniem regex, contactInfo wstrzykiwane z lib/contact-data.ts (obiekty discord, github, email, linkedin z href i handle). Pola dostępne jako project.slug, project.contactInfo.discord.handle w komponentach.
 
-Bezpieczeństwo typów: import type {Project} from 'contentlayer/generated' dla silnie typowanych obiektów project, sprawdzanie w czasie kompilacji dla brakujących pól, autouzupełnianie w IDE dla nazw pól. Filtrowanie projektów ze strażnikami typów (p): p is Project dla bezpieczeństwa runtime.
+Bezpieczeństwo typów: import type \{Project\} from 'contentlayer/generated' dla silnie typowanych obiektów project, sprawdzanie w czasie kompilacji dla brakujących pól, autouzupełnianie w IDE dla nazw pól. Filtrowanie projektów ze strażnikami typów (p): p is Project dla bezpieczeństwa runtime.
 
 ## Stack Technologiczny
 

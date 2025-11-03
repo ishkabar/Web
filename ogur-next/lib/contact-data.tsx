@@ -12,7 +12,7 @@ export const contactData = {
         handle: "ishkabar",
     },
     email: {
-        href: "mailto:test@ogur.dev",
+        href: "mailto:kontakt@ogur.dev",
         handle: "kontakt@ogur.dev",
     },
     linkedin: {
