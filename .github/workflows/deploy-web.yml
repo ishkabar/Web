@@ -66,18 +66,20 @@ jobs:
           GITHUB_OWNER: ${{ github.repository_owner }}
           PORTFOLIO_DOMAIN: ${{ secrets.PORTFOLIO_DOMAIN }}
           OGUR_DOMAIN: ${{ secrets.OGUR_DOMAIN }}
+          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
           IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: GITHUB_ACTOR,GITHUB_TOKEN,GITHUB_OWNER,PORTFOLIO_DOMAIN,OGUR_DOMAIN,IMAGE_TAG
+          envs: GITHUB_ACTOR,GITHUB_TOKEN,GITHUB_OWNER,PORTFOLIO_DOMAIN,OGUR_DOMAIN,NEXT_PUBLIC_GA_ID,IMAGE_TAG
           script: |
             set -eo pipefail
             GH_OWNER="${GITHUB_OWNER:-ishkabar}"
             PORTFOLIO_DOMAIN="${PORTFOLIO_DOMAIN:-dkarczewski.com}"
             OGUR_DOMAIN="${OGUR_DOMAIN:-ogur.dev}"
+            NEXT_PUBLIC_GA_ID="${NEXT_PUBLIC_GA_ID}"
             IMAGE_TAG_SAFE="${IMAGE_TAG:-latest}"
             docker network ls --format '{{.Name}}' | grep -qx web || docker network create web
             mkdir -p ~/web/portfolio ~/web/ogur
@@ -127,6 +129,7 @@ jobs:
                   - PORT=3000
                   - REDIS_URL=redis://bot-redis:6379
                   - HOSTNAME=0.0.0.0
+                  - NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
                 networks:
                   - web
                   - ogursentinel_internal
@@ -156,6 +159,7 @@ jobs:
             GH_OWNER=${GH_OWNER}
             TAG=sha-${IMAGE_TAG_SAFE}
             OGUR_DOMAIN=${OGUR_DOMAIN}
+            NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
             EOF
             echo "${GITHUB_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
             docker compose -f ~/web/portfolio/docker-compose.app.yml pull
