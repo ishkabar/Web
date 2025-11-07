@@ -1,0 +1,165 @@
+---
+title: "Ogur.Core"
+description: "Wspólna infrastruktura runtime dla wszystkich botów - scheduler, FSM, event pipeline i zarządzanie cyklem życia capabilities"
+date: "2025-10-03"
+repository: ishkabar/ogurbot-framework
+category: "personal"
+published: true
+---
+
+# AstroHub
+
+Odkryj swoją astrologiczną stronę z **AstroHub** - nowoczesną aplikacją webową stworzoną w Blazor .NET 8!
+
+## O projekcie
+
+AstroHub to pełnoprawna aplikacja astrologiczna, która łączy w sobie piękny interfejs użytkownika z zaawansowanymi funkcjami obliczeniowymi. Projekt wykorzystuje najnowsze technologie .NET 8 oraz DevExpress Blazor Components.
+
+## Kluczowe funkcje
+
+### Interaktywny kalkulator zodiaku
+Aplikacja oferuje zaawansowany kalkulator z:
+- **Wizualnym kalendarzem** - Elegancki, responsywny kalendarz do wyboru daty urodzenia
+- **Minimalizacją UI** - Kalendarz chowa się po wybraniu daty, pozostawiając więcej miejsca na wyniki
+- **Animacjami** - Płynne przejścia między stanami
+- **Szczegółowymi wynikami** - Znak zodiaku, element, charakterystyka
+
+### Nowoczesny design
+- **Dark theme** - Elegancki ciemny motyw z gradientami
+- **Animowany sidebar** - Płynnie chowający się sidebar na stronie głównej
+- **Efekt cząsteczek** - Dynamiczne tło z animowanymi cząsteczkami
+- **Responsive design** - Pełna responsywność na wszystkich urządzeniach
+
+### ⚙Personalizacja
+Użytkownicy mogą dostosować aplikację do swoich potrzeb:
+- Tryb ciemny
+- Powiadomienia
+- Efekty wizualne
+- Zapisywanie daty urodzenia
+
+## 🛠Stack technologiczny
+
+```tsx
+{
+  "framework": "Blazor .NET 8",
+  "architecture": "Server + WebAssembly (InteractiveAuto)",
+  "ui": "DevExpress Blazor Components",
+  "styling": "CSS Scoped + Bootstrap 5",
+  "markdown": "Markdig",
+  "language": "C# 12"
+}
+```
+
+## Architektura
+
+Projekt wykorzystuje **Blazor Web App** z trybem renderowania `InteractiveAuto`, co pozwala na:
+- Szybkie SSR (Server-Side Rendering) podczas pierwszego ładowania
+- Przełączanie na WebAssembly dla interaktywności
+- Optymalizację wydajności
+
+### Struktura projektu
+
+```
+AstroHub.Web/              # Server
+  └── Components/Pages/
+      └── Privacy.razor    # SSR + Markdown
+
+AstroHub.Web.Client/       # WebAssembly
+  ├── Layout/
+  │   └── MainLayout.razor
+  ├── Pages/
+  │   ├── Home.razor
+  │   ├── Calculator.razor
+  │   └── Settings.razor
+  └── Services/
+      └── ZodiacService.cs
+```
+
+## Ciekawe rozwiązania
+
+### 1. Animowany sidebar
+Sidebar płynnie chowa się na stronie głównej i pojawia się na podstronach:
+
+```csharp
+private bool isHomePage;
+
+private void UpdateIsHomePage()
+{
+    var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+    isHomePage = string.IsNullOrEmpty(relativePath) || relativePath == "/";
+}
+```
+
+```css
+::deep .layout-sidebar {
+    max-width: 250px;
+    transition: max-width 0.5s ease, opacity 0.5s ease;
+}
+
+::deep .layout-sidebar.hidden {
+    max-width: 0 !important;
+    opacity: 0;
+}
+```
+
+### 2. Kalendarz z minimalizacją
+Po obliczeniu znaku zodiaku, kalendarz minimalizuje się do kompaktowego widoku:
+
+```csharp
+private void CalculateSimple()
+{
+    simpleResult = ZodiacService.GetZodiacSign(selectedMonth, selectedDay);
+    isCalendarMinimized = true;
+}
+```
+
+### 3. Scoped CSS
+Każdy komponent ma swój własny CSS:
+
+```
+Calculator.razor
+Calculator.razor.css  ← Scoped styles
+```
+
+## 🎓 Czego się nauczyłem
+
+1. **Blazor InteractiveAuto** - Łączenie SSR z WebAssembly
+2. **DevExpress Components** - Praca z zaawansowaną biblioteką UI
+3. **CSS Animations** - Tworzenie płynnych animacji
+4. **Scoped CSS** - Izolacja stylów komponentów
+5. **Service Pattern** - Organizacja logiki biznesowej
+
+## 🚀 Co dalej?
+
+W planach:
+-  Zaawansowany kalkulator z godziną urodzenia
+-  Chiński zodiak
+-  Personalizowany dashboard
+-  Codzienne powiadomienia
+-  Wsparcie dla wielu języków
+
+##  Linki
+
+- **GitHub**: [AstroHub Repository](https://github.com/ishkabar/AstroHub)
+- **Demo**: [AstroHub Live](https://astrohub.example.com) *(wkrótce)*
+
+##  Podsumowanie
+
+AstroHub to projekt, który pokazuje możliwości nowoczesnego Blazora. Łączy w sobie:
+-  Wydajność SSR
+-  Interaktywność WebAssembly
+-  Piękny UI
+-  Clean Architecture
+
+Jeśli interesujesz się Blazorem lub astrologią - sprawdź kod na GitHubie! ⭐
+
+---
+
+**Stack**: Blazor • .NET 8 • DevExpress • CSS • C#
+
+**Rok**: 2025
+
+
+## Licencja
+
+MIT License © Ogur Project
