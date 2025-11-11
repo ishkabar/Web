@@ -1,0 +1,369 @@
+---
+title: "Ogur.Hub"
+description: "Centralna platforma zarządzania licencjami, urządzeniami i telemetrią dla ekosystemu Ogur - zunifikowany backend dla wszystkich aplikacji"
+date: "2025-11-11"
+url: https://hub.ogur.dev
+repository: ishkabar/ogurbot-hub
+category: "personal"
+published: true
+---
+
+# Ogur.Hub
+
+Centralne serce ekosystemu Ogur - **zunifikowana platforma zarządzania** dla wszystkich aplikacji Dominika. Single source of truth dla licencji, urządzeń, wersji i telemetrii.
+
+## O projekcie
+
+Ogur.Hub to kompleksowa platforma backendu łącząca REST API, SignalR real-time communication oraz zaawansowany panel administracyjny. Każda aplikacja w ekosystemie Ogur integruje się z hubem poprzez biblioteki `Ogur.Core` i `Ogur.Abstractions`, tworząc spójny system zarządzania.
+
+## Kluczowe funkcje
+
+### Zarządzanie licencjami
+Kompleksowy system licencjonowania z:
+- **Device tracking** - HWID + GUID fingerprinting
+- **Multi-device support** - 1 licencja = konfigurowalny limit urządzeń (domyślnie 2)
+- **Walidacja w czasie rzeczywistym** - Instant license validation przez REST API
+- **Audyt** - Pełna historia aktywacji i użycia
+
+### Komunikacja hybrydowa
+Elastyczna architektura komunikacji:
+- **REST API** - License validation, updates, telemetry ingestion
+- **SignalR** - Real-time commands do połączonych aplikacji
+- **Dwukierunkowa** - Push notifications, remote control, heartbeat monitoring
+
+### Panel administracyjny
+DevExpress-powered web panel z:
+- **Application registry** - Zarządzanie wersjami i API keys
+- **License management** - CRUD operacje, status tracking
+- **Device monitoring** - Live sessions, force logout, blocking
+- **Telemetry viewer** - Event logs, usage statistics
+- **Audit trail** - Complete action history
+
+### Multi-tenancy
+Wsparcie dla wielu brandów:
+- **ogur.dev** - Gaming-focused applications
+- **dkarczewski.com** - Business solutions
+- **Shared backend** - Unified infrastructure
+- **Tenant-specific theming** - CSS custom properties
+- **Featured products** - Per-tenant recommendations
+
+### VPS Monitoring
+Kompleksowy system monitoringu infrastruktury:
+- **Docker container tracking** - Status, resource usage, health checks
+- **Website monitoring** - Uptime, response times, SSL validity
+- **System resources** - CPU, memory, disk, network usage
+- **Real-time alerts** - Instant notifications o problemach
+
+## Stack technologiczny
+```json
+{
+  "backend": ".NET 8 Web API",
+  "frontend": "DevExpress Blazor Components",
+  "database": "MariaDB + Entity Framework Core",
+  "realtime": "SignalR",
+  "auth": "JWT (users) + API Keys (apps)",
+  "deployment": "Docker + Traefik + GitHub Actions",
+  "architecture": "Clean Architecture + DDD + CQRS"
+}
+```
+
+## Architektura
+
+Projekt następuje **Clean Architecture** z wyraźnym podziałem warstw:
+
+### Struktura projektowa
+```
+/src
+  Hub.Domain/              # Entities, Value Objects, Enums
+    ├── Entities/
+    │   ├── Application.cs
+    │   ├── License.cs
+    │   ├── Device.cs
+    │   ├── User.cs
+    │   ├── AuditLog.cs
+    │   └── Telemetry.cs
+    └── ValueObjects/
+
+  Hub.Application/         # Business Logic, CQRS, DTOs
+    ├── Commands/
+    ├── Queries/
+    ├── DTOs/
+    └── Interfaces/
+
+  Hub.Infrastructure/      # EF Core, SignalR, Repositories
+    ├── Data/
+    ├── Hubs/
+    └── Services/
+
+  Hub.Api/                 # REST Endpoints, Controllers
+    ├── Controllers/
+    ├── Middleware/
+    └── SignalR/
+
+  Hub.Web/                 # DevExpress Admin Panel
+    ├── Components/
+    ├── Pages/
+    └── Services/
+
+/client-libraries
+  Ogur.Core/              # Client integration library
+  Ogur.Abstractions/      # Shared contracts
+```
+
+## Database Schema
+
+MariaDB z kompleksowym modelem danych:
+```csharp
+// Core entities
+Applications        // App registry (ApiKey, CurrentVersion)
+Users              // Panel users (JWT auth)
+Licenses           // 1 license = 1 user + 1 app + N devices
+Devices            // HWID+GUID tracking, status management
+DeviceSessions     // SignalR connection tracking
+
+// Supporting entities
+ApplicationVersions // Version history, download URLs
+Telemetry          // Event logs from applications
+AuditLogs          // Complete audit trail
+HubCommands        // Command history (sent to devices)
+ApplicationSettings // Per-app JSON configuration
+```
+
+## REST API Endpoints
+
+### Public (API Key auth)
+```
+POST   /api/licenses/validate      # Validate + register device
+GET    /api/updates/check          # Check for updates
+POST   /api/telemetry              # Send telemetry batch
+```
+
+### Admin (JWT auth)
+```
+GET    /api/applications           # List all apps
+POST   /api/applications           # Register new app
+GET    /api/licenses               # List licenses
+POST   /api/licenses               # Create license
+PATCH  /api/licenses/{id}          # Update license
+GET    /api/devices                # List devices
+POST   /api/devices/{id}/block     # Block device
+POST   /api/devices/{id}/logout    # Force logout
+GET    /api/audit                  # Query audit logs
+```
+
+## SignalR Hub
+
+Real-time communication hub na `/hubs/devices`:
+```csharp
+// Server → Client
+ReceiveCommand(HubCommand)          // Push command to app
+RequestHeartbeat()                  // Request liveness check
+
+// Client → Server
+AcknowledgeCommand(commandId)       // Confirm execution
+Heartbeat()                         // Periodic ping
+ReportStatus(status)                // Status update
+```
+
+### Typy komend
+- **Logout** - Force disconnect user
+- **BlockDevice** - Immediate device blocking
+- **Notify** - Push notification
+- **ForceUpdate** - Require app update
+- **RefreshLicense** - Re-validate license
+- **Custom** - Application-specific commands
+
+## Ciekawe rozwiązania
+
+### 1. Hybrid Authentication
+Dwa niezależne systemy auth:
+```csharp
+// JWT dla użytkowników panelu
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => { /* ... */ });
+
+// API Key dla aplikacji
+services.AddAuthentication("ApiKey")
+    .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>();
+```
+
+### 2. Device Fingerprinting
+```csharp
+public class Device
+{
+    public string Hwid { get; set; }        // Hardware ID
+    public string DeviceGuid { get; set; }  // Persistent GUID
+    public DeviceStatus Status { get; set; } // Active/LoggedOut/Blocked
+}
+
+// Validation logic
+if (existingDevice.Hwid != newHwid || existingDevice.DeviceGuid != newGuid)
+    return Error("Device mismatch");
+```
+
+### 3. Real-time Command Pushing
+```csharp
+// Admin panel sends command
+await _hubContext.Clients
+    .Group($"device_{deviceId}")
+    .SendAsync("ReceiveCommand", new HubCommand
+    {
+        Type = CommandType.Logout,
+        Payload = JsonSerializer.Serialize(data)
+    });
+
+// App acknowledges
+public async Task AcknowledgeCommand(int commandId)
+{
+    await _commandRepository.MarkAsAcknowledged(commandId);
+}
+```
+
+### 4. Multi-tenant Architecture
+```csharp
+// Domain-based tenant detection
+var host = httpContext.Request.Host.Host;
+var tenant = host.Contains("ogur.dev") 
+    ? TenantId.OgurDev 
+    : TenantId.DKarczewski;
+
+// CSS theming
+:root[data-tenant="ogur"] {
+    --primary-color: #7c3aed;
+    --accent-color: #a78bfa;
+}
+```
+
+### 5. CQRS Pattern
+```csharp
+// Command
+public record ValidateLicenseCommand(
+    string LicenseKey, 
+    string Hwid, 
+    string DeviceGuid
+) : IRequest<Result<LicenseValidationDto>>;
+
+// Handler
+public class ValidateLicenseCommandHandler 
+    : IRequestHandler<ValidateLicenseCommand, Result<LicenseValidationDto>>
+{
+    public async Task<Result<LicenseValidationDto>> Handle(
+        ValidateLicenseCommand request, 
+        CancellationToken ct)
+    {
+        // Business logic
+    }
+}
+```
+
+## Deployment
+
+Produkcja na VPS z Docker + Traefik:
+```yaml
+# docker-compose.yml
+services:
+  api:
+    image: ghcr.io/ishkabar/ogur-hub-api:latest
+    labels:
+      - "traefik.http.routers.hub-api.rule=Host(`api.ogur.dev`)"
+      - "traefik.http.routers.hub-api.tls.certresolver=letsencrypt"
+
+  web:
+    image: ghcr.io/ishkabar/ogur-hub-web:latest
+    labels:
+      - "traefik.http.routers.hub-web.rule=Host(`hub.ogur.dev`)"
+```
+
+GitHub Actions zapewnia CI/CD:
+- Build & push Docker images
+- Deploy to VPS via SSH
+- Environment variables via GitHub Secrets
+- Automatic MariaDB migrations
+
+## Client Integration
+
+Aplikacje integrują się poprzez `Ogur.Core`:
+```csharp
+// Client-side usage
+var hubClient = serviceProvider.GetRequiredService<IHubClient>();
+
+// License validation
+var result = await hubClient.ValidateLicenseAsync(
+    licenseKey, 
+    hwid, 
+    deviceGuid
+);
+
+// SignalR connection
+await hubClient.ConnectAsync();
+hubClient.OnCommandReceived += async (command) =>
+{
+    switch (command.Type)
+    {
+        case CommandType.Logout:
+            await ForceLogoutAsync();
+            break;
+        case CommandType.Notify:
+            ShowNotification(command.Payload);
+            break;
+    }
+};
+
+// Telemetry
+await hubClient.ReportTelemetryAsync(new TelemetryEvent
+{
+    EventType = "FeatureUsed",
+    Data = JsonSerializer.Serialize(eventData)
+});
+```
+
+## Security
+
+Wielowarstwowa strategia bezpieczeństwa:
+
+- **API Keys** - SHA256 hashed, X-Api-Key header
+- **JWT Tokens** - HS256, 24h expiration, secure claims
+- **Device Verification** - HWID+GUID double-check
+- **Audit Trail** - Every action logged with IP, user, timestamp
+- **Rate Limiting** - Per API key and per IP (future with Redis)
+- **CORS** - Restricted to known origins
+
+## Co dalej?
+
+W planach rozwoju:
+- **Redis caching** - Distributed cache dla license validation
+- **Advanced analytics** - Usage patterns, retention metrics
+- **Webhook system** - Event notifications dla third-party integrations
+- **Multi-language support** - i18n dla global reach
+- **Advanced monitoring** - APM, distributed tracing
+- **License marketplace** - Self-service license purchasing
+
+## Linki
+
+- **GitHub**: [Ogur.Hub Repository](https://github.com/ishkabar/Ogur.Hub)
+- **API**: [api.ogur.dev](https://api.ogur.dev)
+- **Admin Panel**: [hub.ogur.dev](https://hub.ogur.dev)
+- **Documentation**: [docs.ogur.dev](https://docs.ogur.dev) *(wkrótce)*
+
+## Podsumowanie
+
+Ogur.Hub to kręgosłup całego ekosystemu Ogur. Zapewnia:
+- **Centralizację** - Single source of truth
+- **Skalowalność** - Clean Architecture + CQRS
+- **Bezpieczeństwo** - Multi-layer auth & audit
+- **Real-time** - SignalR dla instant communication
+- **Extensibility** - Easy to add new apps & features
+
+Każda aplikacja w ekosystemie Ogur korzysta z tej samej infrastruktury, co pozwala na:
+- Unified licensing system
+- Cross-app analytics
+- Centralized user management
+- Consistent monitoring & logging
+
+---
+
+**Stack**: .NET 8 • Clean Architecture • SignalR • MariaDB • Docker • DevExpress
+
+## Licencja
+
+MIT License © Ogur Project
