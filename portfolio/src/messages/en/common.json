@@ -22,6 +22,11 @@
       "English"
     ]
   },
+  "cookies": {
+    "message": "This site uses cookies and Google Analytics for traffic analysis.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "header": {
     "home": "Home",
     "featured": "Featured",

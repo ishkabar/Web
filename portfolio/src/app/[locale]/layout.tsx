@@ -2,36 +2,36 @@ import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
 import '@/resources/custom.css';
 
-import type { Metadata } from "next";
-import { Background, Column, Flex, opacity, RevealFx, SpacingToken } from '@once-ui-system/core';
-import { getMessages, setRequestLocale } from 'next-intl/server';
-import { locales } from '@/i18n/locales.generated';
-import { NextIntlClientProvider} from 'next-intl';
-import { Providers } from '@/components/Providers';
-import { Footer, Header, RouteGuard } from '@/components';
-import { fonts, style, effects, dataStyle } from '@/resources/ui-tokens.config';
-import { paths, ogImage } from '@/resources/site.config';
+import type {Metadata} from "next";
+import {Background, Column, Flex, opacity, RevealFx, SpacingToken} from '@once-ui-system/core';
+import {getMessages, setRequestLocale} from 'next-intl/server';
+import {locales} from '@/i18n/locales.generated';
+import {NextIntlClientProvider} from 'next-intl';
+import {Providers} from '@/components/Providers';
+import {Footer, Header, RouteGuard} from '@/components';
+import {fonts, style, effects, dataStyle} from '@/resources/ui-tokens.config';
+import {paths, ogImage} from '@/resources/site.config';
 import classNames from 'classnames';
 import Script from 'next/script';
-import { buildPageMetadata } from "@/lib/seo";
-
-
+import {buildPageMetadata} from "@/lib/seo";
+import {CookieConsentBanner} from "@/components/CookieConsentBanner";
 
 
 export function generateStaticParams() {
     return locales.map((locale) => ({locale}));
 }
+
 export async function generateMetadata(): Promise<Metadata> {
-    return buildPageMetadata("common.meta", paths.home, { image: ogImage });
+    return buildPageMetadata("common.meta", paths.home, {image: ogImage});
 }
 
 
 export default async function LocaleLayout(
-    { children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }
+    {children, params}: { children: React.ReactNode; params: Promise<{ locale: string }> }
 ) {
-    const { locale: routeLocale } = await params;
+    const {locale: routeLocale} = await params;
     setRequestLocale(routeLocale);
-    
+
     const messages = await getMessages();
 
     return (
@@ -88,13 +88,22 @@ export default async function LocaleLayout(
                 >
                     <RevealFx fill position="absolute">
                         <Background
-                            mask={{x: effects.mask.x, y: effects.mask.y, radius: effects.mask.radius, cursor: effects.mask.cursor}}
+                            mask={{
+                                x: effects.mask.x,
+                                y: effects.mask.y,
+                                radius: effects.mask.radius,
+                                cursor: effects.mask.cursor
+                            }}
                             gradient={{
                                 display: effects.gradient.display,
                                 opacity: effects.gradient.opacity as opacity,
-                                x: effects.gradient.x, y: effects.gradient.y,
-                                width: effects.gradient.width, height: effects.gradient.height,
-                                tilt: effects.gradient.tilt, colorStart: effects.gradient.colorStart, colorEnd: effects.gradient.colorEnd
+                                x: effects.gradient.x,
+                                y: effects.gradient.y,
+                                width: effects.gradient.width,
+                                height: effects.gradient.height,
+                                tilt: effects.gradient.tilt,
+                                colorStart: effects.gradient.colorStart,
+                                colorEnd: effects.gradient.colorEnd
                             }}
                             dots={{
                                 display: effects.dots.display,
@@ -119,22 +128,23 @@ export default async function LocaleLayout(
                         />
                     </RevealFx>
 
-                    <Flex fillWidth minHeight="32" minWidth="24" s={{hide: true}} />
-                    <Header />
+                    <Flex fillWidth minHeight="32" minWidth="24" s={{hide: true}}/>
+                    <Header/>
 
                     <Flex zIndex={1} fillWidth padding="l" horizontal="center" flex={1}>
                         <Flex horizontal="center" fillWidth minHeight="0">
-                            
+
 
                             <RouteGuard>{children}</RouteGuard>
-                            
+
 
                         </Flex>
                     </Flex>
 
-                    <Footer />
+                    <Footer/>
                 </Column>
             </div>
+            <CookieConsentBanner />
         </Providers>
     );
 }

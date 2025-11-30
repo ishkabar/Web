@@ -22,6 +22,11 @@
       "Englisch"
     ]
   },
+  "cookies": {
+    "message": "Diese Website verwendet Cookies und Google Analytics zur Verkehrsanalyse.",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen"
+  },
   "header": {
     "home": "Start",
     "featured": "Empfohlen",

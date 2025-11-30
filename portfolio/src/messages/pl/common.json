@@ -7,6 +7,11 @@
     "title": "Portfolio – Dominik Karczewski | Senior .NET Developer",
     "description": "Senior .NET Developer specjalizujący się w integracji systemów ERP, architekturze rozwiązań i DevOps."
   },
+  "cookies": {
+    "message": "Ta strona używa plików cookies oraz Google Analytics do analizy ruchu.",
+    "accept": "Akceptuję",
+    "decline": "Odrzuć"
+  },
   "underConstruction": "Ta strona jest w przygotowaniu. Zapraszam wkrótce.",
   "person": {
     "firstName": "Dominik",

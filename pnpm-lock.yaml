@@ -170,6 +170,9 @@ importers:
       react:
         specifier: 19.0.0
         version: 19.0.0
+      react-cookie-consent:
+        specifier: ^9.0.0
+        version: 9.0.0(react@19.0.0)
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
@@ -6823,6 +6826,11 @@ snapshots:
     dependencies:
       js-cookie: 2.2.1
       react: 18.3.1
+
+  react-cookie-consent@9.0.0(react@19.0.0):
+    dependencies:
+      js-cookie: 2.2.1
+      react: 19.0.0
 
   react-dom@18.3.1(react@18.3.1):
     dependencies:
