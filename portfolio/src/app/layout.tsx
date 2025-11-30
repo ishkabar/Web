@@ -4,12 +4,19 @@ import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 import 'flag-icons/css/flag-icons.min.css';
 
-
-
 import classNames from "classnames";
-import { fonts, style, dataStyle } from "@/resources";
+import Script from "next/script";
+import {fonts, style, dataStyle} from "@/resources";
+import type {Metadata} from "next";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+    title: "Dominik Karczewski | Senior .NET Developer",
+    description: "Senior .NET Developer specializing in ERP integrations, solution architecture and DevOps.",
+};
+
+export default function RootLayout({children}: { children: React.ReactNode }) {
+    const gaId = process.env.NEXT_PUBLIC_GA_ID_PORTFOLIO;
+
     return (
         <html
             className={classNames(
@@ -18,7 +25,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 fonts.label.variable,
                 fonts.code.variable
             )}
-
             data-scroll-behavior="smooth"
             data-brand={style.brand}
             data-accent={style.accent}
@@ -32,8 +38,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             data-viz-style={dataStyle.variant}
             data-theme="dark"
         >
-        <body style={{ margin: 0 }}>{children}</body>
-
+        <body style={{margin: 0}}>
+        {gaId && (
+            <>
+                <Script
+                    src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                    strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                            window.dataLayer = window.dataLayer || [];
+                            function gtag(){dataLayer.push(arguments);}
+                            gtag('js', new Date());
+                            gtag('config', '${gaId}');
+                        `}
+                </Script>
+            </>
+        )}
+        {children}
+        </body>
         </html>
     );
 }

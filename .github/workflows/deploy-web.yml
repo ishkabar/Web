@@ -38,6 +38,8 @@ jobs:
           context: .
           file: ./portfolio/Dockerfile
           push: true
+          build-args: |
+            NEXT_PUBLIC_GA_ID_PORTFOLIO=${{ secrets.NEXT_PUBLIC_GA_ID_PORTFOLIO }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/web-portfolio:${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/web-portfolio:sha-${{ github.sha }}
@@ -69,19 +71,21 @@ jobs:
           PORTFOLIO_DOMAIN: ${{ secrets.PORTFOLIO_DOMAIN }}
           OGUR_DOMAIN: ${{ secrets.OGUR_DOMAIN }}
           NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_GA_ID_PORTFOLIO: ${{ secrets.NEXT_PUBLIC_GA_ID_PORTFOLIO }}
           IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: GITHUB_ACTOR,GITHUB_TOKEN,GITHUB_OWNER,PORTFOLIO_DOMAIN,OGUR_DOMAIN,NEXT_PUBLIC_GA_ID,IMAGE_TAG
+          envs: GITHUB_ACTOR,GITHUB_TOKEN,GITHUB_OWNER,PORTFOLIO_DOMAIN,OGUR_DOMAIN,NEXT_PUBLIC_GA_ID,NEXT_PUBLIC_GA_ID_PORTFOLIO,IMAGE_TAG
           script: |
             set -eo pipefail
             GH_OWNER="${GITHUB_OWNER:-ishkabar}"
             PORTFOLIO_DOMAIN="${PORTFOLIO_DOMAIN:-dkarczewski.com}"
             OGUR_DOMAIN="${OGUR_DOMAIN:-ogur.dev}"
             NEXT_PUBLIC_GA_ID="${NEXT_PUBLIC_GA_ID}"
+            NEXT_PUBLIC_GA_ID_PORTFOLIO="${NEXT_PUBLIC_GA_ID_PORTFOLIO}"
             IMAGE_TAG_SAFE="${IMAGE_TAG:-latest}"
             docker network ls --format '{{.Name}}' | grep -qx web || docker network create web
             mkdir -p ~/web/portfolio ~/web/ogur
@@ -94,6 +98,7 @@ jobs:
                 environment:
                   - NODE_ENV=production
                   - PORT=3000
+                  - NEXT_PUBLIC_GA_ID_PORTFOLIO=${NEXT_PUBLIC_GA_ID_PORTFOLIO}
                 networks: [ web ]
                 labels:
                   traefik.enable: "true"
@@ -119,6 +124,7 @@ jobs:
             GH_OWNER=${GH_OWNER}
             TAG=sha-${IMAGE_TAG_SAFE}
             PORTFOLIO_DOMAIN=${PORTFOLIO_DOMAIN}
+            NEXT_PUBLIC_GA_ID_PORTFOLIO=${NEXT_PUBLIC_GA_ID_PORTFOLIO}
             EOF
             cat > ~/web/ogur/docker-compose.app.yml <<'YML'
             services:
