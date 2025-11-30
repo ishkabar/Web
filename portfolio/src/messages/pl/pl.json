@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Polski",
+    "flag": "pl",
+    "default": false
+  },
+  "common": {
+    "hello": "Cześć"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Zmień język na: {locale}"
+  }
+}

@@ -19,7 +19,7 @@
     "name": "Dominik Karczewski",
     "role": "Senior .NET Developer",
     "avatar": "/avatar.png",
-    "email": "dom.karczewski@gmail.com",
+    "email": "mail@dkarczewski.com",
     "location": "Europe/Warsaw",
     "locationDisplay": "Warszawa, Polska",
     "languages": [
@@ -60,7 +60,7 @@
     {
       "name": "Email",
       "icon": "email",
-      "link": "mailto:dom.karczewski@gmail.com"
+      "link": "mailto:mail@dkarczewski.com"
     }
   ],
   "routeGuard": {

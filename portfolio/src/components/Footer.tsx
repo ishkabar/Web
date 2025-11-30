@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 const DEFAULT_SOCIAL = [
     { name: "GitHub", icon: "github", link: "https://github.com/ishkabar" },
     { name: "LinkedIn", icon: "linkedin", link: "https://www.linkedin.com/in/dominik-karczewski-1b850b209/" },
-    { name: "Email", icon: "email", link: "mailto:dom.karczewski@gmail.com" }
+    { name: "Email", icon: "email", link: "mailto:mail@dkarczewski.com" }
 ];
 
 export const Footer = () => {

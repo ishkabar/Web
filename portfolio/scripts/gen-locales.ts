@@ -16,6 +16,7 @@ type Meta = { label?: string; flag?: string; default?: boolean };
 type LocaleEntry = { code: string; meta: Meta };
 
 const PRIORITY: string[] = ['pl', 'en', 'de'];
+const ENABLED: string[] = ['pl', 'en', 'de'];  
 
 function safeReadJson(p: string): any | null {
     try {
@@ -66,6 +67,7 @@ function main() {
         .filter(c => !head.includes(c))
         .sort((a, b) => a.localeCompare(b));
     const locales = [...head, ...tail];
+    const enabledLocales = ENABLED.filter(p => present.has(p));
 
     if (!defaultLocale) defaultLocale = locales[0];
 
@@ -84,6 +86,9 @@ function main() {
 export const locales = ${JSON.stringify(locales)} as const;
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = ${JSON.stringify(defaultLocale)} as Locale;
+
+export const enabledLocales = ${JSON.stringify(enabledLocales)} as const;
+export type EnabledLocale = typeof enabledLocales[number];
 
 export const localeMeta: Record<Locale, {label: string; flag: string}> = ${JSON.stringify(metaMap, null, 2)} as any;
 

@@ -1,28 +1,23 @@
 import createMiddleware from 'next-intl/middleware';
 import {NextRequest, NextResponse} from 'next/server';
+import { locales, defaultLocale, enabledLocales } from "@/i18n/locales.generated";
 
-const locales = ["pl", "en", "de", "cz", "da", "es", "fr", "it", "nl", "no", "pt", "sv", "ua"] as const;
-const defaultLocale = "en";
-const ENABLED_LOCALES = ["pl", "en", "de"] as const;
-
-//const BLOCKED_ROUTES = ['/about', '/work', '/blog', '/gallery'];
 const BLOCKED_ROUTES = ['/about', '/gallery'];
-
 
 const intlMiddleware = createMiddleware({locales, defaultLocale, localePrefix: 'always'});
 
 export default function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
+
     if (pathname.startsWith('/api')) {
         return NextResponse.next();
     }
+
     const segments = pathname.split('/').filter(Boolean);
     const firstSegment = segments[0];
 
-    // Sprawdź czy locale jest aktywny
     const isValidLocale = (locales as readonly string[]).includes(firstSegment);
-    const isEnabledLocale = (ENABLED_LOCALES as readonly string[]).includes(firstSegment);
-
+    const isEnabledLocale = (enabledLocales as readonly string[]).includes(firstSegment);
 
     // Redirect nieaktywnych locale na /en
     if (isValidLocale && !isEnabledLocale) {
@@ -48,7 +43,6 @@ export default function middleware(request: NextRequest) {
 
     if (isBlocked) {
         const locale = isEnabledLocale ? firstSegment : 'en';
-
         const url = request.nextUrl.clone();
         url.pathname = `/${locale}`;
         url.searchParams.set('blocked', '1');

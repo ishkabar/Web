@@ -1,6 +1,6 @@
 import {getBlogPostsLocaleAware, getWorkPostsLocaleAware} from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
-import { locales } from "@/i18n/locales.generated";
+import { enabledLocales } from "@/i18n/locales.generated";
 
 export default async function sitemap() {
     const routes: Array<{url: string; lastModified: string}> = [];
@@ -9,11 +9,9 @@ export default async function sitemap() {
         (route) => routesConfig[route as keyof typeof routesConfig],
     );
 
-    // Generuj dla każdego locale
-    for (const locale of locales) {
+    for (const locale of enabledLocales) {
         const prefix = `/${locale}`;
 
-        // Statyczne route'y
         for (const route of activeRoutes) {
             routes.push({
                 url: `${baseURL}${prefix}${route !== "/" ? route : ""}`,
@@ -21,7 +19,6 @@ export default async function sitemap() {
             });
         }
 
-        // Blogi
         const blogs = getBlogPostsLocaleAware(locale);
         for (const post of blogs) {
             routes.push({
@@ -30,7 +27,6 @@ export default async function sitemap() {
             });
         }
 
-        // Projekty
         const works = getWorkPostsLocaleAware(locale);
         for (const post of works) {
             routes.push({
