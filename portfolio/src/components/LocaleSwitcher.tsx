@@ -273,18 +273,21 @@ export default function LocaleSwitcher() {
                 >
                     {LOCALES.map((l, i) => {
                         const isActive = current === l.code;
+                        const isEnabled = PRIORITY.includes(l.code); // pl, en, de
                         const isHovered = hoverIdx === i;
                         const isFocused = hoverIdx == null && focusIdx === i;
-                        const bg = isActive ? colors.active : isHovered ? colors.hover : isFocused ? colors.focus : 'transparent';
+                        const bg = isActive ? colors.active : isHovered && isEnabled ? colors.hover : isFocused && isEnabled ? colors.focus : 'transparent';
 
                         return (
                             <React.Fragment key={l.code}>
                                 <button
                                     role="option"
                                     aria-selected={isActive}
-                                    onMouseEnter={() => setHoverIdx(i)}
+                                    aria-disabled={!isEnabled}
+                                    onMouseEnter={() => isEnabled && setHoverIdx(i)}
                                     onMouseDown={e => e.preventDefault()}
                                     onClick={() => {
+                                        if (!isEnabled) return;
                                         if (l.code !== current) router.push(buildTargetHref(l.code));
                                         closeMenu();
                                     }}
@@ -299,14 +302,15 @@ export default function LocaleSwitcher() {
                                         background: bg,
                                         color: 'inherit',
                                         borderRadius: 8,
-                                        cursor: 'pointer',
+                                        cursor: isEnabled ? 'pointer' : 'not-allowed',
+                                        opacity: isEnabled ? 1 : 0.4,
                                         transition: 'background .12s ease',
                                     }}
                                 >
-                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                                        <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
-                                        <span>{l.label}</span>
-                                    </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
+                    <span>{l.label}</span>
+                </span>
                                     <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
                                 </button>
 

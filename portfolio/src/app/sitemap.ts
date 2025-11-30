@@ -1,29 +1,44 @@
 import {getBlogPostsLocaleAware, getWorkPostsLocaleAware} from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
-import { getLocale } from "next-intl/server";
-import {localeHref} from "@/utils/localeHref";
-
-const locale = await getLocale();
+import { locales } from "@/i18n/locales.generated";
 
 export default async function sitemap() {
-  const blogs = getBlogPostsLocaleAware(locale).map((post) => ({
-    url: `${baseURL}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
+    const routes: Array<{url: string; lastModified: string}> = [];
 
-  const works = getWorkPostsLocaleAware(locale).map((post) => ({
-    url: `${baseURL}/work/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }));
+    const activeRoutes = Object.keys(routesConfig).filter(
+        (route) => routesConfig[route as keyof typeof routesConfig],
+    );
 
-  const activeRoutes = Object.keys(routesConfig).filter(
-    (route) => routesConfig[route as keyof typeof routesConfig],
-  );
+    // Generuj dla każdego locale
+    for (const locale of locales) {
+        const prefix = `/${locale}`;
 
-  const routes = activeRoutes.map((route) => ({
-    url: `${baseURL}${route !== "/" ? route : ""}`,
-    lastModified: new Date().toISOString().split("T")[0],
-  }));
+        // Statyczne route'y
+        for (const route of activeRoutes) {
+            routes.push({
+                url: `${baseURL}${prefix}${route !== "/" ? route : ""}`,
+                lastModified: new Date().toISOString().split("T")[0],
+            });
+        }
 
-  return [...routes, ...blogs, ...works];
+        // Blogi
+        const blogs = getBlogPostsLocaleAware(locale);
+        for (const post of blogs) {
+            routes.push({
+                url: `${baseURL}${prefix}/blog/${post.slug}`,
+                lastModified: post.metadata.publishedAt,
+            });
+        }
+
+        // Projekty
+        const works = getWorkPostsLocaleAware(locale);
+        for (const post of works) {
+            routes.push({
+                url: `${baseURL}${prefix}/work/${post.slug}`,
+                lastModified: post.metadata.publishedAt,
+            });
+        }
+    }
+
+    return routes;
 }

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+console.log('=== PROXY \ ROUTE.TS ===');
+
 export async function GET(request: NextRequest) {
   try {
     // Get the URL parameter

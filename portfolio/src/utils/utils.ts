@@ -3,7 +3,6 @@ import path from "path";
 import matter from "gray-matter";
 import { notFound } from "next/navigation";
 
-
 export type Team = { name: string; role: string; avatar: string; linkedIn: string; };
 export type Metadata = {
     title: string; publishedAt: string; summary: string;
@@ -12,6 +11,77 @@ export type Metadata = {
 };
 export type ProjectPost = { metadata: Metadata; slug: string; content: string; };
 
+const DEFAULT_LOCALE = "en";
+
+type LocaleData = {
+    title?: string;
+    summary?: string;
+    content?: string;
+};
+
+function loadLocaleJson(dir: string, locale: string): LocaleData | null {
+    const localePath = path.join(dir, `${locale}.json`);
+    if (fs.existsSync(localePath)) {
+        try {
+            return JSON.parse(fs.readFileSync(localePath, "utf-8"));
+        } catch {
+            return null;
+        }
+    }
+    return null;
+}
+
+function readProjectFolder(dir: string, locale: string): Omit<ProjectPost, "slug"> | null {
+    const mdxPath = path.join(dir, "content.mdx");
+    if (!fs.existsSync(mdxPath)) return null;
+
+    const raw = fs.readFileSync(mdxPath, "utf-8");
+    const { data } = matter(raw);
+
+    // Załaduj tłumaczenia: locale -> defaultLocale -> pusty
+    const localeData = loadLocaleJson(dir, locale)
+        || loadLocaleJson(dir, DEFAULT_LOCALE)
+        || {};
+
+    const metadata: Metadata = {
+        title: localeData.title || data.title || "",
+        publishedAt: data.publishedAt || "",
+        summary: localeData.summary || data.summary || "",
+        image: data.image || "",
+        images: Array.isArray(data.images) ? data.images : [],
+        tag: data.tag || undefined,
+        team: Array.isArray(data.team) ? data.team : [],
+        link: data.link || "",
+    };
+
+    const content = localeData.content || "";
+
+    return { metadata, content };
+}
+
+function collectProjectsFromFolders(baseDir: string, locale: string): ProjectPost[] {
+    if (!fs.existsSync(baseDir)) return [];
+
+    const entries = fs.readdirSync(baseDir, { withFileTypes: true });
+    const projects: ProjectPost[] = [];
+
+    for (const entry of entries) {
+        if (entry.isDirectory()) {
+            const projectDir = path.join(baseDir, entry.name);
+            const result = readProjectFolder(projectDir, locale);
+            if (result) {
+                projects.push({
+                    ...result,
+                    slug: entry.name,
+                });
+            }
+        }
+    }
+
+    return projects;
+}
+
+// Legacy: obsługa starych plików .mdx (dla backwards compatibility)
 function getMDXFiles(dir: string): string[] {
     if (!fs.existsSync(dir)) return [];
     return fs.readdirSync(dir).filter((f) => path.extname(f) === ".mdx");
@@ -34,7 +104,7 @@ function readMDXFile(filePath: string): Omit<ProjectPost, "slug"> {
     return { metadata, content };
 }
 
-function collectPosts(dir: string): ProjectPost[] {
+function collectLegacyPosts(dir: string): ProjectPost[] {
     const files = getMDXFiles(dir);
     return files.map((file) => {
         const slug = path.basename(file, ".mdx");
@@ -43,58 +113,87 @@ function collectPosts(dir: string): ProjectPost[] {
     });
 }
 
-
-/*
-export function getWorkPostsLocaleAware(locale?: string): ProjectPost[] {
-    const base = path.join(process.cwd(), "src", "content");
-    const globalDir = path.join(base, "posts", "projects");
-    const localeDir = locale ? path.join(base, locale, "work", "projects") : "";
-
-    const globalPosts = collectPosts(globalDir);
-    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
-
-    const localPosts = collectPosts(localeDir);
-
-    const map = new Map<string, ProjectPost>();
-    for (const p of globalPosts) map.set(p.slug, p);
-    for (const p of localPosts) map.set(p.slug, p); // override by locale
-    return Array.from(map.values());
-}
-*/
 /**
- * /[locale]/work → loads from src/content/projects (+ optional locale override)
+ * /[locale]/work → loads from src/content/projects
  */
-export function getWorkPostsLocaleAware(locale?: string): ProjectPost[] {
-    const base = path.join(process.cwd(), "src", "content");
-    const globalDir = path.join(base, "projects");
-    const localeDir = locale ? path.join(base, locale, "projects") : "";
+export function getWorkPostsLocaleAware(locale: string = DEFAULT_LOCALE): ProjectPost[] {
+    const base = path.join(process.cwd(), "src", "content", "projects");
 
-    const globalPosts = collectPosts(globalDir);
-    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
+    // Nowa struktura: foldery z content.mdx + {locale}.json
+    const folderProjects = collectProjectsFromFolders(base, locale);
 
-    const localPosts = collectPosts(localeDir);
+    // Legacy: stare pliki .mdx w roocie
+    const legacyProjects = collectLegacyPosts(base);
 
-    const map = new Map<string, ProjectPost>();
-    for (const p of globalPosts) map.set(p.slug, p);
-    for (const p of localPosts) map.set(p.slug, p); // override by locale
-    return Array.from(map.values());
+    // Merge - foldery mają priorytet
+    const slugs = new Set(folderProjects.map(p => p.slug));
+    const combined = [
+        ...folderProjects,
+        ...legacyProjects.filter(p => !slugs.has(p.slug))
+    ];
+
+    return combined.sort((a, b) =>
+        new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+    );
 }
 
 /**
- * /[locale]/blog → loads from src/content/posts (+ optional locale override)
+ * /[locale]/blog → loads from src/content/posts
  */
-export function getBlogPostsLocaleAware(locale?: string): ProjectPost[] {
-    const base = path.join(process.cwd(), "src", "content");
-    const globalDir = path.join(base, "posts");
-    const localeDir = locale ? path.join(base, locale, "posts") : "";
+export function getBlogPostsLocaleAware(locale: string = DEFAULT_LOCALE): ProjectPost[] {
+    const base = path.join(process.cwd(), "src", "content", "posts");
 
-    const globalPosts = collectPosts(globalDir);
-    if (!localeDir || !fs.existsSync(localeDir)) return globalPosts;
+    const folderPosts = collectProjectsFromFolders(base, locale);
+    const legacyPosts = collectLegacyPosts(base);
 
-    const localPosts = collectPosts(localeDir);
+    const slugs = new Set(folderPosts.map(p => p.slug));
+    const combined = [
+        ...folderPosts,
+        ...legacyPosts.filter(p => !slugs.has(p.slug))
+    ];
 
-    const map = new Map<string, ProjectPost>();
-    for (const p of globalPosts) map.set(p.slug, p);
-    for (const p of localPosts) map.set(p.slug, p); // override by locale
-    return Array.from(map.values());
+    return combined.sort((a, b) =>
+        new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+    );
+}
+
+/**
+ * Get single project by slug
+ */
+export function getProjectBySlug(slug: string, locale: string = DEFAULT_LOCALE): ProjectPost | null {
+    const base = path.join(process.cwd(), "src", "content", "projects", slug);
+
+    if (fs.existsSync(base) && fs.statSync(base).isDirectory()) {
+        const result = readProjectFolder(base, locale);
+        if (result) return { ...result, slug };
+    }
+
+    // Fallback to legacy
+    const mdxPath = path.join(process.cwd(), "src", "content", "projects", `${slug}.mdx`);
+    if (fs.existsSync(mdxPath)) {
+        const { metadata, content } = readMDXFile(mdxPath);
+        return { metadata, slug, content };
+    }
+
+    return null;
+}
+
+/**
+ * Get single post by slug
+ */
+export function getPostBySlug(slug: string, locale: string = DEFAULT_LOCALE): ProjectPost | null {
+    const base = path.join(process.cwd(), "src", "content", "posts", slug);
+
+    if (fs.existsSync(base) && fs.statSync(base).isDirectory()) {
+        const result = readProjectFolder(base, locale);
+        if (result) return { ...result, slug };
+    }
+
+    const mdxPath = path.join(process.cwd(), "src", "content", "posts", `${slug}.mdx`);
+    if (fs.existsSync(mdxPath)) {
+        const { metadata, content } = readMDXFile(mdxPath);
+        return { metadata, slug, content };
+    }
+
+    return null;
 }

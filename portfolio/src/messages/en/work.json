@@ -1,0 +1,7 @@
+{
+  "label": "Projects",
+  "title": "Projects – {name}",
+  "description": "Selected projects and implementations – {name}",
+  "related": "Related projects",
+  "projects": "Projects"
+}

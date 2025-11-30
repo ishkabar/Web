@@ -19,9 +19,18 @@ import { getLocale, getTranslations } from "next-intl/server";
 import {buildPageMetadata} from "@/lib/seo";
 
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-    const posts = getWorkPostsLocaleAware(undefined);
-    return posts.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
+    const { locales } = await import('@/i18n/locales.generated');
+    const result: { locale: string; slug: string }[] = [];
+
+    for (const locale of locales) {
+        const posts = getWorkPostsLocaleAware(locale);
+        for (const post of posts) {
+            result.push({ locale, slug: post.slug });
+        }
+    }
+
+    return result;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -56,7 +65,8 @@ export default async function Project({
         location: string;
         languages: string[];
     };
-    const title = t('title');
+    //const title = t('title');
+    const title = t('title', { name: person.name });
 
     return (
         <Column as="section" maxWidth="m" horizontal="center" gap="l">
@@ -117,7 +127,7 @@ export default async function Project({
             <Column fillWidth gap="40" horizontal="center" marginTop="40">
                 <Line maxWidth="40" />
                 <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
-                    {t('ralated')}
+                    {t('related')}
                 </Heading>
                 
                 <Projects exclude={[post.slug]} range={[2]} locale={locale} />

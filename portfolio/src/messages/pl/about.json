@@ -1,82 +1,82 @@
 {
   "path": "/about",
-  "label": "@:common.labels.about",
+  "label": "O mnie",
   "title": "O mnie – {name}",
-  "description": "Poznaj {name}, {role} z {location}",
-  "tableOfContent": { "display": true, "subItems": false },
+  "description": "{name} – {role} z doświadczeniem w integracjach systemów ERP i architekturze rozwiązań.",
+  "tableOfContent": { "display": true, "subItems": true },
   "avatar": { "display": true },
-  "calendar": { "display": true, "link": "https://cal.com", "cta": "Umów rozmowę" },
+  "calendar": { "display": true, "link": "", "cta": "" },
 
   "intro": {
     "display": true,
     "title": "Wprowadzenie",
-    "description": "Selene to inżynierka projektowania z Dżakarty z pasją do przekształcania złożonych wyzwań w proste, eleganckie rozwiązania. Jej praca obejmuje interfejsy cyfrowe, doświadczenia interaktywne oraz łączenie designu z technologią."
+    "description": "Senior .NET Developer z wieloletnim doświadczeniem w projektowaniu i wdrażaniu systemów enterprise. Specjalizuję się w integracji systemów ERP, automatyzacji procesów biznesowych oraz budowie skalowalnych rozwiązań backendowych. Działam jako architekt rozwiązań i konsultant techniczny dla firm z sektora MŚP i enterprise."
   },
 
   "work": {
     "display": true,
     "title": "Doświadczenie zawodowe",
-    "experiences": [
-      {
-        "company": "FLY",
-        "timeframe": "2022 – obecnie",
-        "role": "Starsza inżynierka projektowania",
-        "achievements": [
-          "Przeprojektowała UI/UX platformy FLY, co przyniosło 20% wzrost zaangażowania użytkowników i 30% szybsze ładowanie.",
-          "Zainicjowała integrację narzędzi AI w procesach projektowych, umożliwiając projektantom iterację o 50% szybciej."
-        ],
-        "images": [
-          { "src": "/images/projects/project-01/cover-01.jpg", "alt": "Projekt Once UI", "width": 16, "height": 9 }
-        ]
-      },
-      {
-        "company": "Creativ3",
-        "timeframe": "2018 – 2022",
-        "role": "Główna projektantka",
-        "achievements": [
-          "Stworzyła system projektowy ujednolicający markę na wielu platformach, poprawiając spójność o 40%.",
-          "Poprowadziła zespół międzydziałowy przy wdrożeniu nowej linii produktów, co przyczyniło się do 15% wzrostu przychodów."
-        ],
-        "images": []
-      }
-    ]
+    "experiences": []
   },
 
   "studies": {
     "display": true,
     "title": "Edukacja",
-    "institutions": [
-      { "name": "Uniwersytet w Dżakarcie", "description": "Studia z inżynierii oprogramowania." },
-      { "name": "Build the Future", "description": "Marketing online i budowanie marki osobistej." }
-    ]
+    "institutions": []
   },
 
   "technical": {
     "display": true,
-    "title": "Umiejętności techniczne",
+    "title": "Kompetencje techniczne",
     "skills": [
       {
-        "title": "Figma",
-        "description": "Prototypuję w Figmie z Once UI w nienaturalnym tempie.",
+        "title": "Backend & .NET",
+        "description": "Projektowanie i implementacja aplikacji w .NET 6-8, ASP.NET Core, Entity Framework. Tworzenie Windows Services, aplikacji konsolowych i REST API.",
         "tags": [
-          { "name": "Figma", "icon": "figma" }
+          { "name": "C#", "icon": "csharp" },
+          { "name": ".NET", "icon": "dotnet" },
+          { "name": "ASP.NET Core", "icon": "dotnet" }
         ],
-        "images": [
-          { "src": "/images/projects/project-01/cover-02.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 },
-          { "src": "/images/projects/project-01/cover-03.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 }
-        ]
+        "images": []
       },
       {
-        "title": "Next.js",
-        "description": "Buduję aplikacje nowej generacji w Next.js + Once UI + Supabase.",
+        "title": "Bazy danych",
+        "description": "Administracja i optymalizacja SQL Server, PostgreSQL, MySQL, Firebird. Projektowanie schematów, procedur składowanych i mechanizmów synchronizacji.",
         "tags": [
-          { "name": "JavaScript", "icon": "javascript" },
-          { "name": "Next.js", "icon": "nextjs" },
-          { "name": "Supabase", "icon": "supabase" }
+          { "name": "SQL Server", "icon": "database" },
+          { "name": "PostgreSQL", "icon": "database" },
+          { "name": "Firebird", "icon": "database" }
         ],
-        "images": [
-          { "src": "/images/projects/project-01/cover-04.jpg", "alt": "Zdjęcie projektu", "width": 16, "height": 9 }
-        ]
+        "images": []
+      },
+      {
+        "title": "DevOps & Infrastruktura",
+        "description": "Konfiguracja środowisk produkcyjnych: Docker, Docker Compose, Traefik, Watchtower. Automatyzacja CI/CD z GitHub Actions. Zarządzanie VPS.",
+        "tags": [
+          { "name": "Docker", "icon": "docker" },
+          { "name": "GitHub Actions", "icon": "github" },
+          { "name": "Linux", "icon": "linux" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Integracje systemów",
+        "description": "Integracja systemów ERP (Comarch, Prestiż, PcBiznes) z zewnętrznymi API, urządzeniami przemysłowymi i platformami e-commerce.",
+        "tags": [
+          { "name": "REST API", "icon": "api" },
+          { "name": "Comarch Hydra", "icon": "code" },
+          { "name": "XML/JSON", "icon": "code" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & WPF",
+        "description": "Aplikacje desktopowe w WPF z DevExpress. Wzorce MVVM, responsywne interfejsy, integracja z systemami backendowymi.",
+        "tags": [
+          { "name": "WPF", "icon": "windows" },
+          { "name": "DevExpress", "icon": "code" }
+        ],
+        "images": []
       }
     ]
   }

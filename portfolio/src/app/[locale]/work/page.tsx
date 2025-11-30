@@ -83,7 +83,7 @@ export default async function Work() {
                 {title}
             </Heading>
 
-            <Projects />
+            <Projects locale={locale} />
         </Column>
     );
 }

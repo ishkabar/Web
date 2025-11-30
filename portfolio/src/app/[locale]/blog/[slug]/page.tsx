@@ -28,12 +28,18 @@ import { buildPageMetadata } from "@/lib/seo";
 
 
 
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-    const locale = await getLocale();
-    const posts = getBlogPostsLocaleAware(locale);
-    return posts.map((post) => ({
-        slug: post.slug,
-    }));
+export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
+    const { locales } = await import('@/i18n/locales.generated');
+    const result: { locale: string; slug: string }[] = [];
+
+    for (const locale of locales) {
+        const posts = getBlogPostsLocaleAware(locale);
+        for (const post of posts) {
+            result.push({ locale, slug: post.slug });
+        }
+    }
+
+    return result;
 }
 
 export async function generateMetadata(): Promise<Metadata> {

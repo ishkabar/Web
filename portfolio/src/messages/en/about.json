@@ -1,0 +1,83 @@
+{
+  "path": "/about",
+  "label": "About",
+  "title": "About – {name}",
+  "description": "{name} – {role} with expertise in ERP system integration and solution architecture.",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": true, "link": "", "cta": "" },
+
+  "intro": {
+    "display": true,
+    "title": "Introduction",
+    "description": "Senior .NET Developer with extensive experience in designing and implementing enterprise systems. I specialize in ERP system integration, business process automation, and building scalable backend solutions. I work as a solution architect and technical consultant for SMB and enterprise clients."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Work Experience",
+    "experiences": []
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Education",
+    "institutions": []
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Technical Skills",
+    "skills": [
+      {
+        "title": "Backend & .NET",
+        "description": "Designing and implementing applications in .NET 6-8, ASP.NET Core, Entity Framework. Building Windows Services, console applications, and REST APIs.",
+        "tags": [
+          { "name": "C#", "icon": "csharp" },
+          { "name": ".NET", "icon": "dotnet" },
+          { "name": "ASP.NET Core", "icon": "dotnet" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Databases",
+        "description": "Administration and optimization of SQL Server, PostgreSQL, MySQL, Firebird. Schema design, stored procedures, and synchronization mechanisms.",
+        "tags": [
+          { "name": "SQL Server", "icon": "database" },
+          { "name": "PostgreSQL", "icon": "database" },
+          { "name": "Firebird", "icon": "database" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps & Infrastructure",
+        "description": "Production environment configuration: Docker, Docker Compose, Traefik, Watchtower. CI/CD automation with GitHub Actions. VPS management.",
+        "tags": [
+          { "name": "Docker", "icon": "docker" },
+          { "name": "GitHub Actions", "icon": "github" },
+          { "name": "Linux", "icon": "linux" }
+        ],
+        "images": []
+      },
+      {
+        "title": "System Integration",
+        "description": "Integration of ERP systems (Comarch, Prestiż, PcBiznes) with external APIs, industrial devices, and e-commerce platforms.",
+        "tags": [
+          { "name": "REST API", "icon": "api" },
+          { "name": "Comarch Hydra", "icon": "code" },
+          { "name": "XML/JSON", "icon": "code" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & WPF",
+        "description": "Desktop applications in WPF with DevExpress. MVVM patterns, responsive interfaces, backend system integration.",
+        "tags": [
+          { "name": "WPF", "icon": "windows" },
+          { "name": "DevExpress", "icon": "code" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}

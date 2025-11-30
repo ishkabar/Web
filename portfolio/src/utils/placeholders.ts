@@ -96,9 +96,32 @@ export function resolveObjectWithData<T = any>(
  * Dynamically load messages/<locale>/common.json (server or client).
  */
 export async function loadCommon(locale: string): Promise<Record<string, any>> {
-    // Next can import JSON dynamically; .default holds the actual object.
-    const mod = await import(`@/messages/${locale}/common.json`);  // 
-    return (mod as any).default ?? mod;
+    // Server-side: use fs
+    if (typeof window === 'undefined') {
+        const fs = await import('fs');
+        const path = await import('path');
+
+        const filePath = path.join(process.cwd(), 'src', 'messages', locale, 'common.json');
+
+        if (!fs.existsSync(filePath)) {
+            // Fallback do pl
+            const fallbackPath = path.join(process.cwd(), 'src', 'messages', 'pl', 'common.json');
+            if (fs.existsSync(fallbackPath)) {
+                return JSON.parse(fs.readFileSync(fallbackPath, 'utf-8'));
+            }
+            return {};
+        }
+
+        return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    }
+
+    // Client-side: fetch from API or use empty
+    try {
+        const res = await fetch(`/api/messages/${locale}/common`);
+        if (res.ok) return res.json();
+    } catch {}
+
+    return {};
 }
 
 /**

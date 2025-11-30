@@ -2,49 +2,64 @@
   "meta": {
     "label": "Polski",
     "flag": "pl",
-    "default": true,
-    "siteName": "Dominik – Portfolio",
-    "title": "Portfolio - Dominik Karczewski",
-    "description": "Programista programujący ęóąśłżźćń€"
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Senior .NET Developer",
+    "description": "Senior .NET Developer specjalizujący się w integracji systemów ERP, architekturze rozwiązań i DevOps."
   },
-  
+  "underConstruction": "Ta strona jest w przygotowaniu. Zapraszam wkrótce.",
   "person": {
     "firstName": "Dominik",
     "lastName": "Karczewski",
     "name": "Dominik Karczewski",
-    "role": ".NET Developer",
-    "avatar": "/avatar.jpg",
+    "role": "Senior .NET Developer",
+    "avatar": "/avatar.png",
     "email": "dom.karczewski@gmail.com",
     "location": "Europe/Warsaw",
-    "languages": ["Angielski", "Polski"]
+    "locationDisplay": "Warszawa, Polska",
+    "languages": [
+      "Polski",
+      "Angielski"
+    ]
   },
-  
   "header": {
     "home": "Start",
+    "featured": "Wyróżnione",
     "about": "O mnie",
     "work": "Projekty",
     "blog": "Blog",
-    "gallery": "Galeria",
-    "featured": "Featured work"
+    "gallery": "Galeria"
   },
-
-  "footer": { "copyright": "© {year} Dominik"},
-
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
   "newsletter": {
     "display": true,
-    "title": "Zapisz się na newsletter {firstName}",
-    "description": "Mój cotygodniowy newsletter o kreatywności i inżynierii",
-    "subscribe": "Subskrybuj"
+    "disabled": true,
+    "title": "Newsletter",
+    "description": "Zapisz się na newsletter i bądź na bieżąco z nowościami.",
+    "subscribe": "Subskrybuj",
+    "comingSoon": "Wkrótce dostępne"
   },
-
   "social": [
-    { "name": "GitHub",   "icon": "github",   "link": "https://github.com/ishkabar" },
-    { "name": "LinkedIn", "icon": "linkedin", "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/" },
-    { "name": "Email",    "icon": "email",    "link": "mailto:dom.karczewski@gmail.com" }
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:dom.karczewski@gmail.com"
+    }
   ],
-  
   "routeGuard": {
-    "protectedTitle": "Ta strona jest chroniona hasłem",
+    "protectedTitle": "Strona chroniona hasłem",
     "passwordLabel": "Hasło",
     "submit": "Zatwierdź",
     "incorrectPassword": "Nieprawidłowe hasło"

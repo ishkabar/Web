@@ -124,10 +124,10 @@ export default async function LocaleLayout(
 
                     <Flex zIndex={1} fillWidth padding="l" horizontal="center" flex={1}>
                         <Flex horizontal="center" fillWidth minHeight="0">
-                            <NextIntlClientProvider locale={routeLocale} messages={messages}>
+                            
 
                             <RouteGuard>{children}</RouteGuard>
-                            </NextIntlClientProvider>
+                            
 
                         </Flex>
                     </Flex>

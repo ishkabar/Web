@@ -21,6 +21,7 @@
     "@once-ui-system/core": "^1.4.27",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
+    "deepmerge": "^4.3.1",
     "flag-icons": "^7.5.0",
     "gray-matter": "^4.0.3",
     "lint-staged": "^16.1.5",

@@ -33,7 +33,7 @@ type Props = {
 
 export function Providers({children, messages, locale}: Props) {
     return (
-        <NextIntlClientProvider messages={messages} locale={locale}>
+        <NextIntlClientProvider messages={messages} locale={locale} timeZone="Europe/Warsaw">
 
         <LayoutProvider>
       <ThemeProvider

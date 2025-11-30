@@ -24,14 +24,15 @@ export default async function Gallery() {
         location: string;
         languages: string[];
     };
-    const title = t('title');
-  return (
+    const title = t('title', { name: person.name });
+
+    return (
     <Flex maxWidth="l">
       <Schema
         as="webPage"
         baseURL={baseURL}
         title={title}
-        description={t('description')}
+        description={t('description', { name: person.name })}
         path={paths.gallery}
         image={`/api/og/generate?title=${encodeURIComponent(title)}`}
         author={{

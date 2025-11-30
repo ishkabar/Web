@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "label": "Deutsch",
+    "flag": "de",
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Senior .NET Developer",
+    "description": "Senior .NET Developer mit Spezialisierung auf ERP-Systemintegration, Lösungsarchitektur und DevOps."
+  },
+  "underConstruction": "Diese Seite befindet sich im Aufbau. Bitte schauen Sie bald wieder vorbei.",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "Senior .NET Developer",
+    "avatar": "/avatar.png",
+    "email": "dom.karczewski@gmail.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "Warszawa, Polska",
+    "languages": [
+      "Polnisch",
+      "Englisch"
+    ]
+  },
+  "header": {
+    "home": "Start",
+    "featured": "Empfohlen",
+    "about": "Über mich",
+    "work": "Projekte",
+    "blog": "Blog",
+    "gallery": "Galerie"
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "Newsletter",
+    "description": "Abonnieren Sie den Newsletter und bleiben Sie über Neuigkeiten informiert.",
+    "subscribe": "Abonnieren",
+    "comingSoon": "Demnächst verfügbar"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:dom.karczewski@gmail.com"
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "Diese Seite ist passwortgeschützt",
+    "passwordLabel": "Passwort",
+    "submit": "Absenden",
+    "incorrectPassword": "Falsches Passwort"
+  }
+}

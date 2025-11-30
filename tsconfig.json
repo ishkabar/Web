@@ -1,4 +1,6 @@
 {
-  "extends": "./portfolio/tsconfig.json",
-  "include": ["middleware.ts"]
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "strict": true
+  }
 }

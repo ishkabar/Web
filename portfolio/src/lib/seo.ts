@@ -2,41 +2,91 @@
  * buildPageMetadata
  * Returns Next.js Metadata using next-intl translations and canonical URL.
  *
- * - Reads `title`/`description` from i18n namespace (default keys: "title", "description").
- * - Builds canonical from baseURL + path.
- * - OG/Twitter image: dynamic `/api/og/generate?title=...` by default; can be overridden.
+ * Features:
+ * - Reads `title`/`description` from i18n namespace
+ * - Builds canonical URL from baseURL + locale + path
+ * - Generates alternateLanguages (hreflang) for all enabled locales
+ * - OG/Twitter with proper locale tags
  */
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { baseURL } from "@/resources/ui-tokens.config";
 
+const ENABLED_LOCALES = ["pl", "en", "de"] as const;
+const DEFAULT_LOCALE = "en";
+
 type Options = {
-    image?: string;            // override OG/Twitter image
-    titleKey?: string;         // default "title"
-    descriptionKey?: string;   // default "description"
-    titleOverride?: string;    // skip i18n title
-    descriptionOverride?: string; // skip i18n description
+    image?: string;
+    titleKey?: string;
+    descriptionKey?: string;
+    titleOverride?: string;
+    descriptionOverride?: string;
 };
 
 export async function buildPageMetadata(
-    ns: string,                // e.g. "common.meta" / "about.meta"
-    path: string,              // e.g. paths.about
+    ns: string,
+    path: string,
     opts: Options = {}
 ): Promise<Metadata> {
+    const locale = await getLocale();
     const t = await getTranslations(ns);
 
     const title = opts.titleOverride ?? t(opts.titleKey ?? "title");
     const description = opts.descriptionOverride ?? t(opts.descriptionKey ?? "description");
 
-    const canonical = new URL(path, baseURL).toString();
-    const ogImage = opts.image ?? `/api/og/generate?title=${encodeURIComponent(title)}`;
+    // Canonical z locale
+    const canonicalPath = path === "/" || path === "" ? `/${locale}` : `/${locale}${path}`;
+    const canonical = new URL(canonicalPath, baseURL).toString();
+
+    // Alternate languages (hreflang)
+    const languages: Record<string, string> = {};
+    for (const loc of ENABLED_LOCALES) {
+        const altPath = path === "/" || path === "" ? `/${loc}` : `/${loc}${path}`;
+        languages[loc] = new URL(altPath, baseURL).toString();
+    }
+    // x-default wskazuje na domyślny język
+    languages["x-default"] = new URL(`/${DEFAULT_LOCALE}${path === "/" ? "" : path}`, baseURL).toString();
+
+    const ogImage = opts.image ?? `/api/og/generate?title=${encodeURIComponent(title)}&locale=${locale}`;
+
+    // Mapowanie locale na OG locale format
+    const ogLocaleMap: Record<string, string> = {
+        pl: "pl_PL",
+        en: "en_US",
+        de: "de_DE",
+    };
 
     return {
         title,
         description,
-        alternates: { canonical },
-        openGraph: { url: canonical, title, description, images: [ogImage] },
-        twitter: { card: "summary_large_image", title, description, images: [ogImage] },
+        alternates: {
+            canonical,
+            languages,
+        },
+        openGraph: {
+            url: canonical,
+            title,
+            description,
+            images: [ogImage],
+            locale: ogLocaleMap[locale] || "en_US",
+            alternateLocale: ENABLED_LOCALES.filter(l => l !== locale).map(l => ogLocaleMap[l]),
+            type: "website",
+            siteName: title.split("–")[0]?.trim() || title,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+            images: [ogImage],
+        },
         metadataBase: new URL(baseURL),
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+            },
+        },
     };
 }

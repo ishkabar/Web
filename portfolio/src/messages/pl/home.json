@@ -1,21 +1,22 @@
 {
   "path": "/",
   "image": "/images/home.jpg",
-  "label": "@:common.labels.home",
-  "title": "Portfolio {name}",
-  "description": "Strona portfolio prezentująca moją pracę jako {role}",
-  "headline": "Buduję mosty między designem a kodem",
-  "sublineRich": "Jestem {firstName}, tworzę intuicyjne doświadczenia.Po godzinach buduję własne projekty.",
-  "calendar": { "cta": "Umów rozmowę" },
+  "label": "Start",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET Developer – integracje systemów, architektura rozwiązań, DevOps",
+  "headline": "Buduję niezawodne systemy dla biznesu",
+  "sublineRich": "Jestem {firstName} – projektuję i wdrażam rozwiązania .NET dla sektora enterprise. Specjalizuję się w integracjach ERP, automatyzacji procesów i infrastrukturze DevOps.",
+  "calendar": { "cta": "" },
   "featured": {
     "display": true,
-    "titleRich": "<b>Once UI</b><sep></sep><small>{featured}</small>",
-    "href": "/work/building-once-ui-a-customizable-design-system"
+    "title": "ogur.dev",
+    "subtitle": "Wyróżniony projekt",
+    "href": "/pl/work/ogur-dev"
   },
-  "blog": { "latest": "latest" },
+  "blog": { "latest": "Najnowsze wpisy" },
   "intro": {
     "display": true,
-    "title": "Introduction",
-    "description": "(<>Selene is a Jakarta-based design engineer with a passion for transforming complex challenges into simple, elegant design solutions. Her work spans digital interfaces, interactive experiences, and the convergence of design and technology. </>)"
+    "title": "",
+    "description": ""
   }
 }

@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 import { getLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 
-const locale = await getLocale();
 export async function GET() {
-  const posts = getWorkPostsLocaleAware(locale);
+    const locale = await getLocale();
+    const posts = getWorkPostsLocaleAware(locale);
 
   // Sort posts by date (newest first)
   const sortedPosts = posts.sort((a, b) => {
@@ -42,7 +42,7 @@ export async function GET() {
     <managingEditor>${person.email || "noreply@example.com"} (${person.name})</managingEditor>
     <webMaster>${person.email || "noreply@example.com"} (${person.name})</webMaster>
     <image>
-      <url>${baseURL}${person.avatar || "/images/avatar.jpg"}</url>
+      <url>${baseURL}${person.avatar || "/DK.png"}</url>
       <title>${tBlog('title')}</title>
       <link>${baseURL}/blog</link>
     </image>

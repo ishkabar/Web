@@ -1,7 +1,7 @@
 {
-  "label": "@:common.labels.work",
-  "title": "Projects – {name}",
-  "description": "Design and dev projects by {name}",
-  "related" : "Powiązane projekty",
+  "label": "Projekty",
+  "title": "Projekty – {name}",
+  "description": "Wybrane projekty i realizacje – {name}",
+  "related": "Powiązane projekty",
   "projects": "Projekty"
 }

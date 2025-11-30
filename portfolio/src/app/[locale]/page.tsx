@@ -1,63 +1,74 @@
 import {
-  Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Line,
+    Heading, Text, Button, Avatar, RevealFx, Column, Badge, Row, Schema, Line,
 } from "@once-ui-system/core";
-import { baseURL, routes, paths } from "@/resources";
-import { Mailchimp } from "@/components";
-import { Projects } from "@/components/work/Projects";
-import { Posts } from "@/components/blog/Posts";
+import {baseURL, routes, paths} from "@/resources";
+import {Mailchimp} from "@/components";
+import {Projects} from "@/components/work/Projects";
+import {Posts} from "@/components/blog/Posts";
+
 export const runtime = "nodejs";
-import { Logo } from "@once-ui-system/core";
+import {Logo} from "@once-ui-system/core";
 import {getTranslations} from "next-intl/server";
-import type { Metadata } from "next";
+import type {Metadata} from "next";
 import {buildPageMetadata} from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-    return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
+    return buildPageMetadata("common.meta", paths.about, {titleKey: "title"});
 }
 
 export default async function Home(
-  { params }: { params: Promise<{ locale: string }> }
+    {params, searchParams}: {
+        params: Promise<{ locale: string }>;
+        searchParams: Promise<{ blocked?: string }>;
+    }
 ) {
-  const { locale } = await params;
+    const {locale} = await params;
+    const {blocked} = await searchParams;
+    const wasBlocked = blocked === '1';
 
-  const tHome = await getTranslations({ locale, namespace: "home" });
-  const tAbout = await getTranslations({ locale, namespace: "about" });
-  const t = await getTranslations({ locale, namespace: "common" });
+    const tHome = await getTranslations({locale, namespace: "home"});
+    const tAbout = await getTranslations({locale, namespace: "about"});
+    const t = await getTranslations({locale, namespace: "common"});
 
-  const featured = tHome.raw("featured") as {
-    display: boolean;
-    titleRich?: string;
-    href: string;
-  };
+    const featured = tHome.raw("featured") as {
+        display: boolean;
+        title?: string;
+        subtitle?: string;
+        href: string;
+    };
 
-  const aboutAvatar = (tAbout.raw("avatar") as { display: boolean } | undefined)?.display === true;
-  const aboutTitle = tAbout("title", { name: t("person.name") });
+    const aboutAvatar = (tAbout.raw("avatar") as { display: boolean } | undefined)?.display === true;
+    const aboutTitle = tAbout("title", {name: t("person.name")});
 
-  const personAvatar = t("person.avatar");
-  const personName = t("person.name");
+    const personAvatar = t("person.avatar");
+    const personName = t("person.name");
 
-  try {
+    try {
         return (
             <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
-            <div style={{ background: "red", color: "white", padding: "10px" }}>
-                    DEBUG: [{locale.toUpperCase()}]/page.tsx
-                </div>
 
-            {/* Schema.org */}
+                {/* Komunikat o zablokowanej stronie */}
+                {wasBlocked && (
+                    <Row fillWidth padding="16" background="warning-alpha-medium" radius="m" horizontal="center">
+                        <Text>{t('underConstruction')}</Text>
+                    </Row>
+                )}
+
+                {/* Schema.org */}
                 {(() => {
                     return (
                         <Schema
-                          as="webPage"
-                          baseURL={baseURL}
-                          path={paths.home}
-                          title={tHome("title", { name: personName })}
-                          description={tHome("description", { role: t("person.role") })}
-                          image={`/api/og/generate?title=${encodeURIComponent(tHome("title", { name: personName }))}`}
-                          author={{
-                            name: personName,
-                            url: `${baseURL}${paths.about}`,
-                            image: `${baseURL}${personAvatar}`,
-                          }}
+                            as="webPage"
+                            baseURL={baseURL}
+                            path={paths.home}
+                            title={tHome("title", {name: personName})}
+                            description={tHome("description", {role: t("person.role")})}
+                            image={`/api/og/generate?title=${encodeURIComponent(tHome("title", {name: personName}))}`}
+                            author={{
+                                name: personName,
+                                url: `${baseURL}${paths.about}`,
+                                image: `${baseURL}${personAvatar}`,
+                            }}
                         />
                     );
                 })()}
@@ -69,7 +80,8 @@ export default async function Home(
                             <Column maxWidth="s" horizontal="center" align="center">
                                 {featured?.display && (() => {
                                     return (
-                                        <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32" paddingLeft="12">
+                                        <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32"
+                                                  paddingLeft="12">
                                             <Badge
                                                 background="brand-alpha-weak"
                                                 paddingX="12"
@@ -79,28 +91,23 @@ export default async function Home(
                                                 arrow={false}
                                                 href={featured.href}
                                             >
-
                                                 <Row gap="12" vertical="center" paddingY="2">
-                                                    {tHome.rich("featured.titleRich", {
-                                                        featured: t("header.featured"),
-                                                        b: (c) => <strong className="ml-4">{c}</strong>,
-                                                        sep: () => (
-                                                            <div style={{ width: 1, height: 20, background: "var(--brand-alpha-strong)" }} />
-                                                        ),
-                                                        small: (c) => (
-                                                            <Text as="span" marginRight="4" onBackground="brand-medium">
-                                                                {c}
-                                                            </Text>
-                                                        ),
-                                                    })}
+                                                    <strong className="ml-4">{featured.title}</strong>
+                                                    <div style={{
+                                                        width: 1,
+                                                        height: 20,
+                                                        background: "var(--brand-alpha-strong)"
+                                                    }}/>
+                                                    <Text as="span" marginRight="4" onBackground="brand-medium">
+                                                        {featured.subtitle}
+                                                    </Text>
                                                 </Row>
-
                                             </Badge>
                                         </RevealFx>
                                     );
                                 })()}
 
-                               { (() => {
+                                {(() => {
                                     return (
                                         <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
                                             <Heading wrap="balance" variant="display-strong-l">
@@ -137,7 +144,7 @@ export default async function Home(
                                                             }}
                                                         />
                                                     ),
-                                                    br: () => <br />
+                                                    br: () => <br/>
                                                 })}
                                             </Text>
                                         </RevealFx>
@@ -160,7 +167,7 @@ export default async function Home(
                                                     {aboutAvatar && (
                                                         <Avatar
                                                             marginRight="8"
-                                                            style={{ marginLeft: "-0.75rem" }}
+                                                            style={{marginLeft: "-0.75rem"}}
                                                             src={personAvatar}
                                                             size="m"
                                                         />
@@ -175,23 +182,22 @@ export default async function Home(
                         </Column>
                     );
                 })()}
-                
+
                 {(() => {
                     return (
                         <RevealFx translateY="16" delay={0.6}>
-                            <Projects range={[1, 1]} />
+                            <Projects range={[1, 1]} locale={locale}/>
                         </RevealFx>
                     );
                 })()}
-                
-                {routes["/blog"] && (() => { //TODO: 404
 
+                {routes["/blog"] && (() => {
                     return (
                         <Column fillWidth gap="24" marginBottom="l">
                             <Row fillWidth paddingRight="64">
-                                <Line maxWidth={48} />
+                                <Line maxWidth={48}/>
                             </Row>
-                            <Row fillWidth gap="24" marginTop="40" s={{ direction: "column" }}>
+                            <Row fillWidth gap="24" marginTop="40" s={{direction: "column"}}>
                                 <Row flex={1} paddingLeft="l" paddingTop="24">
                                     <Heading as="h2" variant="display-strong-xs" wrap="balance">
                                         {tHome("blog.latest")}
@@ -199,25 +205,25 @@ export default async function Home(
                                 </Row>
                                 <Row flex={3} paddingX="20">
                                     {(() => {
-                                        return <Posts range={[1, 2]} columns="2" />;
+                                        return <Posts range={[1, 2]} columns="2"/>;
                                     })()}
                                 </Row>
                             </Row>
                             <Row fillWidth paddingLeft="64" horizontal="end">
-                                <Line maxWidth={48} />
+                                <Line maxWidth={48}/>
                             </Row>
                         </Column>
                     );
                 })()}
 
                 {(() => {
-                    return <Projects range={[2]} />;
+                    return <Projects range={[2]} locale={locale}/>
                 })()}
-                
+
                 {(() => {
-                    return <Mailchimp />;
+                    return <Mailchimp/>;
                 })()}
-                
+
             </Column>
         );
     } catch (error) {

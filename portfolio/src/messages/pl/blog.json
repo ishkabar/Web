@@ -1,10 +1,10 @@
 {
-    "title": "Blog – artykuły o designie i technologii",
-    "titleShort": "Blog",
-    "description": "Przeczytaj najnowsze wpisy Dominika",
-    "author": {
-      "name": "Dominik Karczewski"
-    },
-    "earlierPosts": "Starsze wpisy",
-  "onPage": "On this page"
-  }
+  "title": "Blog – artykuły techniczne",
+  "titleShort": "Blog",
+  "description": "Artykuły o .NET, DevOps i architekturze systemów",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "Starsze wpisy",
+  "onPage": "Na tej stronie"
+}

@@ -35,7 +35,7 @@ export default async function Blog() {
         author={{
             name: t("author.name"),
             url: `${baseURL}${path}`,
-            image: `${baseURL}/images/avatar.jpg`,
+            image: `${baseURL}/DK.png`,
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">
