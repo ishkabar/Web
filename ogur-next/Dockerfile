@@ -4,10 +4,10 @@ WORKDIR /app
 ARG NEXT_PUBLIC_GA_ID
 ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --no-frozen-lockfile 
+    pnpm install --frozen-lockfile
 
 COPY . .
 
