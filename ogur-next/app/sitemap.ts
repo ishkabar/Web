@@ -1,9 +1,8 @@
 import { MetadataRoute } from 'next'
-import { allProjects } from 'contentlayer/generated'
+import { allProjects } from '@/lib/mdx'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const projects = allProjects
-        .filter((project) => project.published)
+    const projects = allProjects.filter((project) => project.published)
         .map((project) => ({
             url: `https://ogur.dev/projects/${project.slug}`,
             lastModified: project.date ? new Date(project.date) : new Date(),

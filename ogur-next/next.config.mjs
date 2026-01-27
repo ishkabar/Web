@@ -1,11 +1,20 @@
-import { withContentlayer } from "next-contentlayer";
+import createMDX from '@next/mdx';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
-	experimental: {
-		mdxRs: true,
-	},
+    output: 'standalone',
+    pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+    experimental: {
+        nextScriptWorkers: false,
+    },
+    turbopack: {},
 };
 
-export default withContentlayer(nextConfig);
+const withMDX = createMDX({
+    options: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+    },
+});
+
+export default withMDX(nextConfig);

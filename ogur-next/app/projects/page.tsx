@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
-import type {Project} from 'contentlayer/generated';
-import {allProjects} from 'contentlayer/generated';
+import type {Project} from '@/lib/mdx';
+import {allProjects} from '@/lib/mdx';
 import {Navigation} from '../components/nav';
 import {Card} from '../components/card';
 import {Article} from './article';

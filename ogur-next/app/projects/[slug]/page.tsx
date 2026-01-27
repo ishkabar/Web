@@ -1,5 +1,5 @@
 ﻿import { notFound } from "next/navigation";
-import { allProjects } from "contentlayer/generated";
+import { allProjects } from "@/lib/mdx";
 import { Mdx } from "@/app/components/mdx";
 import { Header } from "./header";
 import "./mdx.css";
@@ -10,7 +10,6 @@ import { Metadata } from 'next';
 import { ArticleSchema } from '@/app/components/article-schema'; 
 
 export const dynamic = 'force-dynamic';
-
 export const revalidate = 30;
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params;
+    const { slug } = await params; // to zostaje async bo params jest Promise
     const project = allProjects.find((p) => p.slug === slug);
 
     if (!project) {
@@ -44,7 +43,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
                     height: 630,
                     alt: project.title,
                 },
-
                 {
                     url: fallbackImage,
                     width: 1200,
@@ -63,17 +61,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
     return allProjects
         .filter((p) => p.published)
-        .map((p) => ({
-            slug: p.slug,
-        }));
+        .map((p) => ({ slug: p.slug }));
 }
 
 export default async function PostPage({ params }: Props) {
     const { slug } = await params;
-    const project = allProjects.find((project) => project.slug === slug);
+    const project = allProjects.find((project) => project.slug === slug); // BEZ await
 
     if (!project) {
         notFound();
@@ -83,16 +79,17 @@ export default async function PostPage({ params }: Props) {
     try {
         const redisClient = redis();
         if (redisClient.status !== "ready") {
-            await redisClient.connect();
+            await redisClient.connect(); // z await bo Redis
         }
-        const result = await redisClient.get(["pageviews", "projects", slug].join(":"));
+        const result = await redisClient.get(["pageviews", "projects", slug].join(":")); // z await
         views = parseInt(result || "0");
     } catch (error) {
         console.log("Redis unavailable, defaulting to 0 views");
         views = 0;
     }
-    const ogImage = `/og/${project.slug}.png`;  // <-- DODAJ
-
+    
+    const ogImage = `/og/${project.slug}.png`;
+    
     return (
         <div className="bg-gradient-to-br from-zinc-50 via-zinc-100/70 to-zinc-50 min-h-screen">
             <ArticleSchema
@@ -104,9 +101,8 @@ export default async function PostPage({ params }: Props) {
             />
             <Header project={project} views={views} />
             <ReportView slug={project.slug} />
-
             <article className="px-4 py-12 mx-auto max-w-4xl prose prose-zinc prose-quoteless">
-                <Mdx code={project.body.code} />
+                <Mdx source={project.body.code} />
                 <Contact website={project.contactInfo?.website} />
             </article>
         </div>

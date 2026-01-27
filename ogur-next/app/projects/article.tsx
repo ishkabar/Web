@@ -1,4 +1,4 @@
-import type { Project } from "@/.contentlayer/generated";
+import type { Project } from "@/lib/mdx";
 import Link from "next/link";
 import { Eye, View } from "lucide-react";
 
