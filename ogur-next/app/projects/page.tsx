@@ -31,9 +31,9 @@ export default async function ProjectsPage() {
         projects.forEach(p => views[p.slug] = 0);
     }
 
-    const featured = projects.find((p) => p.slug === 'SentinelDevexpress') ?? null;
-    const top2 = projects.find((p) => p.slug === 'OgurFishing') ?? null;
-    const top3 = projects.find((p) => p.slug === 'SentinelApiWorker') ?? null;
+    const featured = projects.find((p) => p.slug === 'OgurHub') ?? null;
+    const top2 = projects.find((p) => p.slug === 'TerrariaManager') ?? null;
+    const top3 = projects.find((p) => p.slug === 'OgurFishing') ?? null;
 
     const hero: Project[] = [featured, top2, top3].filter((p): p is Project => p !== null);
     

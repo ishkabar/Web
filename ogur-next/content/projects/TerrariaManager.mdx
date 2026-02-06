@@ -1,0 +1,102 @@
+---
+title: "Terraria Manager"
+description: "Aplikacja desktopowa WPF do zarządzania serwerami Terraria przez SSH z konsolą w czasie rzeczywistym, wizualnym interfejsem komend i wsparciem dla kontenerów Docker"
+date: "2025-02-06"
+repository: ishkabar/TerrariaManager
+category: "personal"
+published: true
+---
+
+Aplikacja desktopowa WPF stworzona do zarządzania dedykowanymi serwerami Terraria działającymi w kontenerach Docker na zdalnych hostach Linux. Projekt powstał z praktycznej potrzeby - moi znajomi grali na moim serwerze Terraria i za każdym razem gdy chcieli wykonać komendy serwera, musieli łączyć się przez SSH. Ponieważ większość z nich nie czuła się komfortowo z interfejsem wiersza poleceń, stworzyłem tę aplikację GUI, która daje im prosty i przyjazny sposób zarządzania serwerem.
+
+![Interfejs konsoli](https://files.ogur.dev/public/terrariaManagerConsole.png)
+
+## Główne funkcje
+
+###### Podwójny tryb interfejsu
+Widok Console zapewnia tradycyjne wykonywanie komend w stylu terminala ze streamingiem wyjścia w czasie rzeczywistym, podczas gdy widok Commands oferuje wizualny interfejs oparty na przyciskach zorganizowany w kategorie: Time, Server Management i Admin. Oba tryby współdzielą ten sam stan połączenia i operują na tej samej sesji serwera.
+
+###### Integracja SSH i Docker
+Bezpośrednie zarządzanie połączeniem SSH z automatycznym podłączaniem kontenera Docker przez sesje tmux. Wspiera kontenery stdin_open do dwukierunkowej komunikacji, umożliwiając wykonywanie komend w czasie rzeczywistym i streaming wyjścia konsoli z pełnym filtrowaniem kodów ANSI escape.
+
+###### Inteligentny system komend
+Wykonywanie komend z konfigurowalnymi wymaganiami wejścia i potwierdzeniami. Flaga RequiresInput wywołuje niestandardowe dialogi wejściowe dla komend wymagających parametrów (kick, ban, password), podczas gdy RequiresConfirm dodaje potwierdzenia bezpieczeństwa dla operacji destrukcyjnych (wyłączenie serwera, banowanie graczy).
+
+###### Wsparcie dla wielu kontenerów
+Płynne przełączanie między wieloma kontenerami Terraria przez konfigurację w ustawieniach. Wspiera oddzielne środowiska testowe i produkcyjne na tym samym hoście, z każdym kontenerem utrzymującym własną sesję tmux i historię konsoli.
+
+###### Zarządzanie stanem połączenia
+Kolorowy wskaźnik połączenia (czerwony/żółty/zielony) z automatycznymi przejściami stanu. Przepływ połączenia obsługuje uwierzytelnienie SSH, podłączanie Docker i walidację sesji tmux, ze szczegółowymi komunikatami błędów do rozwiązywania problemów z połączeniem.
+
+###### Bezpieczne przechowywanie poświadczeń
+Zaszyfrowane przechowywanie haseł przy użyciu Windows Data Protection API. Ustawienia są trwale zapisywane w AppData z automatycznym przeładowaniem przy zmianach konfiguracji, wspierając auto-connect przy starcie dla płynnego doświadczenia użytkownika.
+
+![Interfejs komend](https://files.ogur.dev/public/terrariaManagerCommands.png)
+
+## Architektura
+
+Projekt zorganizowany jako wielowarstwowa aplikacja WPF następująca wzorzec MVVM z zasadami czystej architektury. Warstwa Core zawiera modele domenowe (ServerCommand), Infrastructure dostarcza serwisy (SshService, NavigationService, AppFlowCoordinator), a warstwa Devexpress implementuje UI z ViewModels i Views.
+
+Łączność SSH zaimplementowana przez bibliotekę SSH.NET z niestandardowym zarządzaniem ShellStream. SshService obsługuje cykl życia połączenia, operacje Docker attach przez komendę docker attach, oraz dwukierunkową komunikację przez przekazywanie sesji tmux. Kody ANSI escape są usuwane dla czystego wyjścia konsoli.
+
+Nawigacja zarządzana przez INavigationService z przełączaniem widoków opartym na messengerze. ShellViewModel hostuje właściwość CurrentView, NavigationMessage przenosi instancje widoków, a AppFlowCoordinator orkiestruje przepływ startowy włączając uwierzytelnienie i sprawdzanie aktualizacji.
+
+Wykonywanie komend używa wzorca strategii z modelem ServerCommand definiującym wymagania wykonania. Metoda ExecuteCommand obsługuje warunkowe dialogi wejściowe (okno InputDialog), potwierdzenia (DXMessageBox), oraz finalne przesyłanie komendy przez SshService z właściwym kodowaniem UTF-8.
+
+Zarządzanie stanem przez właściwości ConsoleViewModel (IsConnected, StatusText, CommandInput) z implementacją INotifyPropertyChanged. Komendy implementują logikę CanExecute opartą na stanie połączenia, zapewniając odpowiednie włączanie/wyłączanie kontrolek UI podczas przejść połączenia.
+
+Persystencja ustawień przez klasę AppSettings używającą serializacji JSON do %AppData%\OgurTerrariaManager\config.json. Wspiera przeładowanie w runtime przez metodę ReloadSettings, wywołując aktualizacje właściwości we wszystkich ViewModels współdzielących singleton instancję AppSettings.
+
+![Ustawienia](https://files.ogur.dev/public/terrariaManagerSettings.png)
+
+## Stos technologiczny
+
+**Frontend Framework** - WPF z .NET 8.0 i komponentami DevExpress 24.1 dla nowoczesnych kontrolek UI (SimpleButton, TextEdit, PasswordBoxEdit). Dark theme z custom borderless window design i drag-anywhere funkcjonalnością.
+
+**SSH Library** - SSH.NET (Renci.SshNet) 2024.2.0 dla połączeń SSH, ShellStream dla interaktywnej sesji, oraz SshCommand dla jednorazowych komend. Custom encoding UTF-8 bez BOM dla kompatybilności z terminalem Linux.
+
+**MVVM Infrastructure** - CommunityToolkit.Mvvm 8.3.2 z ObservableObject, RelayCommand, oraz WeakReferenceMessenger. Dependency injection przez Microsoft.Extensions.DependencyInjection 9.0.0 z Generic Host pattern.
+
+**Authentication** - Integracja z Ogur.Hub (custom auth system) przez Ogur.Core i Ogur.Abstractions packages. LoginViewModel obsługuje flow uwierzytelnienia z update checking przez IUpdateChecker.
+
+**Configuration** - Microsoft.Extensions.Configuration z appsettings.json binding. AppSettings używa ProtectedData dla encryption hasła SSH, z automatycznym tworzeniem config directory w AppData.
+
+**UI Components** - DevExpress kontrolki (DXMessageBox, LayoutControl, SpinEdit) dla consistent look and feel. Custom converters (StatusToColorConverter, InverseBooleanConverter) dla data binding transformations.
+
+## Wymagania serwerowe
+
+System wymaga specyficznej konfiguracji serwera Linux dla poprawnego działania. Docker kontener musi być uruchomiony z flagą stdin_open: true w docker-compose.yml, umożliwiając stdin attachment dla bidirectional communication.
+
+Sesja tmux musi być stworzona przez tego samego użytkownika SSH, którego aplikacja używa do połączenia. To rozwiązuje problem permissions z tmux socket directories - każdy user ma własny /tmp/tmux-{UID}/default socket, więc session created by ubuntu user nie będzie widoczna dla terraria user.
+
+Komenda tworzenia sesji: `tmux new-session -d -s terraria "docker attach terraria"`. Sesja persystuje przez restarty aplikacji i może być ręcznie detached przez Ctrl+B, D. Każdy kontener wymaga dedykowanej sesji tmux.
+
+User permissions wymagają docker group membership dla wykonywania komend Docker bez sudo, oraz tmux installation. Read/write access do Terraria directories dla persistence world files i configuration.
+
+## Konfiguracja
+
+Settings tab dostarcza pełną konfigurację z sekcjami dla SSH Connection (Host, Port, Username, Password, Container Name, Auto-connect), Ogur.Hub Authentication (API URL), oraz User Interface (Console Font Size, Show Timestamps, Always on Top).
+
+Password encryption używa ProtectedData.Protect z CurrentUser scope, storing encrypted bytes jako base64 string w config.json. GetSshPassword method dekryptuje on-demand, nigdy nie cachując plaintext w memory.
+
+Container Name setting umożliwia switching między multiple containers bez reconnection do SSH. Application reattaches do nowego tmux session odpowiadającego wybranemu container name, maintaining separate console history dla każdego environment.
+
+## Keyboard Shortcuts
+
+- **Enter** - wysyła komendę w console input
+- **Ctrl+Enter** - wysyła chat message (say command)
+- **Enter** w input dialogach - potwierdza i wykonuje
+- **Escape** w input dialogach - anuluje bez wykonania
+- Drag window - kliknij i przeciągnij gdziekolwiek na window (nie tylko titlebar)
+
+## Troubleshooting
+
+**"No sessions" error** - Tmux session została stworzona przez innego użytkownika niż SSH user. Solution: kill session i recreate jako correct user.
+
+**Commands not executing** - Docker container nie został started z stdin_open: true. Solution: dodaj do docker-compose.yml i recreate container z --force-recreate.
+
+**Input dialog hidden** - Application set to Always on Top ale dialogs nie dziedziczą. Fixed w current version przez explicit Owner setting na wszystkich dialogach.
+
+## Licencja
+
+MIT License © Ogur Project
