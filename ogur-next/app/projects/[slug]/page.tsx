@@ -19,16 +19,19 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-    const { slug } = await params; // to zostaje async bo params jest Promise
+    const { slug } = await params;
     const project = allProjects.find((p) => p.slug === slug);
 
     if (!project) {
         return {};
     }
 
-    const ogImage = `/og/${project.slug}.png`;
+    const ogImagePath = `/og/${project.slug}.png`;
     const fallbackImage = '/og-image.png';
-    
+
+    const ogImageExists = fs.existsSync(path.join(process.cwd(), 'public', 'og', `${project.slug}.png`));
+    const image = ogImageExists ? ogImagePath : fallbackImage;
+
     return {
         title: project.title,
         description: project.description,
@@ -38,16 +41,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             url: `https://ogur.dev/projects/${project.slug}`,
             images: [
                 {
-                    url: ogImage,
+                    url: image,
                     width: 1200,
                     height: 630,
                     alt: project.title,
-                },
-                {
-                    url: fallbackImage,
-                    width: 1200,
-                    height: 630,
-                    alt: 'Ogur - Senior .NET Developer',
                 },
             ],
             type: 'article',
@@ -56,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             card: 'summary_large_image',
             title: project.title,
             description: project.description,
-            images: [ogImage, fallbackImage], 
+            images: [image],
         },
     };
 }
