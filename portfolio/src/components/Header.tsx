@@ -156,120 +156,120 @@ export const Header = () => {
                             <Line background="neutral-alpha-medium" vert maxHeight="24"/>
 
                             {routes["/about"] && (
-                                <>
-                                    <Row s={{hide: true}}>
-                                        <ToggleButton
-                                            prefixIcon="person"
-                                            href={H("/about")}
-                                            label={t('about')}
-                                            title={t('about')}
-                                            aria-label={t('about')}
-                                            selected={isAt("/about")}
-                                        />
-                                    </Row>
-                                    <Row hide s={{hide: false}}>
-                                        <ToggleButton
-                                            prefixIcon="person"
-                                            href={H("/about")}
-                                            label={t('about')}
-                                            title={t('about')}
-                                            aria-label={t('about')}
-                                            selected={isAt("/about")}
-                                        />
-                                    </Row>
-                                </>
-                            )}
+    <>
+        <Row s={{hide: true}}>
+            <ToggleButton
+                prefixIcon="person"
+                href={H("/about")}
+                label={t('about')}
+                title={t('about')}
+                aria-label={t('about')}
+                selected={isAt("/about")}
+            />
+        </Row>
+        <Row hide s={{hide: false}}>
+            <ToggleButton
+                prefixIcon="person"
+                href={H("/about")}
+                //label={t('about')}
+                title={t('about')}
+                aria-label={t('about')}
+                selected={isAt("/about")}
+            />
+        </Row>
+    </>
+)}
 
-                            {routes["/work"] && (
-                                <>
-                                    <Row s={{hide: true}}>
-                                        <ToggleButton
-                                            prefixIcon="grid"
-                                            href={H("/work")}
-                                            label={t('work')}
-                                            title={t('work')}
-                                            aria-label={t('work')}
-                                            selected={isUnder("/work")}
-                                        />
-                                    </Row>
-                                    <Row hide s={{hide: false}}>
-                                        <ToggleButton
-                                            prefixIcon="grid"
-                                            href={H("/work")}
-                                            //label={t('work')}
-                                            title={t('work')}
-                                            aria-label={t('work')}
-                                            selected={isUnder("/work")}
-                                        />
-                                    </Row>
-                                </>
-                            )}
+{routes["/work"] && (
+    <>
+        <Row s={{hide: true}}>
+            <ToggleButton
+                prefixIcon="grid"
+                href={H("/work")}
+                label={t('work')}
+                title={t('work')}
+                aria-label={t('work')}
+                selected={isUnder("/work")}
+            />
+        </Row>
+        <Row hide s={{hide: false}}>
+            <ToggleButton
+                prefixIcon="grid"
+                href={H("/work")}
+                //label={t('work')}
+                title={t('work')}
+                aria-label={t('work')}
+                selected={isUnder("/work")}
+            />
+        </Row>
+    </>
+)}
 
-                            {routes["/blog"] && (
-                                <>
-                                    <Row s={{hide: true}}>
-                                        <ToggleButton
-                                            prefixIcon="book"
-                                            href={H("/blog")}
-                                            label={t('blog')}
-                                            title={t('blog')}
-                                            aria-label={t('blog')}
-                                            selected={isUnder("/blog")}
-                                        />
-                                    </Row>
-                                    <Row hide s={{hide: false}}>
-                                        <ToggleButton
-                                            prefixIcon="book"
-                                            //label={t('blog')}
-                                            title={t('blog')}
-                                            aria-label={t('blog')}
-                                            href={H("/blog")}
-                                            selected={isUnder("/blog")}
-                                        />
-                                    </Row>
-                                </>
-                            )}
+{routes["/blog"] && (
+    <>
+        <Row s={{hide: true}}>
+            <ToggleButton
+                prefixIcon="book"
+                href={H("/blog")}
+                label={t('blog')}
+                title={t('blog')}
+                aria-label={t('blog')}
+                selected={isUnder("/blog")}
+            />
+        </Row>
+        <Row hide s={{hide: false}}>
+            <ToggleButton
+                prefixIcon="book"
+                href={H("/blog")}
+                //label={t('blog')}
+                title={t('blog')}
+                aria-label={t('blog')}
+                selected={isUnder("/blog")}
+            />
+        </Row>
+    </>
+)}
 
-                            {routes["/gallery"] && (
-                                <>
-                                    <Row s={{hide: false}}>
-                                        <ToggleButton
-                                            prefixIcon="gallery"
-                                            href={H("/gallery")}
-                                            label={t('gallery')}
-                                            title={t('gallery')}
-                                            aria-label={t('gallery')}
-                                            selected={isUnder("/gallery")}
-                                        />
-                                    </Row>
-                                    <Row hide s={{hide: false}}>
-                                        <ToggleButton
-                                            prefixIcon="gallery"
-                                            href={H("/gallery")}
-                                            //label={t('gallery')}
-                                            title={t('gallery')}
-                                            aria-label={t('gallery')}
-                                            selected={isUnder("/gallery")}
-                                        />
-                                    </Row>
-                                </>
-                            )}
+{/*{routes["/gallery"] && (
+    <>
+        <Row s={{hide: true}}>
+            <ToggleButton
+                prefixIcon="gallery"
+                href={H("/gallery")}
+                label={t('gallery')}
+                title={t('gallery')}
+                aria-label={t('gallery')}
+                selected={isUnder("/gallery")}
+            />
+        </Row>
+        <Row hide s={{hide: false}}>
+            <ToggleButton
+                prefixIcon="gallery"
+                href={H("/gallery")}
+                //label={t('gallery')}
+                title={t('gallery')}
+                aria-label={t('gallery')}
+                selected={isUnder("/gallery")}
+            />
+        </Row>
+    </>
+)}*/}
 
-                            {/* Sponsor buttons */}
-                            <Row s={{hide: true}}>
-                                <Suspense fallback={
-                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
-                                }>
-                                    <SponsorSwitcher showLabel={true} />
-                                </Suspense>
-                            </Row>
-                            <Row hide s={{hide: false}}>
-                                <Suspense fallback={
-                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
-                                }>
-                                    <SponsorSwitcher showLabel={false} />
-                                </Suspense>
-                            </Row>
+{/* Sponsor buttons */}
+<Row s={{hide: true}}>
+    <Suspense fallback={
+        <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+    }>
+        <SponsorSwitcher showLabel={true} />
+    </Suspense>
+</Row>
+<Row hide s={{hide: false}}>
+    <Suspense fallback={
+        <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+    }>
+        <SponsorSwitcher showLabel={false} />
+    </Suspense>
+</Row>
 
                             <Line background="neutral-alpha-medium" vert maxHeight="24"/>
 

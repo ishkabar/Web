@@ -1,4 +1,3 @@
-// src/components/CVDocument.tsx
 /*
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 
@@ -63,5 +62,4 @@ export const CVDocument = ({ person, work, technical }) => (
         </Page>
     </Document>
 );
-
- */
+*/
