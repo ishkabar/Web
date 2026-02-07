@@ -33,7 +33,12 @@
     "about": "Über mich",
     "work": "Projekte",
     "blog": "Blog",
-    "gallery": "Galerie"
+    "gallery": "Galerie",
+    "sponsor": {
+      "title": "Unterstützen",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
   },
   "footer": {
     "copyright": "© {year} Dominik Karczewski"
@@ -61,6 +66,18 @@
       "name": "Email",
       "icon": "email",
       "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
     }
   ],
   "routeGuard": {

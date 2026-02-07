@@ -2,6 +2,8 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { SponsorMenu } from "./SponsorMenu";
+
 
 export const Navigation: React.FC = () => {
 	const ref = useRef<HTMLElement>(null);
@@ -40,6 +42,7 @@ export const Navigation: React.FC = () => {
 						>
 							Kontakt
 						</Link>
+                        <SponsorMenu isIntersecting={isIntersecting} openUp={false} showLabel={true} showIcon={false} />
                         <Link
                             href="/legal"
                             className="duration-200 text-zinc-400 hover:text-zinc-100"

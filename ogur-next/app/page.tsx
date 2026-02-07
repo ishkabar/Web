@@ -2,10 +2,13 @@ import Link from 'next/link';
 import React from 'react';
 import Particles from './components/particles';
 import Slogan from '@/app/components/Slogan';
+import { SponsorMenu } from './components/SponsorMenu';
+
 
 const navigation = [
     {name: 'Projekty', href: '/projects'},
     {name: 'Kontakt', href: '/contact'},
+    {name: 'Sponsor', href: '#', isSponsor: true},
     {name: 'Regulamin', href: '/legal'},
 ];
 
@@ -16,6 +19,15 @@ export default function Home() {
             <nav className="my-16 animate-fade-in">
                 <ul className="flex items-center justify-center gap-7">
                     {navigation.map((item) => (
+                    item.isSponsor ? (
+                        <SponsorMenu
+                            key="sponsor"
+                            isIntersecting={true}
+                            openUp={true}
+                            showLabel={true}
+                            showIcon={false}
+                        />
+                    ) : (
                         <Link
                             key={item.href}
                             href={item.href}
@@ -23,6 +35,7 @@ export default function Home() {
                         >
                             {item.name}
                         </Link>
+                        )
                     ))}
                 </ul>
             </nav>

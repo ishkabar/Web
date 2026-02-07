@@ -3,6 +3,8 @@ import {ArrowLeft, Eye} from "lucide-react";
 import Link from "next/link";
 import React, {useEffect, useRef, useState} from "react";
 import {socials} from "@/lib/contact-data";
+import {SponsorMenu} from "@/app/components/SponsorMenu";
+
 
 type Props = {
     project: {
@@ -71,7 +73,7 @@ export const Header: React.FC<Props> = ({project, views}) => {
                    </span>
 
                         {/* Kontakty z lib/contact-data.ts */}
-                        {socials.slice(0, 4).map((social) => ( 
+                        {socials.slice(0, 4).map((social) => (
                             <Link
                                 key={social.label}
                                 target="_blank"
@@ -89,6 +91,10 @@ export const Header: React.FC<Props> = ({project, views}) => {
       </span>
                             </Link>
                         ))}
+                        <SponsorMenu isIntersecting={isIntersecting} openUp={false} showLabel={false} showIcon={true} />
+
+
+
                     </div>
 
                     <Link
@@ -98,7 +104,9 @@ export const Header: React.FC<Props> = ({project, views}) => {
                                 ? "text-zinc-400 hover:text-zinc-100"
                                 : "text-zinc-600 hover:text-zinc-900"
                         }`}
+
                     >
+
                         <ArrowLeft className="w-6 h-6"/>
                     </Link>
                 </div>

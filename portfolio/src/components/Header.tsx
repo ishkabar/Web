@@ -12,6 +12,8 @@ import {ThemeToggle} from "./ThemeToggle";
 import styles from "./Header.module.scss";
 import {locales, defaultLocale, type Locale} from "@/i18n/routing";
 import {useTranslations} from 'next-intl';
+import SponsorSwitcher from "@/components/SponsorSwitcher";
+
 
 const DEFAULT_TIMEZONE = "Europe/Warsaw";
 
@@ -252,6 +254,23 @@ export const Header = () => {
                                     </Row>
                                 </>
                             )}
+
+                            {/* Sponsor buttons */}
+                            <Row s={{hide: true}}>
+                                <Suspense fallback={
+                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+                                }>
+                                    <SponsorSwitcher showLabel={true} />
+                                </Suspense>
+                            </Row>
+                            <Row hide s={{hide: false}}>
+                                <Suspense fallback={
+                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+                                }>
+                                    <SponsorSwitcher showLabel={false} />
+                                </Suspense>
+                            </Row>
+
                             <Line background="neutral-alpha-medium" vert maxHeight="24"/>
 
                             {display.localeSwitcher && (

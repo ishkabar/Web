@@ -1,5 +1,14 @@
 import { IconType } from "react-icons";
 
+import { FaHeart } from "react-icons/fa6";
+import { CiHeart } from "react-icons/ci";
+import { FaHandHoldingHeart } from "react-icons/fa6";
+import { RiHeart2Line } from "react-icons/ri";
+
+
+
+
+
 import {
   HiArrowUpRight,
   HiOutlineLink,
@@ -63,6 +72,10 @@ export const iconLibrary: Record<string, IconType> = {
   whatsapp: FaWhatsapp,
   reddit: FaReddit,
   telegram: FaTelegram,
+  heart1: FaHeart,
+  heart2: CiHeart,
+  heart3: FaHandHoldingHeart,
+    heart4: RiHeart2Line
 };
 
 export type IconLibrary = typeof iconLibrary;
