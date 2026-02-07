@@ -72,6 +72,7 @@ export const iconLibrary: Record<string, IconType> = {
   whatsapp: FaWhatsapp,
   reddit: FaReddit,
   telegram: FaTelegram,
+    heart: RiHeart2Line,
   heart1: FaHeart,
   heart2: CiHeart,
   heart3: FaHandHoldingHeart,

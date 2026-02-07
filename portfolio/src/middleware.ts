@@ -2,7 +2,8 @@ import createMiddleware from 'next-intl/middleware';
 import {NextRequest, NextResponse} from 'next/server';
 import { locales, defaultLocale, enabledLocales } from "@/i18n/locales.generated";
 
-const BLOCKED_ROUTES = ['/about', '/gallery'];
+//const BLOCKED_ROUTES = ['/about', '/gallery'];
+const BLOCKED_ROUTES = ['/gallery'];
 
 const intlMiddleware = createMiddleware({locales, defaultLocale, localePrefix: 'always'});
 

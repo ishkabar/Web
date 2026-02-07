@@ -232,7 +232,7 @@ export const Header = () => {
 
                             {routes["/gallery"] && (
                                 <>
-                                    <Row s={{hide: true}}>
+                                    <Row s={{hide: false}}>
                                         <ToggleButton
                                             prefixIcon="gallery"
                                             href={H("/gallery")}

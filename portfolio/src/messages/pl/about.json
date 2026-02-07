@@ -5,24 +5,88 @@
   "description": "{name} – {role} z doświadczeniem w integracjach systemów ERP i architekturze rozwiązań.",
   "tableOfContent": { "display": true, "subItems": true },
   "avatar": { "display": true },
-  "calendar": { "display": true, "link": "", "cta": "" },
+  "calendar": { "display": false, "link": "", "cta": "" },
 
   "intro": {
     "display": true,
     "title": "Wprowadzenie",
-    "description": "Senior .NET Developer z wieloletnim doświadczeniem w projektowaniu i wdrażaniu systemów enterprise. Specjalizuję się w integracji systemów ERP, automatyzacji procesów biznesowych oraz budowie skalowalnych rozwiązań backendowych. Działam jako architekt rozwiązań i konsultant techniczny dla firm z sektora MŚP i enterprise."
+    "description": "Senior Backend Developer (.NET) specjalizujący się w integracjach systemów i tworzeniu API. Doświadczenie w budowaniu skalowalnych serwisów backendowych, implementacji automatycznych przepływów pracy i rozwiązywaniu złożonych wyzwań integracyjnych. Silny nacisk na jakość kodu, testowanie oraz nowoczesne praktyki developmentu włączając CI/CD i konteneryzację."
   },
 
   "work": {
     "display": true,
     "title": "Doświadczenie zawodowe",
-    "experiences": []
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "06.2025 - obecnie",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Projektowanie i tworzenie rozwiązań integracyjnych backend dla systemów ERP (Streamsoft Prestiż)",
+          "Budowa i utrzymanie RESTful Web API oraz Windows Services dla automatyzacji procesów biznesowych",
+          "Implementacja synchronizacji danych między wieloma bazami (Firebird, PostgreSQL, MySQL) przy użyciu LinqToDB ORM",
+          "Tworzenie aplikacji desktopowych w WPF z biblioteką komponentów DevExpress",
+          "Rozwój przepływów przetwarzania XML i synchronizacji danych przez FTP między systemami",
+          "Optymalizacja wydajności baz danych poprzez procedury składowane, triggery i optymalizację zapytań z kompleksowym logowaniem (NLog)"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Rozwój serwisów RESTful WebAPI z frontendem Blazor do importu danych i generowania raportów",
+          "Implementacja automatycznych przepływów przetwarzania plików Excel/CSV i operacji bazodanowych",
+          "Budowa systemu generowania raportów po stronie serwera wykonującego skrypty Python i PowerShell",
+          "Projektowanie i optymalizacja struktur baz danych SQL, zapytań i procedur składowanych",
+          "Tworzenie mechanizmów eksportu danych z generowaniem plików Excel",
+          "Utrzymanie i rozbudowa istniejących serwisów backend oraz API endpoints"
+        ],
+        "images": []
+      },
+      {
+        "company": "Autoryzowany Partner Comarch S.A.",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend Integration Developer",
+        "achievements": [
+          "Tworzenie złożonych integracji systemów ERP przy użyciu frameworków .NET Hydra i XLAPI",
+          "Budowa Windows Services dla automatycznej synchronizacji danych i automatyzacji procesów biznesowych",
+          "Rozwój rozbudowanej warstwy bazodanowej: procedury składowane, funkcje, triggery i SQL jobs",
+          "Projektowanie i implementacja modeli danych Business Intelligence w BI Point",
+          "Integracja modułów ERP z systemami zewnętrznymi przez custom API i data connectors",
+          "Zarządzanie bazami danych, optymalizacja zapytań i tuning wydajności systemów"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "Email Marketing Automation Specialist",
+        "achievements": [
+          "Analiza danych i ciągłe doskonalenie procesów automatyzacji w celu zwiększenia efektywności kampanii",
+          "Tworzenie niestandardowych rozwiązań poprzez modyfikację kodu HTML i CSS szablonów email",
+          "Współpraca z zespołami sprzedaży, kreatywnym i technicznym dla spójnych działań marketingowych",
+          "Praca z dużymi bazami kontaktów (ponad 600,000 osób) wymagająca efektywnego przetwarzania i analizy danych"
+        ],
+        "images": []
+      }
+    ]
   },
 
   "studies": {
     "display": true,
     "title": "Edukacja",
-    "institutions": []
+    "institutions": [
+      {
+        "name": "Warszawska Wyższa Szkoła Informatyki (WIT)",
+        "description": "Inżynieria, Systemy Informacyjne Zarządzania, specjalizacja Informatyka Stosowana (2020-2024)"
+      },
+      {
+        "name": "Zespół Szkół Elektronicznych w Radomiu",
+        "description": "Technik Informatyk (2013-2017)"
+      }
+    ]
   },
 
   "technical": {
@@ -30,51 +94,97 @@
     "title": "Kompetencje techniczne",
     "skills": [
       {
-        "title": "Backend & .NET",
-        "description": "Projektowanie i implementacja aplikacji w .NET 6-8, ASP.NET Core, Entity Framework. Tworzenie Windows Services, aplikacji konsolowych i REST API.",
+        "title": "Backend Development (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Projektowanie i implementacja skalowalnych serwisów backendowych, RESTful API, batch processing i automatyzacja procesów biznesowych.",
         "tags": [
-          { "name": "C#", "icon": "csharp" },
-          { "name": ".NET", "icon": "dotnet" },
-          { "name": "ASP.NET Core", "icon": "dotnet" }
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
         ],
         "images": []
       },
       {
-        "title": "Bazy danych",
-        "description": "Administracja i optymalizacja SQL Server, PostgreSQL, MySQL, Firebird. Projektowanie schematów, procedur składowanych i mechanizmów synchronizacji.",
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - custom callbacks, event-driven integrations, UI extensions. Integracje z zewnętrznymi serwisami, automatyzacja arkuszy Excel. Moduły: DMS (zarządzanie dokumentami), BI Point (Business Intelligence), WMS (magazyn), Automatyzacja Procesów, Produkcja.",
         "tags": [
-          { "name": "SQL Server", "icon": "database" },
-          { "name": "PostgreSQL", "icon": "database" },
-          { "name": "Firebird", "icon": "database" }
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Moduł Automatyzacja Procesów" },
+          { "name": "Moduł Produkcja" }
         ],
         "images": []
       },
       {
-        "title": "DevOps & Infrastruktura",
-        "description": "Konfiguracja środowisk produkcyjnych: Docker, Docker Compose, Traefik, Watchtower. Automatyzacja CI/CD z GitHub Actions. Zarządzanie VPS.",
+        "title": "Databases & Data Processing",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (procedury składowane, triggery, funkcje, SQL jobs, optymalizacja zapytań), ETL, zarządzanie bazami danych, tuning wydajności i synchronizacja między systemami.",
         "tags": [
-          { "name": "Docker", "icon": "docker" },
-          { "name": "GitHub Actions", "icon": "github" },
-          { "name": "Linux", "icon": "linux" }
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
         ],
         "images": []
       },
       {
-        "title": "Integracje systemów",
-        "description": "Integracja systemów ERP (Comarch, Prestiż, PcBiznes) z zewnętrznymi API, urządzeniami przemysłowymi i platformami e-commerce.",
+        "title": "ERP System Integrations",
+        "description": "Integracja systemów ERP (Streamsoft Prestiż, PCBiznes) z zewnętrznymi API, urządzeniami przemysłowymi, platformami płatności i systemami EDI. REST API, WebSocket, XML/JSON processing, XSLT transformations, FTP synchronization.",
         "tags": [
-          { "name": "REST API", "icon": "api" },
-          { "name": "Comarch Hydra", "icon": "code" },
-          { "name": "XML/JSON", "icon": "code" }
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
         ],
         "images": []
       },
       {
-        "title": "Desktop & WPF",
-        "description": "Aplikacje desktopowe w WPF z DevExpress. Wzorce MVVM, responsywne interfejsy, integracja z systemami backendowymi.",
+        "title": "DevOps & Infrastructure",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD pipelines, Traefik reverse proxy, Watchtower auto-updates. Linux (Ubuntu), Windows Server. Automatyzacja deployment, konteneryzacja i zarządzanie infrastrukturą produkcyjną.",
         "tags": [
-          { "name": "WPF", "icon": "windows" },
-          { "name": "DevExpress", "icon": "code" }
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & Frontend Development",
+        "description": "WPF, DevExpress component library, WinForms. Blazor, React (Next.js). Tworzenie aplikacji desktopowych z MVVM pattern, responsywne interfejsy użytkownika i integracja z systemami backendowymi.",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Tools & Development Practices",
+        "description": "Git/GitHub, PowerShell scripting, Python automation, NLog logging, Unit Testing, Code Review. Excel/CSV automation, report generation. Nowoczesne praktyki developmentu i współpracy w zespole.",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Unit Testing" },
+          { "name": "Code Review" },
+          { "name": "Excel automation" }
         ],
         "images": []
       }

@@ -1,80 +1,190 @@
 {
   "path": "/about",
-  "label": "About",
-  "title": "About – {name}",
-  "description": "{name} – {role} with expertise in ERP system integration and solution architecture.",
+  "label": "Über mich",
+  "title": "Über mich – {name}",
+  "description": "{name} – {role} mit Erfahrung in ERP-Systemintegrationen und Lösungsarchitektur.",
   "tableOfContent": { "display": true, "subItems": true },
   "avatar": { "display": true },
-  "calendar": { "display": true, "link": "", "cta": "" },
+  "calendar": { "display": false, "link": "", "cta": "" },
 
   "intro": {
     "display": true,
-    "title": "Introduction",
-    "description": "Senior .NET Developer with extensive experience in designing and implementing enterprise systems. I specialize in ERP system integration, business process automation, and building scalable backend solutions. I work as a solution architect and technical consultant for SMB and enterprise clients."
+    "title": "Einführung",
+    "description": "Senior Backend Developer (.NET) mit Spezialisierung auf Systemintegrationen und API-Entwicklung. Erfahrung im Aufbau skalierbarer Backend-Services, Implementierung automatisierter Workflows und Lösung komplexer Integrationsherausforderungen. Starker Fokus auf Codequalität, Testing und moderne Entwicklungspraktiken einschließlich CI/CD und Containerisierung."
   },
 
   "work": {
     "display": true,
-    "title": "Work Experience",
-    "experiences": []
-  },
-
-  "studies": {
-    "display": true,
-    "title": "Education",
-    "institutions": []
-  },
-
-  "technical": {
-    "display": true,
-    "title": "Technical Skills",
-    "skills": [
+    "title": "Berufserfahrung",
+    "experiences": [
       {
-        "title": "Backend & .NET",
-        "description": "Designing and implementing applications in .NET 6-8, ASP.NET Core, Entity Framework. Building Windows Services, console applications, and REST APIs.",
-        "tags": [
-          { "name": "C#", "icon": "csharp" },
-          { "name": ".NET", "icon": "dotnet" },
-          { "name": "ASP.NET Core", "icon": "dotnet" }
+        "company": "Artex IT",
+        "timeframe": "06.2025 - heute",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Design und Entwicklung von Backend-Integrationslösungen für ERP-Systeme (Streamsoft Prestiż)",
+          "Aufbau und Wartung von RESTful Web APIs und Windows Services für automatisierte Geschäftsprozesse",
+          "Implementierung der Datensynchronisation über mehrere Datenbanken (Firebird, PostgreSQL, MySQL) mit LinqToDB ORM",
+          "Entwicklung von Desktop-Anwendungen mit WPF und DevExpress-Komponentenbibliothek",
+          "Erstellung von XML-Verarbeitungsworkflows und FTP-basierter Datensynchronisation zwischen Systemen",
+          "Optimierung der Datenbankleistung durch gespeicherte Prozeduren, Trigger und Query-Optimierung mit umfassendem Logging (NLog)"
         ],
         "images": []
       },
       {
-        "title": "Databases",
-        "description": "Administration and optimization of SQL Server, PostgreSQL, MySQL, Firebird. Schema design, stored procedures, and synchronization mechanisms.",
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Entwicklung von RESTful WebAPI-Services mit Blazor-Frontend für Datenimport und Berichtsgenerierung",
+          "Implementierung automatisierter Workflows für die Verarbeitung von Excel/CSV-Dateien und Datenbankoperationen",
+          "Aufbau eines serverseitigen Berichtsgenerierungssystems zur Ausführung von Python- und PowerShell-Skripten",
+          "Design und Optimierung von SQL-Datenbankstrukturen, Abfragen und gespeicherten Prozeduren",
+          "Erstellung von Datenexportmechanismen mit Excel-Output-Generierung",
+          "Wartung und Erweiterung bestehender Backend-Services und API-Endpunkte"
+        ],
+        "images": []
+      },
+      {
+        "company": "Autorisierter Partner von Comarch S.A.",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend Integration Developer",
+        "achievements": [
+          "Entwicklung komplexer ERP-Systemintegrationen mit .NET Hydra und XLAPI Frameworks",
+          "Aufbau von Windows Services für automatische Datensynchronisation und Geschäftsprozessautomatisierung",
+          "Entwicklung umfangreicher Datenbankschicht: gespeicherte Prozeduren, Funktionen, Trigger und SQL Jobs",
+          "Design und Implementierung von Business Intelligence Datenmodellen in BI Point",
+          "Integration von ERP-Modulen mit externen Systemen über Custom APIs und Data Connectors",
+          "Durchführung von Datenbankverwaltung, Query-Optimierung und System-Performance-Tuning"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "Email Marketing Automation Specialist",
+        "achievements": [
+          "Datenanalyse und kontinuierliche Verbesserung von Automatisierungsprozessen zur Steigerung der Kampagneneffizienz",
+          "Entwicklung maßgeschneiderter Lösungen durch Modifikation von HTML- und CSS-Code für E-Mail-Vorlagen",
+          "Zusammenarbeit mit Vertriebs-, Kreativ- und Technikteams zur Sicherstellung kohärenter Marketingaktionen",
+          "Arbeit mit großen Kontaktdatenbanken (über 600.000 Personen) mit effizienter Datenverarbeitung und -analyse"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Ausbildung",
+    "institutions": [
+      {
+        "name": "Warschauer Hochschule für Informationstechnologie (WIT)",
+        "description": "Bachelor of Engineering, Management-Informationssysteme, Spezialisierung Angewandte Informatik (2020-2024)"
+      },
+      {
+        "name": "Elektronik-Schulzentrum in Radom",
+        "description": "Computer-Techniker (2013-2017)"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Technische Kompetenzen",
+    "skills": [
+      {
+        "title": "Backend Development (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Design und Implementierung skalierbarer Backend-Services, RESTful APIs, Batch-Processing und Geschäftsprozessautomatisierung.",
         "tags": [
-          { "name": "SQL Server", "icon": "database" },
-          { "name": "PostgreSQL", "icon": "database" },
-          { "name": "Firebird", "icon": "database" }
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - Custom Callbacks, Event-Driven Integrations, UI Extensions. Integration mit externen Services, Excel-Automatisierung. Module: DMS (Dokumentenverwaltung), BI Point (Business Intelligence), WMS (Lager), Prozessautomatisierung, Produktion.",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Modul Prozessautomatisierung" },
+          { "name": "Produktionsmodul" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Databases & Data Processing",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (gespeicherte Prozeduren, Trigger, Funktionen, SQL Jobs, Query-Optimierung), ETL, Datenbankverwaltung, Performance-Tuning und systemübergreifende Synchronisation.",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ERP System Integrations",
+        "description": "Integration von ERP-Systemen (Streamsoft Prestiż, PCBiznes) mit externen APIs, Industriegeräten, Zahlungsplattformen und EDI-Systemen. REST API, WebSocket, XML/JSON-Verarbeitung, XSLT-Transformationen, FTP-Synchronisation.",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
         ],
         "images": []
       },
       {
         "title": "DevOps & Infrastructure",
-        "description": "Production environment configuration: Docker, Docker Compose, Traefik, Watchtower. CI/CD automation with GitHub Actions. VPS management.",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD-Pipelines, Traefik Reverse Proxy, Watchtower Auto-Updates. Linux (Ubuntu), Windows Server. Deployment-Automatisierung, Containerisierung und Produktionsinfrastruktur-Management.",
         "tags": [
-          { "name": "Docker", "icon": "docker" },
-          { "name": "GitHub Actions", "icon": "github" },
-          { "name": "Linux", "icon": "linux" }
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
         ],
         "images": []
       },
       {
-        "title": "System Integration",
-        "description": "Integration of ERP systems (Comarch, Prestiż, PcBiznes) with external APIs, industrial devices, and e-commerce platforms.",
+        "title": "Desktop & Frontend Development",
+        "description": "WPF, DevExpress-Komponentenbibliothek, WinForms. Blazor, React (Next.js). Erstellung von Desktop-Anwendungen mit MVVM-Pattern, responsive Benutzeroberflächen und Backend-Systemintegration.",
         "tags": [
-          { "name": "REST API", "icon": "api" },
-          { "name": "Comarch Hydra", "icon": "code" },
-          { "name": "XML/JSON", "icon": "code" }
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
         ],
         "images": []
       },
       {
-        "title": "Desktop & WPF",
-        "description": "Desktop applications in WPF with DevExpress. MVVM patterns, responsive interfaces, backend system integration.",
+        "title": "Tools & Development Practices",
+        "description": "Git/GitHub, PowerShell-Skripting, Python-Automatisierung, NLog-Logging, Unit Testing, Code Review. Excel/CSV-Automatisierung, Berichtsgenerierung. Moderne Entwicklungspraktiken und Teamzusammenarbeit.",
         "tags": [
-          { "name": "WPF", "icon": "windows" },
-          { "name": "DevExpress", "icon": "code" }
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Unit Testing" },
+          { "name": "Code Review" },
+          { "name": "Excel-Automatisierung" }
         ],
         "images": []
       }
