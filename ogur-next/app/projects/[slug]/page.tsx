@@ -7,7 +7,9 @@ import { ReportView } from "./view";
 import { redis } from "@/lib/redis";
 import { Contact } from "@/app/components/contact";
 import { Metadata } from 'next';
-import { ArticleSchema } from '@/app/components/article-schema'; 
+import { ArticleSchema } from '@/app/components/article-schema';
+import fs from 'fs';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 30;
