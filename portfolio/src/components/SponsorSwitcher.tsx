@@ -41,13 +41,13 @@ export default function SponsorSwitcher({ showLabel = false }: SponsorSwitcherPr
         {
             key: 'github',
             label: t('github'),
-            url: 'https://github.com/sponsors/yourusername',
+            url: 'https://github.com/sponsors/ishkabar/',
             icon: '💜'
         },
         {
             key: 'patreon',
             label: t('patreon'),
-            url: 'https://patreon.com/yourusername',
+            url: 'https://www.patreon.com/c/DominikKarczewski',
             icon: '❤️'
         }
     ];
