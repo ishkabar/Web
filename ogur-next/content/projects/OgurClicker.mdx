@@ -1,0 +1,155 @@
+---
+title: "Ogur Clicker"
+description: "Precyzyjny auto-clicker z zaawansowanym systemem global hotkeys, wieloma metodami input i obsługą hooków myszy/klawiatury dla Windows"
+date: "2025-02-07"
+url: https://github.com/ishkabar/ogur-clicker
+repository: ishkabar/ogur-clicker
+category: "archived"
+published: true
+---
+
+Wysokoprecyzyjny auto-clicker dla Windows stworzony w WPF z architekturą MVVM. Ogur Clicker oferuje capture pozycji ekranu jednym kliknięciem, rejestrację global hotkeys z kombinacjami modyfikatorów, cztery różne metody input (SendInput, SendInput Hardware, PostMessage, DirectInput), oraz opcjonalny powrót kursora do oryginalnej pozycji. System wykorzystuje low-level Windows hooks (WH_MOUSE_LL, WH_KEYBOARD_LL) do przechwytywania zdarzeń globalnych bez względu na focus aplikacji.
+
+![Główny interfejs aplikacji](https://files.ogur.dev/public/clickerMainView.png)
+
+## Główne funkcje
+
+###### Capture Pozycji Jednym Kliknięciem
+PositionCaptureService wykorzystuje global mouse hook do przechwytywania współrzędnych ekranu w czasie rzeczywistym. Kliknięcie "Capture Position" aktywuje hook, następne kliknięcie LMB gdziekolwiek na ekranie zapisuje dokładne współrzędne X,Y do ViewModelu. Hook automatycznie wyłącza się po capture, minimalizując overhead systemowy.
+
+###### Global Hotkeys z Kombinacjami
+System wspiera rejestrację hotkeys z dowolnej kombinacji klawiszy klawiatury lub przycisków myszy (MB3/MB4/MB5) z modyfikatorami Ctrl/Alt/Shift. LMB i RMB są zablokowane jako hotkeys aby zapobiec interferencji z normalną pracą systemu. Wykorzystuje RegisterHotKey API dla klawiszy oraz custom mouse hook dla przycisków myszy, zapewniając globalną aktywację bez focus na aplikację.
+
+###### Cztery Metody Input
+**SendInput** - standardowa metoda Win32 API najlepsza dla większości aplikacji. **SendInput Hardware** - wariant z flagą INPUT_HARDWARE dla zwiększonej kompatybilności z anti-cheat. **PostMessage** - wysyła WM_LBUTTONDOWN/UP do window handle z automatyczną detekcją okna pod kursorem. **DirectInput** - legacy mouse_event API dla starszych aplikacji wymagających bezpośredniego input.
+
+###### Powrót Kursora do Pozycji Oryginalnej
+Opcjonalna funkcja "Return to Original Position" zapisuje aktualną pozycję kursora przed wykonaniem kliknięcia, wykonuje click w docelowej lokalizacji, czeka 15ms, następnie przywraca cursor do oryginalnej pozycji. Przydatne dla scenariuszy gdzie kursor nie powinien pozostać w miejscu kliknięcia.
+
+###### Always on Top
+Toggle pozwalający przypięcie okna aplikacji ponad wszystkimi innymi oknami. Property IsAlwaysOnTop w MainViewModel synchronizuje się z Window.Topmost przez PropertyChanged event, zapewniając natychmiastową reakcję UI bez restartu aplikacji.
+
+###### System Licencji z Wygaśnięciem
+Wbudowany mechanizm wygasania licencji sprawdzający aktualną datę przeciwko hardcoded expiration date (12 grudnia 2025). Po wygaśnięciu aplikacja pokazuje LicenseWindow z alertem dźwiękowym SystemSounds.Hand zamiast normalnego LoginWindow, blokując dostęp do funkcjonalności.
+
+## Architektura
+
+Projekt zorganizowany jako multi-project solution z wyraźnym separation of concerns: Core dla abstrakcji i modeli, Infrastructure dla implementacji platform-specific, Host dla warstwy prezentacji WPF.
+
+**Ogur.Clicker.Core** - definicje modeli domain: ClickAction (X, Y, MouseButton), MouseButton enum (Left/Right/Middle), MouseInputMethod enum (SendInput/SendInputHardware/PostMessage/DirectInput). Interfejsy serwisów: IMouseService, IMouseHookService, IKeyboardHookService, IPositionCaptureService, IGlobalMouseHotkeyService, IGlobalKeyboardHotkeyService. Zero dependencies, czyste C# contracts.
+
+**Ogur.Clicker.Infrastructure** - implementacje platform-dependent przez P/Invoke do user32.dll i kernel32.dll. MouseService z metodami SetCursorPos, GetCursorPos, SendInput, PostMessage, mouse_event. MouseHookService implementuje WH_MOUSE_LL hook z SetWindowsHookEx do przechwytywania LMB/RMB/MMB/MB4/MB5. KeyboardHookService implementuje WH_KEYBOARD_LL hook z detekcją modyfikatorów przez GetKeyState. GlobalMouseHotkeyService i GlobalKeyboardHotkeyService zarządzają rejestracją i triggerowaniem hotkeys z flagą _ignoreNextTrigger zapobiegającą double-firing.
+
+**Ogur.Clicker.Host** - warstwa WPF z MVVM pattern. Views: LoginWindow z drag-move i close button, MainWindow z emergency exit Ctrl+Alt+Q, LicenseWindow dla expired license. ViewModels: LoginViewModel basic, MainViewModel orchestruje wszystkie services i komendy, LicenseViewModel basic. Commands przez RelayCommand z CanExecute logic. Dependency injection przez Microsoft.Extensions.DependencyInjection w App.xaml.cs z Generic Host pattern.
+
+Komunikacja między warstwami odbywa się wyłącznie przez dependency injection. Host rejestruje wszystkie services jako singletons, ViewModels jako transients. ViewModels subskrybują eventy z services (PositionCaptured, HotkeyCaptured, HotkeyTriggered) i aktualizują state przez ViewModelBase.SetProperty z automatycznym OnPropertyChanged.
+
+## Serwisy Infrastructure
+
+**MouseService** - niskopoziomowa obsługa input myszy przez Win32 API. TryClick(ClickAction, MouseInputMethod) najpierw SetCursorPos na target coordinates, czeka 10ms dla symulacji human behavior, następnie wykonuje click przez wybraną metodę. ClickUsingSendInput buduje tablicę INPUT[2] z down/up events, ClickUsingPostMessage wykrywa window handle przez WindowFromPoint i wysyła WM_* messages, ClickUsingMouseEvent używa legacy mouse_event. GetCurrentPosition zwraca aktualny cursor position przez GetCursorPos.
+
+**MouseHookService** - implementacja low-level mouse hook. SetWindowsHookEx z WH_MOUSE_LL instaluje global hook, HookCallback przetwarza WM_LBUTTONDOWN/RBUTTONDOWN/MBUTTONDOWN/XBUTTONDOWN. Event LeftButtonClicked dla position capture, MouseButtonClicked z virtual key code dla hotkey registration. StartListening/StopListening zarządzają lifecycle hooka z walidacją _hookId != IntPtr.Zero. Dispose pattern zapewnia unhook przy shutdown.
+
+**KeyboardHookService** - implementacja low-level keyboard hook. SetWindowsHookEx z WH_KEYBOARD_LL, HookCallback przetwarza WM_KEYDOWN i WM_SYSKEYDOWN. Detekcja modyfikatorów przez IsKeyPressed(VK_CONTROL/VK_MENU/VK_SHIFT) sprawdzając bit 0x8000 w GetKeyState. Event KeyPressed z (virtualKey, isCtrl, isAlt, isShift) tuple dla hotkey capture.
+
+**GlobalMouseHotkeyService** - zarządzanie hotkeys z przycisków myszy. StartCapture aktywuje MouseHookService, OnMouseButtonClicked w trybie capture wywołuje HotkeyCaptured event i stopuje capture. RegisterHotkey blokuje LMB/RMB (virtual keys 0x01/0x02), zapisuje registered state z virtual key i modifiers, ustawia _ignoreNextTrigger=true. W trybie trigger porównuje aktualny event z registered hotkey, skipuje pierwszy trigger po rejestracji, następnie wywołuje HotkeyTriggered.
+
+**GlobalKeyboardHotkeyService** - zarządzanie hotkeys z klawiatury. StartCapture aktywuje KeyboardHookService, OnKeyPressed w trybie capture wywołuje HotkeyCaptured. RegisterHotkey(IntPtr windowHandle, ...) używa Win32 RegisterHotKey API z MOD_CONTROL/MOD_ALT/MOD_SHIFT modifiers i HOTKEY_ID=9001. HwndSource.AddHook rejestruje HwndHook callback przechwytujący WM_HOTKEY=0x0312. _ignoreNextTrigger zapobiega immediate trigger po rejestracji.
+
+**PositionCaptureService** - wrapper nad MouseHookService dla single-click capture. StartCapture ustawia _isCapturing=true i włącza hook. OnMouseClicked sprawdza flagę, stopuje capture, stopuje hook, wywołuje PositionCaptured event z Point. Simple state machine zapewniający one-shot behavior.
+
+## ViewModels i Commands
+
+**MainViewModel** - centralny orchestrator całej aplikacji. Properties: ClickX/ClickY dla target coordinates, SelectedButton (Left/Right/Middle), SelectedMethod (enum MouseInputMethod), ReturnToOriginalPosition bool, IsAlwaysOnTop bool, StatusMessage dla user feedback, HotkeyDisplay string representation hotkey. Commands: CapturePositionCommand wywołuje PositionCaptureService.StartCapture, CaptureHotkeyCommand startuje oba hotkey services jednocześnie, ExecuteClickCommand wykonuje click z optional cursor return, TestClickCommand robi click w current position dla testów.
+
+Event handlers: OnPositionCaptured aktualizuje ClickX/ClickY i StatusMessage przez Dispatcher.Invoke. OnMouseHotkeyCaptured blokuje LMB/RMB, unregisteruje keyboard hotkey jeśli był registered, rejestruje mouse hotkey, stopuje keyboard capture. OnKeyboardHotkeyCaptured unregisteruje mouse hotkey, rejestruje keyboard hotkey przez RegisterHotKey API, stopuje mouse capture. OnHotkeyTriggered wywołuje ExecuteClick przez dispatcher.
+
+ExecuteClick logic: jeśli ReturnToOriginalPosition zapisuje current position, wykonuje TryClick, czeka 15ms, przywraca cursor. UpdateHotkeyDisplay formatuje string z modifiers (Ctrl+/Alt+/Shift+) plus key name, dla mouse buttons mapuje virtual codes na "LMB"/"RMB"/"MMB"/"MB4"/"MB5", dla keyboard keys używa KeyInterop.KeyFromVirtualKey.
+
+**ViewModelBase** - base class z INotifyPropertyChanged implementation. OnPropertyChanged wywołuje event, SetProperty<T> sprawdza equality, ustawia field, wywołuje OnPropertyChanged. Pattern używany przez wszystkie ViewModels dla automatic UI updates przez binding.
+
+**LoginViewModel** i **LicenseViewModel** - basic ViewModels bez special logic, głównie placeholders dla future expansion z authentication lub license management features.
+
+## Windows i Application Lifecycle
+
+**App.xaml.cs** - entry point aplikacji z Generic Host setup. Application_Startup konfiguruje unhandled exception handlers przez AppDomain.CurrentDomain.UnhandledException, DispatcherUnhandledException, TaskScheduler.UnobservedTaskException - wszystkie wywołują Environment.Exit(1) dla immediate shutdown bez cleanup. Watchdog timer 30s dla detection UI freeze. Host.CreateDefaultBuilder konfiguruje DI: wszystkie services jako singletons, ViewModels i Windows jako transients. License validation sprawdza DateTime.Now > expirationDate, pokazuje LicenseWindow z SystemSounds.Hand alert lub LoginWindow.
+
+OnExit cleanup: stopuje wszystkie hooks przez StopListening przed Dispose, force cleanup mouseHook i keyboardHook przez explicit calls, dispose Host, base.OnExit, następnie Environment.Exit(0) dla force terminate. Critical dla zapewnienia unhook przed exit, inaczej hooks mogą pozostać aktywne powodując system instability.
+
+**MainWindow** - główne okno aplikacji. Emergency exit przez KeyDown handler sprawdzający Ctrl+Alt+Q combination wywołujący Environment.Exit(0). PropertyChanged subscription na MainViewModel.IsAlwaysOnTop aktualizuje Window.Topmost property dla always-on-top functionality.
+
+**LoginWindow** - okno startowe z drag-move functionality przez Window_MouseLeftButtonDown wywołujący DragMove(). ContinueButton_Click resolve MainWindow z DI, ustawia Application.Current.MainWindow (CRITICAL dla proper lifecycle), pokazuje MainWindow, zamyka LoginWindow. CloseButton_Click wywołuje Application.Current.Shutdown().
+
+## Hook Management i Safety
+
+**Critical Hook Handling** - LMB i RMB (virtual keys 0x01 i 0x02) są ZABLOKOWANE jako hotkeys w GlobalMouseHotkeyService.RegisterHotkey i OnMouseHotkeyCaptured. Używanie LMB/RMB jako hotkeys powoduje interferację z normalnym system behavior i może prowadzić do deadlocków gdzie user nie może kliknąć aby wyłączyć aplikację.
+
+**Ignore Next Trigger Pattern** - zarówno GlobalMouseHotkeyService jak GlobalKeyboardHotkeyService używają _ignoreNextTrigger flag. Po rejestracji hotkey flaga=true, pierwszy trigger po rejestracji jest skipowany, następne triggery są procesowane normalnie. Zapobiega to natychmiastowemu wykonaniu click gdy user naciska hotkey aby go zarejestrować.
+
+**Proper Hook Cleanup** - App.OnExit wywołuje StopListening na wszystkich hookach PRZED Dispose. Hooks muszą być unhook przez UnhookWindowsHookEx przed application exit, inaczej system może pozostać w invalid state z dangling hooks. Explicit try/catch wokół cleanup zapewnia best-effort cleanup nawet przy exceptions.
+
+**Dispatcher.Invoke dla Thread Safety** - wszystkie event handlers z hook callbacks wywołują Dispatcher.Invoke aby marshal z hook thread (background) na UI thread. Modyfikacje ViewModelu i UI muszą odbywać się na UI thread dla thread safety i zapobiegania cross-thread exceptions.
+
+## Emergency Controls
+
+**Ctrl+Alt+Q Exit** - MainWindow.KeyDown handler sprawdza kombinację Ctrl+Alt+Q i wywołuje Environment.Exit(0) dla immediate termination. Critical escape hatch gdy aplikacja jest w bad state lub hotkeys nie działają. Bypass normalnego shutdown flow dla guaranteed exit.
+
+**Watchdog Timer** - 30-sekundowy DispatcherTimer w App.xaml.cs który restartuje się przy każdym tick. Jeśli UI thread jest responsive, timer ticks i restartuje. Jeśli UI freeze, timer może nie tick ale to nie force exit - głównie monitoring/logging purpose. Faktyczny exit przez unhandled exception handlers.
+
+**Unhandled Exception Handlers** - trzech handlers: UnhandledException dla non-UI threads, DispatcherUnhandledException dla UI thread, UnobservedTaskException dla async task exceptions. Wszystkie wywołują Environment.Exit(1) dla immediate shutdown bez cleanup. Design decision: prefer crash over undefined behavior z dangling hooks.
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12 z nullable reference types
+- **UI:** WPF z MVVM pattern
+- **DI/Hosting:** Microsoft.Extensions (DependencyInjection, Hosting)
+- **Platform:** Windows API (user32.dll, kernel32.dll) przez P/Invoke
+- **Hooks:** WH_MOUSE_LL (14), WH_KEYBOARD_LL (13)
+- **Input:** SendInput, PostMessage, mouse_event, RegisterHotKey
+- **Architecture:** Clean Architecture z Core/Infrastructure/Host layers
+
+## Wymagania
+
+- **OS:** Windows 10/11
+- **Runtime:** .NET 8.0 Desktop Runtime
+- **Uprawnienia:** Administrator privileges zalecane dla global hooks
+- **Dependencies:** Brak external dependencies poza .NET runtime
+
+## Użycie
+
+1. Uruchom aplikację - pokazuje się LoginWindow
+2. Kliknij "Continue" aby przejść do MainWindow
+3. Kliknij "Capture Position" → kliknij w dowolnym miejscu ekranu aby zapisać współrzędne
+4. Kliknij "Capture Hotkey" → naciśnij kombinację klawiszy/przycisków myszy (unikaj LMB/RMB)
+5. Wybierz MouseButton (Left/Right/Middle) i InputMethod (SendInput/PostMessage/etc)
+6. Opcjonalnie włącz "Return to Original Position" i/lub "Always on Top"
+7. Trigger hotkey aby wykonać click w zapisanych współrzędnych
+8. "Test Click" wykonuje click w aktualnej pozycji kursora dla testów
+9. Ctrl+Alt+Q dla emergency exit
+
+## Konfiguracja
+
+Brak external configuration files - wszystkie settings w runtime przez UI. License expiration date hardcoded w App.xaml.cs (DateTime(2025, 12, 12)). Modyfikacja wymaga recompile.
+
+Dependency injection konfiguracja w App.xaml.cs:
+```csharp
+services.AddSingleton<IMouseService, MouseService>();
+services.AddSingleton<IMouseHookService, MouseHookService>();
+services.AddSingleton<IKeyboardHookService, KeyboardHookService>();
+services.AddSingleton<IPositionCaptureService, PositionCaptureService>();
+services.AddSingleton<IGlobalMouseHotkeyService, GlobalMouseHotkeyService>();
+services.AddSingleton<IGlobalKeyboardHotkeyService, GlobalKeyboardHotkeyService>();
+```
+
+## Known Issues
+
+**Hook Persistence** - jeśli aplikacja crash bez proper cleanup, hooks mogą pozostać aktywne. Solution: restart systemu lub kill procesu przez Task Manager.
+
+**PostMessage Compatibility** - PostMessage method może nie działać z niektórymi aplikacjami używającymi DirectInput lub innych low-level input methods. Fallback do SendInput lub DirectInput.
+
+**Hotkey Conflicts** - jeśli wybrany hotkey jest już registered przez inną aplikację, RegisterHotKey zwraca false. StatusMessage pokazuje "Failed to register hotkey (maybe already in use)". User musi wybrać inny hotkey.
+
+## Licencja
+
+MIT License © Ogur Project

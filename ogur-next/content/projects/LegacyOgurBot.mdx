@@ -1,0 +1,185 @@
+---
+title: "OgurBot (Legacy)"
+description: "Wczesny eksperymentalny bot do wędkowania w Metin2 z memory scanning i keyboard simulation - archived learning project"
+date: "2024-01-15"
+url: https://github.com/ishkabar/OgurBot
+repository: ishkabar/OgurBot
+category: "archived"
+published: true
+tags: ["archived", "legacy", "learning-project"]
+---
+
+⚠️ **PROJEKT ARCHIWALNY** - Wczesny eksperymentalny bot do automatyzacji wędkowania w Metin2. Ten kod reprezentuje moje pierwsze kroki w automatyzacji gier i interakcji z Windows API. **Brzydze się jak patrzę na ten kod** - jakość nie odzwierciedla obecnych standardów, ale zachowuję go jako dokumentację mojej drogi rozwoju.
+
+![Legacy OgurBot Interface](https://files.ogur.dev/public/legacyOgurBotMainView.png)
+
+## Historia i Kontekst
+
+To był mój pierwszy projekt związany z game automation i low-level Windows programming. Kod pełen jest eksperymentów, redundantnych implementacji, i rozwiązań typu "sprawdźmy czy to w ogóle zadziała". Wiele rzeczy tutaj to anti-patterns których obecnie unikam, ale projekt pokazuje proces uczenia się przez trial and error.
+
+Główne problemy z którymi się zmagałem:
+- Jak czytać pamięć innego procesu
+- Czym są AOB patterns i jak ich szukać
+- Jak symulować klawiaturę aby gra to akceptowała
+- Dlaczego polskie znaki wyświetlają się jako "?g|0'?" (encoding hell)
+- Które API użyć: keybd_event vs SendInput vs co innego
+
+Rezultat: 4 różne implementacje keyboard simulatora, 2-3 memory scannerów, mnóstwo commented code z notatkami "DO WYJEBANIA", i działający (mniej więcej) bot do wędkowania.
+
+## Anty-Funkcje (czego NIE robić)
+
+###### Wielokrotne Redundantne Implementacje
+Projekt zawiera **cztery różne** implementacje keyboard simulation (KeyboardSimulator, KeyboardSimulator2, KeyboardSimulator3, KeySimulator) testujące różne podejścia. KeyboardSimulator2 oznaczony komentarzem "DO WYJEBANIA" ale nigdy nie usunięty. Dwa różne memory scannery (MemoryScanner i MemoryScanner2) z różnymi strategiami. To pokazuje brak zrozumienia kiedy wybrać jedno rozwiązanie i trzymać się go.
+
+###### Hardcoded Everything
+AOB patterns hardcoded jako byte arrays w classach. Memory offsets jako magic numbers. Polish fishing messages jako string literals z corrupted encoding `"nij 1 spacji aby wy"`. Żadnej konfiguracji, wszystko wkompilowane. Zmiana wzorca = recompile.
+
+###### Zero Error Handling
+P/Invoke calls do OpenProcess, ReadProcessMemory, SetWindowsHookEx bez sprawdzania return values. Jeśli coś nie zadziała, aplikacja po prostu crashuje lub milczy. Brak try-catch, brak logging, brak user feedback o błędach.
+
+###### Encoding Horror
+Metin2 używa Windows-1250, ja czytam jako UTF-8, rezultat: `"?g|0'?"` zamiast polskich znaków. KnownKeys zawiera zarówno `"|cff27c112"` (hex color code który akurat działa) jak i `"??"` (garbage z failed encoding). Lookup działa ale przypadkowo.
+
+###### Brak Abstrakcji
+Services to static classes z public static methods wywołującymi bezpośrednio Win32 API. Żadnych interfejsów, dependency injection, testability. MainForm prawdopodobnie bezpośrednio wywołuje te statyczne metody. God classes everywhere.
+
+###### Polska/Angielska Mieszanka
+Kod mixing Polish variable names, English API names, Polish comments, English struct names. `LookForMessage`, `KnownKeys`, ale messages content po polsku. Inconsistent naming conventions.
+
+## Funkcjonalność (która działa)
+
+###### Memory Scanning z VirtualQueryEx
+MemoryScanner2 używa `VirtualQueryEx` do enumeracji committed memory regions w target process. Iteruje przez MEMORY_BASIC_INFORMATION structs, sprawdza State==0x1000 (MEM_COMMIT), czyta region przez ReadProcessMemory, skanuje byte-by-byte dla AOB pattern match. Zwraca IntPtr do pierwszego znalezionego match lub IntPtr.Zero.
+
+Pattern dla fishing detection:
+```csharp
+byte[] pattern = new byte[] {
+    0x8B, 0x44, 0x24, 0x18, 0x8B, 0x4C, 0x24, 0x24,
+    0x0F, 0x11, 0x00, 0x03, 0xC1, 0x0F, 0x11, 0x08
+};
+```
+
+###### Memory Reading dla Fishing Messages
+MemoryReader.LookForMessage() otwiera process handle z PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, alokuje buffer, wywołuje ReadProcessMemory, konwertuje bytes do UTF-8 string, sprawdza czy zawiera KnownKeys patterns.
+
+KnownKeys dla detection:
+- `"|cff27c112"` - color code prefix w Metin2 chat messages
+- `"?g|0'?"`, `"??"` - corrupted polish characters z encoding mismatch
+- `"nij 1 spacji aby wy"` - fragment "Naciśnij X spacji aby wyłowić rybę"
+
+Lookup wymaga second group match (`nij 1/2/3 spacji`) dla accuracy. First group (color codes) optional.
+
+###### Keyboard Simulation przez SendInput
+KeySimulator.PressKey() tworzy Input array z dwoma elementami: KEYDOWN i KEYUP. Input struct zawiera type=1 (keyboard), InputUnion z KeyboardInput containing wVk (virtual key code), wScan (scan code), dwFlags (KEYEVENTF_KEYDOWN | KEYEVENTF_SCANCODE dla down, KEYEVENTF_KEYUP | KEYEVENTF_SCANCODE dla up). Wywołuje SendInput() dwukrotnie dla complete key press simulation.
+
+Alternative implementations:
+- KeyboardSimulator: `keybd_event(VK_SPACE, 0, KEYEVENTF_KEYDOWN, 0)` z Thread.Sleep(100)
+- KeyboardSimulator2: SendInput z KEYBDINPUT struct (marked for deletion)
+- KeyboardSimulator3: Simple keybd_event wrapper z 50ms delay
+
+###### Global Keyboard Hook
+KeyboardHook.HookKeyboard() instaluje WH_KEYBOARD_LL hook przez SetWindowsHookEx z callback KeyboardHookProc. Callback sprawdza nCode >= 0, czyta Keys z Marshal.ReadInt32(lParam), sprawdza czy Space/D1/D2, printuje do console, wywołuje CallNextHookEx. UnhookKeyboard() wywołuje UnhookWindowsHookEx dla cleanup.
+
+Hook działa globalnie bez względu na focus aplikacji. Designed dla hotkey detection do start/stop bota.
+
+###### License System
+Program.cs Main() sprawdza DateTime.Now < licencja (2026-11-30 01:01:30). Jeśli expired pokazuje MessageBox "Licencja wygasła", wywołuje Environment.Exit(0), return false. Jeśli valid, uruchamia Application.Run(new MainForm()). Primitive ale functional.
+
+## Architektura (luźno powiedziane)
+
+Projekt nie ma właściwej architektury - to collection of services i WinForms UI bez clear separation. Services to static classes bez interfaces. MainForm prawdopodobnie bezpośrednio wywołuje static methods.
+
+**Services Folder** - zawiera wszystkie low-level components: memory scanning (MemoryScanner, MemoryScanner2, MemorySearcher), memory reading (MemoryReader), keyboard simulation (4x implementacje), keyboard hook (KeyboardHook). Każdy service jako isolated static class z P/Invoke declarations.
+
+**Program.cs** - entry point z license check i Application.Run. Brak dependency injection, configuration, logging setup. STA thread attribute dla COM interop (WinForms requirement).
+
+**MainForm** - (nie załączony w documents) prawdopodobnie WinForms form z buttons do start/stop, process selection, status display. Bezpośrednie wywołania do Services static methods.
+
+Komunikacja: MainForm → Services static methods → Win32 API. Zero abstrakcji, zero testability, zero flexibility.
+
+## Problemy Techniczne
+
+**Encoding Mismatch** - Metin2 używa Windows-1250 (Central European) encoding dla Polish characters. MemoryReader czyta jako UTF-8 przez `Encoding.UTF8.GetString()`. Rezultat: Polish characters jak "ń", "ł", "ś" konwertują do garbage `"?"`, `"?g|0'?"`. Pattern matching działa ale accidentally przez matching corrupted strings.
+
+Fix wymagałby `Encoding.GetEncoding(1250).GetString(buffer)` ale to nie było zrozumiane w tym momencie development.
+
+**Memory Scanning Performance** - MemoryScanner2 iteruje przez ALL committed memory regions procesu. Dla typowego Metin2 client (hundreds of MB memory) to oznacza reading i scanning gigabytes data. Brak optimization jak caching found addresses, limiting scan range, using known module base addresses.
+
+**No Pattern Wildcards** - AOB patterns jako byte arrays wymagają exact match. Real-world patterns często potrzebują wildcards (np. `"8B 44 24 ?? 8B 4C"`). Brak support dla `??` w pattern matching logic.
+
+**Keyboard Simulation Reliability** - Multiple implementations suggest problems z getting input accepted przez game. Niektóre games detect keybd_event jako bot input, SendInput może być blocked przez anti-cheat, scan codes vs virtual keys issues. Brak understanding kiedy użyć której metody.
+
+**Hook Cleanup** - KeyboardHook.UnhookKeyboard() istnieje ale prawdopodobnie nie wywołana w MainForm closing event. Hook może remain active po application exit, requiring system restart dla cleanup. No proper IDisposable pattern.
+
+**Magic Numbers Everywhere** - `0x10000` (64KB buffer size), `0x1000` (MEM_COMMIT), `0x20` (VK_SPACE), `0x0400` (PROCESS_QUERY_INFORMATION). Brak named constants, niemożliwe do understand bez Win32 API documentation.
+
+## Co Nauczyłem Się
+
+Ten projekt nauczył mnie więcej przez to **co zrobiłem źle** niż przez to co zadziałało:
+
+**Refactoring > Rewriting** - Zamiast pisać KeyboardSimulator2, 3, 4, powinienem był refactorować KeyboardSimulator. Multiple implementations to code smell.
+
+**Error Handling is Critical** - P/Invoke bez checking return values to recepta na crashes i debugging hell. Każdy OpenProcess, ReadProcessMemory powinien sprawdzać czy succeeded.
+
+**Abstractions Matter** - Static classes bez interfaces to testability nightmare. Dependency injection pozwoliłby na unit testing i swapping implementations.
+
+**Encoding is Hard** - Windows-1250 vs UTF-8 to nie trivial problem. Trzeba było researchu o game encoding requirements przed rozpoczęciem.
+
+**Documentation** - Brak comments explaining WHY konkretny pattern lub offset. Za 6 miesięcy sam nie wiedziałem co robi ten kod.
+
+**Performance Considerations** - Scanning gigabytes memory per tick to bad idea. Trzeba było zrozumieć jak game allocates memory i targetować specific regions.
+
+**Design Before Code** - Projekt started z "let's try reading memory" i evolved chaotically. Brak plan = spaghetti code.
+
+## Technologie
+
+- **Framework:** .NET Framework 4.x (WinForms)
+- **Język:** C# z heavy P/Invoke usage
+- **Platform:** Windows API (kernel32.dll, user32.dll)
+- **APIs:** OpenProcess, ReadProcessMemory, VirtualQueryEx, keybd_event, SendInput, SetWindowsHookEx
+- **Target:** Metin2 Client (Polish version, Windows-1250 encoding)
+
+## Wymagania
+
+- **OS:** Windows XP/7/10 (no admin required dla memory reading, ale zalecane)
+- **Runtime:** .NET Framework 4.x
+- **Target:** Metin2 game client running
+- **Knowledge:** Trzeba znać process name i message patterns
+
+## Dlaczego Archived
+
+Projekt został archived bo:
+1. **Code quality** - anti-patterns i bad practices throughout
+2. **No maintenance** - wszystko hardcoded, changes wymagają recompile
+3. **Superseded** - późniejsze projekty (Fishing Planet) mają proper architecture
+4. **Learning artifact** - wartość tylko jako historical record mojego learning process
+
+Kod pozostaje w repo jako reminder skąd zacząłem i jak daleko zaszedłem. **Nie polecam używania tego kodu** - jest tutaj tylko dla dokumentacji.
+
+## Co Zrobiłbym Inaczej Dzisiaj
+
+Gdybym robił ten projekt teraz:
+
+**Architecture** - Clean Architecture z Core/Abstractions/Infrastructure layers jak w Fishing Planet. Dependency injection, interfaces, proper separation of concerns.
+
+**Memory Scanning** - Targeted approach z known module bases, pattern wildcards support, caching found addresses. Performance optimization.
+
+**Input Simulation** - Single well-tested implementation z fallback strategies. Feature flags dla różnych anti-cheat environments.
+
+**Configuration** - External JSON config dla patterns, offsets, delays. Hot reload capability.
+
+**Error Handling** - Try-catch blocks, logging (NLog/Serilog), user-friendly error messages, retry logic.
+
+**Testing** - Unit tests dla pattern matching logic, integration tests z mock process memory, UI automation tests.
+
+**Documentation** - Clear README, architecture docs, inline comments explaining non-obvious logic, changelog.
+
+**Encoding** - Proper charset detection i conversion, support dla multiple game versions/localizations.
+
+---
+
+<div className="mt-8 pt-8 border-t border-zinc-800">
+    <div className="text-zinc-600 italic">
+        Ten projekt to **archived learning artifact**. Pokazuje moje początki w game automation i wszystkie błędy które popełniłem po drodze. Zachowuję go jako przypomnienie że **każdy musi gdzieś zacząć**, nawet jeśli początek jest brzydki. Późniejsze projekty jak Fishing Planet i Sentinel pokazują progress który zrobiłem odkąd nauczyłem się na tych błędach.
+    </div>
+</div>

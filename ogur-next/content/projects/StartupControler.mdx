@@ -1,0 +1,245 @@
+---
+title: "Startup Controler"
+description: "Lekki launcher aplikacji z zarządzaniem procesami, wsparciem motywów Light/Dark, elevation do admina i integracją z Task Schedulerem"
+date: "2025-02-07"
+url: https://github.com/ishkabar/StartupControler
+repository: ishkabar/StartupControler
+category: "archived"
+published: true
+---
+
+Minimalistyczny launcher aplikacji Windows stworzony w WPF z architekturą MVVM. StartupControler umożliwia szybkie uruchamianie skonfigurowanych aplikacji z custom argumentami, elevation do uprawnień administratora, zamykanie procesów przez konfigurowalne nazwy, oraz pełne wsparcie dla motywów Light/Dark/System z persistent konfigurацją. System oferuje integrację z Windows Task Scheduler dla auto-startu z najwyższymi uprawnieniami, automatyczną detekcję najnowszej wersji Discord przez app-* folders, oraz wbudowany mechanizm wygasania licencji.
+
+![Główny interfejs aplikacji](https://files.ogur.dev/public/startupControlerMainView.png)
+
+## Główne funkcje
+
+###### Launcher Aplikacji z Elevation
+AppLauncherService obsługuje uruchamianie aplikacji z custom argumentami i opcjonalną elevation do admina przez `Verb = "runas"`. Wspiera dynamiczne ścieżki z wildcardem `app-*` dla instalacji z wersjami, automatycznie wykrywając najnowszy folder. Specjalna integracja z DiscordResolver dla Discord.exe z automatic detection najnowszego app-* directory w %LOCALAPPDATA%/Discord.
+
+###### Zarządzanie Procesami
+ProcessService umożliwia zamykanie procesów przez konfigurowalne listy nazw procesów per aplikacja. Graceful shutdown attempt przez CloseMainWindow() z 3-sekundowym timeoutem, fallback do force kill przez `Process.Kill(entireProcessTree: true)` przy przekroczeniu. Case-insensitive deduplication nazw procesów, zwraca count zamkniętych procesów dla user feedback.
+
+###### System Motywów Light/Dark/System
+ThemeService implementuje dynamic theme switching przez ResourceDictionary merging z oddzielnych XAML files (Light.xaml, Dark.xaml). SystemDefault resolver wykrywa aktualny motyw systemu przez SystemThemeDetector. Theme persistence przez ConfigService z zapisem do config.json. Pełny clear poprzednich merged dictionaries przy zmianie dla clean state.
+
+###### Edytor Konfiguracji z UI
+AppsEditorWindow to modal dialog z master-detail UI: ListView z listą apps po lewej, detail panel z bindingami po prawej. Browse buttons dla ExePath i IconPath przez OpenFileDialog z filtrami. KillProcessNamesString property z parsing comma/newline separated text do `List<string>`. Clone pattern dla Safe editing bez mutacji live config do momentu Save.
+
+###### Auto-Start przez Task Scheduler
+StartupService oferuje dwa tryby auto-start: Task Scheduler z admin privileges (recommended) lub Registry-based dla non-admin. Task variant tworzy LogonTrigger z `TaskRunLevel.Highest`, `LogonType.InteractiveToken`, battery-friendly settings. Registry variant dodaje entry do `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` z quoted ExePath.
+
+###### License Management
+LicenseService z UTC-based expiration check przeciwko hardcoded `ExpirationUtc = 2026-12-31 23:59:59`. `EnforceWithUi()` pokazuje Polish MessageBox "Licencja wygasła [date]. Aplikacja zostanie zamknięta. Skontaktuj sie z ogurem" i wywołuje `Application.Current.Shutdown()`. Alternative `EnforceOrThrow()` rzuca `LicenseExpiredException` dla programmatic handling.
+
+## Architektura
+
+Aplikacja zorganizowana jako single-project WPF solution z wyraźnym separation of concerns przez foldery: Models dla domain objects, Services dla business logic, ViewModels dla MVVM orchestration, Views dla WPF windows.
+
+**Models** - AppEntry reprezentuje single application z properties: Name, ExePath (wspiera env vars i app-* wildcards), Arguments, IconPath, RequiresAdmin bool, Enabled bool, `List<string> KillProcessNames`. AppConfig to root configuration object z `List<AppEntry> Apps` i GeneralConfig zawierającą Theme string. Serialization do JSON przez System.Text.Json.
+
+**Services** - ConfigService zarządza JSON persistence w `%APPDATA%/StartupControlelr/config.json`, auto-copy z appsettings.json template przy pierwszym run. AppLauncherService z ResolveExe dla dynamic paths i Discord resolution. ProcessService dla graceful/force kill logic. StartupService dla Task Scheduler integration. ThemeService dla ResourceDictionary management. LicenseService dla expiration enforcement.
+
+**ViewModels** - MainViewModel z CommunityToolkit.Mvvm ObservableObject, ObservableCollection<AppEntry> filtered do Enabled==true, Commands dla Run/RunAdmin/Kill/OpenEditor/ChangeTheme, Status property dla feedback, BuildInfo z assembly last write time. AppsEditorViewModel z CRUD operations, Selected property, DialogResult dla modal close, KillProcessNamesString parser.
+
+**Views** - MainWindow z frameless design, custom title bar z Minimize/Maximize/Close buttons, DragMove na MouseLeftButtonDown, ListView z app entries, context menu z Run/Run as Admin/Kill options, theme menu bound do ChangeThemeCmd. AppsEditorWindow z master-detail layout, Browse buttons dla file dialogs, PropertyChanged listener dla auto-close on DialogResult.
+
+Komunikacja przez dependency injection z Microsoft.Extensions.DependencyInjection. Program.cs konfiguruje Generic Host z services jako singletons, ViewModels jako singletons (MainViewModel) lub construction-time DI (MainWindow). Theme application on startup z saved config.
+
+## Serwisy
+
+**ConfigService** - persistence layer dla application configuration. Constructor tworzy `%APPDATA%/StartupControlelr` directory, sprawdza czy config.json exists, jeśli nie to kopiuje z appsettings.json template z AppContext.BaseDirectory lub tworzy empty. Load() deserializuje JSON z `JsonSerializerOptions(JsonSerializerDefaults.Web)` z WriteIndented=true, AllowTrailingCommas=true, ReadCommentHandling=Skip. Save() serializuje Config do JSON i zapisuje atomicznie przez WriteAllText.
+
+**AppLauncherService** - launching logic z integration DiscordResolver w constructor. ResolveExe(AppEntry) expands environment variables przez `Environment.ExpandEnvironmentVariables()`, special case dla paths zawierających "Discord\\app-" wywołuje DiscordResolver.ResolveDiscordExe(), generic app-* wildcard resolution przez scanning parent directory dla app-* folders ordered descending, picking newest, combining z filename. Launch(AppEntry, bool asAdmin) tworzy ProcessStartInfo z resolved exe path, arguments, UseShellExecute=true, Verb="runas" jeśli asAdmin, wywołuje Process.Start().
+
+**ProcessService** - process termination service. Kill(AppEntry, TimeSpan? grace) iteruje przez app.KillProcessNames z Distinct case-insensitive, dla każdej nazwy wywołuje Process.GetProcessesByName(), dla każdego procesu próbuje CloseMainWindow() z WaitForExit na timeout (default 3s), jeśli timeout lub close failed wywołuje `Kill(entireProcessTree: true)`. Zwraca count killed processes. Try-catch per process dla resilience.
+
+**StartupService** - Windows auto-start management. IsEnabled() sprawdza czy TaskName="StartupControlelr_AutoStart" exists w TaskService. EnableWithAdminAtLogon() tworzy TaskDefinition z Description, Principal.RunLevel=Highest, LogonType=InteractiveToken, Settings z StartWhenAvailable=true, DisallowStartIfOnBatteries=false, StopIfGoingOnBatteries=false. Dodaje LogonTrigger. Action to ExecAction z ExePath resolved z Process.GetCurrentProcess().MainModule.FileName, WorkingDirectory z GetDirectoryName. Registers w RootFolder. Disable() deletes task. Alternative EnableUserRunNoAdmin() i DisableUserRunNoAdmin() dla Registry-based approach w HKCU Run key.
+
+**ThemeService** - implements IThemeService interface. ApplyTheme(AppTheme) sprawdza czy theme==SystemDefault, jeśli tak resolve przez SystemThemeDetector.GetSystemTheme(). Map theme enum do relative path "Themes/Light.xaml" lub "Themes/Dark.xaml". Tworzy new ResourceDictionary z Source=Uri. Clears Application.Current.Resources.MergedDictionaries, adds new theme dictionary. Updates CurrentTheme property. Clear() method usuwa wszystkie merged dictionaries i resetuje do SystemDefault.
+
+**LicenseService** - license enforcement logic z hardcoded ExpirationUtc property = `new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)`. IsExpiredUtc(DateTime? nowUtc) porównuje now (default DateTime.UtcNow) z ExpirationUtc. EnforceWithUi() sprawdza expiration, loguje warning z NLog, converts ExpirationUtc do local time, pokazuje MessageBox z Polish text "Licencja wygasła {expLocal:d}. Aplikacja zostanie zamknięta. Skontaktuj sie z ogurem", wywołuje Application.Current.Shutdown(), zwraca false. EnforceOrThrow() variant rzuca LicenseExpiredException z ExpirationUtc.
+
+**DiscordResolver** - helper service dla Discord path resolution. ResolveDiscordExe() expands "%LOCALAPPDATA%\\Discord" environment variable, sprawdza czy directory exists, gets subdirectories matching "app-*" pattern ordered descending (newest first), iteruje i sprawdza czy Discord.exe exists w każdym directory, zwraca pierwszy match lub null.
+
+## ViewModels i Commands
+
+**MainViewModel** - centralny orchestrator aplikacji inheriting z CommunityToolkit.Mvvm ObservableObject. Properties: `ObservableCollection<AppEntry> Apps` populated z Config.Apps filtered gdzie Enabled==true, Status partial observable property z attribute [ObservableProperty], CurrentTheme z manual SetProperty, BuildInfo string z GetBuildDate() returning assembly LastWriteTime formatted "yyyy-MM-dd HH:mm". Commands: RunCmd jako RelayCommand<AppEntry> wywołujący Launch(app, admin: false), RunAdminCmd z admin: true, KillCmd wywołujący Kill(app), OpenEditorCmd bez parametru wywołujący OpenEditor(), ChangeThemeCmd z string parameter. CanExecute dla RunCmd/RunAdminCmd/KillCmd sprawdza app != null.
+
+Launch(AppEntry, bool) method wywołuje _launcher.Launch() w try-catch, updates Status z app.Name i (admin) suffix, loguje success z NLog. Catch updates Status z error message, loguje exception. Kill(AppEntry) wywołuje _process.Kill(), updates Status z count i app.Name, loguje count. OpenEditor() tworzy new AppsEditorViewModel z _config dependency, tworzy AppsEditorWindow z DataContext=vm, wywołuje ShowDialog(), jeśli result==true wywołuje ReloadApps() i updates Status "Zapisano konfigurację".
+
+ChangeTheme(string? themeName) parsuje string do AppTheme enum przez Enum.TryParse, jeśli success wywołuje _themeService.ApplyTheme(), updates CurrentTheme property, updates Config.General.Theme, saves config, updates Status "Zmieniono motyw na {theme}", loguje info. Else updates Status "Nieznany motyw" i loguje warning.
+
+ReloadApps() helper clears Apps ObservableCollection, re-populates z Config.Apps gdzie Enabled==true, wywołuje CollectionViewSource.GetDefaultView(Apps)?.Refresh() dla UI sync.
+
+**AppsEditorViewModel** - editor dialog ViewModel z CommunityToolkit.Mvvm partial class. Properties: `ObservableCollection<AppEntry> Apps` populated z Config.Apps clones, Selected observable property, DialogResult nullable bool observable property dla window close signaling. KillProcessNamesString computed property z getter joining Selected.KillProcessNames przez Environment.NewLine, setter parsing input przez Split na ',', ';', '\r', '\n' separators z RemoveEmptyEntries, Trim, Length>0 filter, Distinct case-insensitive, ToList(), calls OnPropertyChanged.
+
+Commands: AddCmd tworzy new AppEntry z defaults "Nowa aplikacja" Enabled=true, adds do Apps, sets Selected=item. RemoveCmd z CanExecute Selected!=null removes Selected, updates Selected do previous index lub null. SaveCmd clones all Apps do Config.Apps przez Select(Clone), calls _config.Save(), sets DialogResult=true. CancelCmd sets DialogResult=false. Clone(AppEntry) static helper tworzy new AppEntry z copied properties i ToList() dla KillProcessNames.
+
+PropertyChanged subscription w constructor wywołuje RemoveCmd.NotifyCanExecuteChanged() przy Selected property change dla CanExecute update.
+
+## Windows Implementation
+
+**MainWindow** - główne okno aplikacji bez WindowStyle, AllowsTransparency=true, custom title bar z border containing Minimize/Maximize/Close buttons. Title bar buttons: Minimize_Click sets WindowState=Minimized, Maximize_Click toggles Normal/Maximized, Close_Click wywołuje Close(). Window_MouseLeftButtonDown z check ChangedButton==Left wywołuje DragMove() dla window dragging.
+
+Content zawiera theme menu z RadioButton per AppTheme bound do CurrentTheme property z ChangeThemeCmd command. ListView z ItemsSource=Apps, DisplayMemberPath="Name". Context menu z MenuItem per action: Run bound do RunCmd, Run as Admin do RunAdminCmd, Kill do KillProcessNames. Status bar z TextBlock bound do Status property. Build info TextBlock bound do BuildInfo.
+
+**AppsEditorWindow** - modal dialog window z ShowDialog() call z MainViewModel. Loaded event handler z OnLoaded subscribuje PropertyChanged z DataContext, sprawdza PropertyName==DialogResult, jeśli AppsEditorViewModel.DialogResult.HasValue sets window DialogResult i calls Close() dla automatic modal dismiss.
+
+Layout: Grid z ColumnDefinitions 200,*. Left column: ListView ItemsSource=Apps, SelectedItem=Selected. Right column: detail panel z TextBox per property bindings: Name, ExePath z Browse button calling BrowseExePath_Click, Arguments, IconPath z Browse button calling BrowseIconPath_Click. CheckBox dla RequiresAdmin i Enabled. TextBox Mode=AcceptsReturn dla KillProcessNamesString. Buttons panel: Add/Remove/Save/Cancel bound do respective commands.
+
+BrowseExePath_Click tworzy OpenFileDialog z Title "Wybierz plik EXE lub skrót", Filter dla exe/lnk files, CheckFileExists=true. ShowDialog() result==true updates Selected.ExePath z dlg.FileName. BrowseIconPath_Click similar z Filter dla ico/exe/dll/lnk files.
+
+## Configuration i Persistence
+
+**Config Location** - `%APPDATA%/StartupControlelr/config.json` dla user-specific storage. Directory auto-created przez ConfigService constructor z `Directory.CreateDirectory(_appDir)`.
+
+**Template Fallback** - przy pierwszym uruchomieniu jeśli config.json nie exists, ConfigService sprawdza `AppContext.BaseDirectory/appsettings.json`, jeśli exists kopiuje do _configPath. Else calls Save() dla empty default config. To umożliwia shipping aplikacji z pre-configured appsettings.json jako template.
+
+**JSON Serialization** - System.Text.Json z JsonSerializerDefaults.Web dla camelCase naming, WriteIndented=true dla human-readable output, AllowTrailingCommas=true dla flexibility, ReadCommentHandling=Skip dla comments support w JSON. Deserialize do AppConfig z fallback do `new()` przy null.
+
+**Example Config Structure:**
+```json
+{
+  "general": {
+    "theme": "Dark"
+  },
+  "apps": [
+    {
+      "name": "Discord",
+      "exePath": "%LOCALAPPDATA%\\Discord\\app-*\\Discord.exe",
+      "arguments": "",
+      "iconPath": "%LOCALAPPDATA%\\Discord\\app-*\\Discord.exe",
+      "requiresAdmin": false,
+      "enabled": true,
+      "killProcessNames": ["Discord"]
+    },
+    {
+      "name": "Visual Studio Code",
+      "exePath": "%LOCALAPPDATA%\\Programs\\Microsoft VS Code\\Code.exe",
+      "arguments": "--new-window",
+      "iconPath": "",
+      "requiresAdmin": false,
+      "enabled": true,
+      "killProcessNames": ["Code"]
+    }
+  ]
+}
+```
+
+**Theme Persistence** - przy startup Program.cs resolve ThemeService i ConfigService, parsuje Config.General.Theme string do AppTheme enum, wywołuje ApplyTheme(). MainViewModel.ChangeTheme updates Config.General.Theme i saves.
+
+**App-* Wildcard Resolution** - ExePath może zawierać `app-*` pattern dla applications z version-based folders. ResolveExe() wykrywa pattern, gets parent directory, scans dla matching subdirectories OrderByDescending (newest first), checks file existence, returns first match. Fallback do original path jeśli resolution fails.
+
+## Dependency Injection i Hosting
+
+**Program.cs Setup** - Generic Host z CreateDefaultBuilder(args). ConfigureServices rejestruje wszystkie services jako singletons: ConfigService, DiscordResolver, AppLauncherService, ProcessService, StartupService, LicenseService, IThemeService. MainViewModel jako singleton, MainWindow jako transient z factory pattern tworzącym window i setting DataContext z resolved MainViewModel.
+
+**Service Resolution** - po Build() host resolve ThemeService i ConfigService dla theme initialization. MainWindow resolved i passed do app.Run(). MainWindow constructor nie tworzy własnych dependencies (dead code visible z new operators), actual DI odbywa się przez Program.cs factory.
+
+**Lifetime Management** - services jako singletons zapewniają single instance per application lifetime. MainWindow jako transient dla flexibility gdyby multiple windows były needed w przyszłości. ViewModels potential dla transient but currently singleton przez Program.cs.
+
+## Auto-Start Configuration
+
+**Task Scheduler Approach (Recommended)** - EnableWithAdminAtLogon() tworzy scheduled task z LogonTrigger firing at user logon. Principal.RunLevel=Highest zapewnia admin elevation automatycznie bez UAC prompt przy każdym logon. LogonType=InteractiveToken dla user context. Settings: StartWhenAvailable=true retry jeśli computer was off podczas trigger time, DisallowStartIfOnBatteries=false i StopIfGoingOnBatteries=false dla laptops. ExecAction z full ExePath i WorkingDirectory.
+
+**Registry Approach (Fallback)** - EnableUserRunNoAdmin() dodaje entry do `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` z value `"{ExePath}"` quoted dla spaces handling. Runs z normal user privileges bez elevation. Simple approach ale no admin rights. DisableUserRunNoAdmin() deletes registry value jeśli exists.
+
+**Detection** - IsEnabled() sprawdza czy scheduled task exists w TaskService.FindTask(). No check dla registry variant - potential enhancement.
+
+## Theme System
+
+**Theme Files Structure** - Themes/Light.xaml i Themes/Dark.xaml jako separate ResourceDictionary XAML files. Każdy definiuje complete set color resources, brush resources, style overrides. Applied przez merging do Application.Current.Resources.MergedDictionaries.
+
+**Application Logic** - ThemeService.ApplyTheme() clears wszystkie existing merged dictionaries przed adding new theme. To zapewnia clean state bez leftover resources z previous theme. CurrentTheme property tracked dla state management.
+
+**System Theme Detection** - AppTheme.SystemDefault resolve przez SystemThemeDetector.GetSystemTheme() który query system registry dla current Windows theme preference. Automatic fallback do Light lub Dark based on OS setting.
+
+**Persistence** - CurrentTheme saved do Config.General.Theme jako string. Loaded on startup w Program.cs before window creation. Updates przez MainViewModel.ChangeTheme command z save do config.
+
+## License Enforcement
+
+**Expiration Date** - hardcoded w LicenseService jako `new DateTime(2026, 12, 31, 23, 59, 59, DateTimeKind.Utc)`. UTC-based dla timezone-independent comparison. ExpirationUtc property publicly accessible dla display purposes.
+
+**Enforcement Flow** - EnforceWithUi() sprawdza IsExpiredUtc() comparing DateTime.UtcNow > ExpirationUtc. Jeśli expired: converts ExpirationUtc do local time przez ToLocalTime(), loguje NLog warning z UTC i local timestamps, shows MessageBox z Polish text including formatted local expiration date, wywołuje Application.Current.Shutdown() dla graceful app termination.
+
+**Exception Variant** - EnforceOrThrow() dla programmatic handling bez UI. Sprawdza expiration, loguje warning, rzuca LicenseExpiredException z ExpirationUtc property. Exception może być caught w higher layers dla custom handling.
+
+**Integration Point** - currently nie wywołane automatycznie w Program.cs. Potential integration w startup before window creation lub w MainViewModel constructor. Dead code currently present w services.
+
+## Technologie
+
+- **Framework:** .NET 8.0
+- **Język:** C# 12 z nullable reference types
+- **UI:** WPF z MVVM pattern, frameless window design
+- **MVVM:** CommunityToolkit.Mvvm (ObservableObject, ObservableProperty, RelayCommand partial classes)
+- **DI/Hosting:** Microsoft.Extensions (DependencyInjection, Hosting)
+- **Configuration:** System.Text.Json z JsonSerializerDefaults.Web
+- **Logging:** NLog structured logging z class-specific loggers
+- **Task Scheduler:** TaskScheduler NuGet package dla scheduled task management
+- **Platform:** Windows API (Registry, Task Scheduler, Process Management)
+
+## Wymagania
+
+- **OS:** Windows 10/11
+- **Runtime:** .NET 8.0 Desktop Runtime
+- **Uprawnienia:** Admin rights zalecane dla Task Scheduler integration i run as admin features
+- **Dependencies:** TaskScheduler NuGet, CommunityToolkit.Mvvm, NLog
+
+## Użycie
+
+1. Uruchom aplikację - pokazuje MainWindow z configured apps
+2. Apps list pokazuje tylko entries gdzie Enabled=true
+3. Kliknij app entry, użyj context menu lub buttons:
+- **Run** - uruchamia z normal privileges
+- **Run as Admin** - uruchamia elevated, UAC prompt
+- **Kill** - zamyka wszystkie processes z KillProcessNames list
+4. Status bar shows operation feedback
+5. Theme menu w top-left: wybierz Light/Dark/System Default
+6. Click "Editor" button dla AppsEditorWindow
+7. W editorze:
+- Add tworzy new entry z defaults
+- Select entry z listy, edit properties po prawej
+- Browse buttons dla ExePath i IconPath file selection
+- KillProcessNames jako multiline text, comma/newline separated
+- CheckBox dla RequiresAdmin i Enabled flags
+- Save applies changes, Cancel discards
+8. Build info w bottom-right shows compilation timestamp
+
+## Known Issues i Limitations
+
+**Discord Path Hardcoded Logic** - assumes standard `%LOCALAPPDATA%/Discord` installation path. Custom Discord installs w innych lokalizacjach require manual ExePath configuration. DiscordResolver może nie wykryć non-standard paths.
+
+**Process Kill Timeout** - 3-second graceful shutdown timeout może być insufficient dla heavy applications z long cleanup procedures. No user-configurable timeout setting. Force kill may cause data loss jeśli application nie saved state.
+
+**Theme Switching Artifacts** - clearing MergedDictionaries i adding new może cause brief visual glitches. Existing windows may need manual style refresh dla complete theme application. No animation during theme transition.
+
+**Single Instance** - no enforcement of single application instance. Multiple copies can run simultaneously z potential conflicts w config file access. No file locking lub mutex implementation.
+
+**License Enforcement Not Active** - LicenseService registered w DI ale EnforceWithUi() nie wywołane w startup flow. License expiration currently nie blokuje application usage. Dead code requiring integration.
+
+**Task Scheduler Permissions** - EnableWithAdminAtLogon() requires elevated privileges do create scheduled task. No graceful fallback z error handling jeśli user declines UAC prompt. Silent failure possible.
+
+**Config Migration** - no automatic migration logic dla config schema changes. Breaking changes w AppConfig structure require manual config.json edits lub deletion for recreation from template.
+
+## Roadmap Potential
+
+**Multi-Instance Detection** - mutex-based single instance enforcement z activation of existing instance jeśli already running. Prevent config conflicts.
+
+**License Integration** - actual enforcement of LicenseService.EnforceWithUi() w Program.cs startup before window creation. Grace period warnings before expiration.
+
+**Configurable Timeouts** - user-adjustable process kill grace period w config. Per-app timeout overrides.
+
+**Theme Transition Animations** - smooth fade animations during theme switches. Resource preloading dla glitch-free transitions.
+
+**Tray Icon Support** - minimize to system tray, quick launch menu, persistent background running.
+
+**Process Monitoring** - real-time display czy configured apps are running, memory/CPU usage stats, restart on crash functionality.
+
+**Import/Export** - backup/restore functionality dla config.json, sharing app configurations between machines.
+
+## Licencja
+
+License type not specified in source files. License expiration enforcement suggests proprietary/commercial usage model.
+
+Wygasa: 31 grudnia 2026
