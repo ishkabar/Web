@@ -1,4 +1,4 @@
-/*
+// src/components/CVDocument.tsx
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 
 Font.register({
@@ -39,10 +39,30 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
     },
-    // ... więcej stylów
 });
 
-export const CVDocument = ({ person, work, technical }) => (
+interface CVDocumentProps {
+    person: {
+        name: string;
+        role: string;
+    };
+    work: {
+        experiences: Array<{
+            company: string;
+            role: string;
+            timeframe: string;
+            achievements: string[];
+        }>;
+    };
+    technical: {
+        skills: Array<{
+            title: string;
+            description: string;
+        }>;
+    };
+}
+
+export const CVDocument = ({ person, work, technical }: CVDocumentProps) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <View style={styles.header}>
@@ -62,4 +82,3 @@ export const CVDocument = ({ person, work, technical }) => (
         </Page>
     </Document>
 );
-*/

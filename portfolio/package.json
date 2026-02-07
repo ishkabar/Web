@@ -19,6 +19,7 @@
     "@mdx-js/loader": "^3.1.0",
     "@next/mdx": "^15.3.1",
     "@once-ui-system/core": "^1.4.27",
+    "@react-pdf/renderer": "^4.3.2",
     "classnames": "^2.5.1",
     "cookie": "^1.0.2",
     "deepmerge": "^4.3.1",
