@@ -26,6 +26,7 @@ export default function Home() {
                             openUp={true}
                             showLabel={true}
                             showIcon={false}
+                            className="text-sm md:text-xl duration-500 text-zinc-500 hover:text-zinc-300"
                         />
                     ) : (
                         <Link

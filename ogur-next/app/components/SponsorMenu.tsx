@@ -21,11 +21,13 @@ export const SponsorMenu: React.FC<{
     openUp?: boolean;
     showLabel?: boolean;
     showIcon?: boolean;
+    className?: string;
 }> = ({
     isIntersecting,
     openUp = false,
     showLabel = true,
-    showIcon = true
+    showIcon = true,
+    className = ""
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -77,7 +79,7 @@ export const SponsorMenu: React.FC<{
             onMouseLeave={handleMouseLeave}
         >
             <button
-                className={`duration-200 flex items-center gap-1 ${
+                className={`duration-200 flex items-center gap-1 ${className} ${
                     isIntersecting
                         ? "text-zinc-400 hover:text-zinc-100"
                         : "text-zinc-600 hover:text-zinc-900"

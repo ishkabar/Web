@@ -42,7 +42,13 @@ export const Navigation: React.FC = () => {
 						>
 							Kontakt
 						</Link>
-                        <SponsorMenu isIntersecting={isIntersecting} openUp={false} showLabel={true} showIcon={false} />
+                        <SponsorMenu
+                            isIntersecting={isIntersecting}
+                            openUp={false}
+                            showLabel={true}
+                            showIcon={false}
+                            className=""
+                        />
                         <Link
                             href="/legal"
                             className="duration-200 text-zinc-400 hover:text-zinc-100"
