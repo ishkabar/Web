@@ -214,17 +214,31 @@ export default async function About() {
                 )}
               </Row>
             )}
-              <Row paddingTop="m" gap="8" className={styles.blockAlign}>
-                  <StaticDownloadButton
-                      href="/Dominik_Karczewski_Backend_Developer.pdf"
-                      label={t("downloadCV")}
-                      prefixIcon="fileText"
-                  />
-                  <StaticDownloadButton
-                      href="/Dominik_Karczewski_Cover_Letter.pdf"
-                      label={t("downloadCoverLetter")}
-                      prefixIcon="mail"
-                  />
+              <Row paddingTop="m" gap="16" className={styles.blockAlign}>
+                  <div
+                      style={{
+                          animation: 'subtlePulse 3s ease-in-out infinite',
+                          position: 'relative',
+                      }}
+                  >
+                      <StaticDownloadButton
+                          href="/Dominik_Karczewski_Backend_Developer.pdf"
+                          label={t("downloadCV")}
+                          prefixIcon="fileText"
+                      />
+                  </div>
+                  <div
+                      style={{
+                          animation: 'subtlePulse 3s ease-in-out 0.5s infinite',
+                          position: 'relative',
+                      }}
+                  >
+                      <StaticDownloadButton
+                          href="/Dominik_Karczewski_Cover_Letter.pdf"
+                          label={t("downloadCoverLetter")}
+                          prefixIcon="mail"
+                      />
+                  </div>
               </Row>
           </Column>
 

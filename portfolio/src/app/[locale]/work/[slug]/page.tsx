@@ -79,7 +79,15 @@ export default async function Project({
     return (
         <Column as="section" maxWidth="m" horizontal="center" gap="l">
             {!hasContent && (
-                <Row fillWidth padding="16" background="warning-alpha-medium" radius="m" horizontal="center" marginBottom="l">
+                <Row
+                    fillWidth
+                    maxWidth="l"
+                    padding="16"
+                    background="warning-alpha-medium"
+                    radius="m"
+                    horizontal="center"
+                    marginBottom="l"
+                >
                     <Text>{tCommon('translationInProgress')}</Text>
                 </Row>
             )}

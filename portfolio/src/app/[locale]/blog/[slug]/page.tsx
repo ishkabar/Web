@@ -86,7 +86,15 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
             {!hasContent && (
-                <Row fillWidth padding="16" background="warning-alpha-medium" radius="m" horizontal="center" marginBottom="l">
+                <Row
+                    fillWidth
+                    maxWidth="l"
+                    padding="16"
+                    background="warning-alpha-medium"
+                    radius="m"
+                    horizontal="center"
+                    marginBottom="l"
+                >
                     <Text>{tCommon('translationInProgress')}</Text>
                 </Row>
             )}

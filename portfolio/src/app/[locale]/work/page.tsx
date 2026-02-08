@@ -78,6 +78,7 @@ export default async function Work() {
             {!hasFullTranslation && (
                 <Row
                     fillWidth
+                    maxWidth="l"
                     padding="16"
                     background="warning-alpha-medium"
                     radius="m"

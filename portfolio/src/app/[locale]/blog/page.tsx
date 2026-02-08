@@ -47,12 +47,12 @@ export default async function Blog() {
             {!hasFullTranslation && (
                 <Row
                     fillWidth
+                    maxWidth="l"
                     padding="16"
                     background="warning-alpha-medium"
                     radius="m"
                     horizontal="center"
                     marginBottom="l"
-                    marginX="24"
                 >
                     <Text>{tCommon('translationInProgress')}</Text>
                 </Row>

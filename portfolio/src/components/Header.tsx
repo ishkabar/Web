@@ -84,6 +84,8 @@ export const Header = () => {
     const H = (p: string) => normalize(withLocale(p, locale));
     const isAt = (p: string) => pathname === H(p);
     const isUnder = (p: string) => pathname === H(p) || pathname.startsWith(H(p) + "/");
+    const isAboutPage = pathname.endsWith('/about');
+
 
     const isHomeActive = () => {
         const homeLocalized = H("/");
@@ -119,8 +121,7 @@ export const Header = () => {
             <Fade s={{hide: true}} fillWidth position="fixed" height="80" zIndex={9}/>
             <Fade hide s={{hide: false}} fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9}/>
 
-            {/* Osobna sekcja - Social icons po lewej (pod barem) */}
-            {display.location && social.length > 0 && (
+            {display.location && social.length > 0 && !isAboutPage && (
                 <Column
                     position="fixed"
                     style={{
@@ -138,7 +139,7 @@ export const Header = () => {
                                 <div
                                     key={item.name}
                                     style={{
-                                        transform: 'scale(1.3)',  // <--- Skalowanie całego buttona
+                                        transform: 'scale(1.3)',
                                         transformOrigin: 'center'
                                     }}
                                 >

@@ -52,3 +52,25 @@
   --scheme-neutral-600-50: rgba(137,152,159,0.5);
   /*
 }*/
+@keyframes subtlePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 12px; /* <--- DODANE */
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        border-radius: 12px; /* <--- DODANE */
+    }
+}
+
+/* Hover dla dodatkowego efektu */
+div:has(> a[href*=".pdf"]):hover {
+    transform: translateY(-4px) !important;
+    filter: brightness(1.1) saturate(1.2);
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
