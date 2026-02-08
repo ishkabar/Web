@@ -3,7 +3,9 @@
 import * as React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ToggleButton } from '@once-ui-system/core';
-import { locales, defaultLocale, type Locale, isLocale, localeMeta } from '@/i18n/routing';
+import { locales, defaultLocale, type Locale, isLocale, localeMeta, enabledLocales } from '@/i18n/routing';
+
+
 
 type LocaleDef = { code: Locale; label: string; flag: string };
 const LOCALES: LocaleDef[] = locales.map(code => ({
@@ -13,7 +15,8 @@ const LOCALES: LocaleDef[] = locales.map(code => ({
 }));
 
 const listHideDelay = 300;
-const PRIORITY = ['pl','en','de'];
+const PRIORITY = ['pl','en','de','da'];
+//const ENABLED_LOCALES = ['pl','en','de','da'];
 
 function detectLocaleFromPath(pathname: string): Locale {
     const seg = pathname.split('/')[1] ?? '';
@@ -273,7 +276,8 @@ export default function LocaleSwitcher() {
                 >
                     {LOCALES.map((l, i) => {
                         const isActive = current === l.code;
-                        const isEnabled = PRIORITY.includes(l.code); // pl, en, de
+                        //const isEnabled = ENABLED_LOCALES.includes(l.code);
+                        const isEnabled = (enabledLocales as readonly string[]).includes(l.code);
                         const isHovered = hoverIdx === i;
                         const isFocused = hoverIdx == null && focusIdx === i;
                         const bg = isActive ? colors.active : isHovered && isEnabled ? colors.hover : isFocused && isEnabled ? colors.focus : 'transparent';
@@ -315,7 +319,7 @@ export default function LocaleSwitcher() {
                                 </button>
 
                                 {/* separator po ostatnim języku priorytetowym */}
-                                {PRIORITY.includes(l.code) && i < LOCALES.length - 1 && LOCALES[i+1] && !PRIORITY.includes(LOCALES[i+1].code) && (
+                                {i === PRIORITY.length - 1 && i < LOCALES.length - 1 && (
                                     <div
                                         style={{
                                             borderTop: `1px solid ${colors.border}`,

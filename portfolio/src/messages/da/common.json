@@ -1,19 +1,14 @@
 {
   "meta": {
-    "label": "Polski",
-    "flag": "pl",
+    "label": "Dansk",
+    "flag": "dk",
     "default": false,
     "siteName": "Dominik Karczewski – Portfolio",
     "title": "Portfolio – Dominik Karczewski | Senior .NET Developer",
-    "description": "Senior .NET Developer specjalizujący się w integracji systemów ERP, architekturze rozwiązań i DevOps."
+    "description": "Senior .NET Developer specialiseret i ERP-systemintegration, løsningsarkitektur og DevOps."
   },
-  "cookies": {
-    "message": "Ta strona używa plików cookies oraz Google Analytics do analizy ruchu.",
-    "accept": "Akceptuję",
-    "decline": "Odrzuć"
-  },
-  "underConstruction": "Ta strona jest w przygotowaniu. Zapraszam wkrótce.",
-  "translationInProgress": "Ta strona jest w trakcie tłumaczenia. Przepraszamy za niedogodności.",
+  "underConstruction": "Denne side er under konstruktion. Kom venligst tilbage snart.",
+  "translationInProgress": "Denne side bliver oversat i øjeblikket. Undskyld ulejligheden.",
   "person": {
     "firstName": "Dominik",
     "lastName": "Karczewski",
@@ -22,22 +17,27 @@
     "avatar": "/avatar.png",
     "email": "mail@dkarczewski.com",
     "location": "Europe/Warsaw",
-    "locationDisplay": "Warszawa, Polska",
+    "locationDisplay": "Warszawa, Polen",
     "languages": [
-      "Polski",
-      "Angielski",
-      "Niemiecki"
+      "Polsk",
+      "Engelsk",
+      "Tysk"
     ]
   },
+  "cookies": {
+    "message": "Dette websted bruger cookies og Google Analytics til trafikanalyse.",
+    "accept": "Acceptér",
+    "decline": "Afvis"
+  },
   "header": {
-    "home": "Start",
-    "featured": "Wyróżnione",
-    "about": "O mnie",
-    "work": "Projekty",
+    "home": "Hjem",
+    "featured": "Fremhævet",
+    "about": "Om mig",
+    "work": "Projekter",
     "blog": "Blog",
-    "gallery": "Galeria",
+    "gallery": "Galleri",
     "sponsor": {
-      "title": "Wesprzyj",
+      "title": "Sponsor",
       "github": "GitHub Sponsors",
       "patreon": "Patreon"
     }
@@ -48,10 +48,10 @@
   "newsletter": {
     "display": true,
     "disabled": true,
-    "title": "Newsletter",
-    "description": "Zapisz się na newsletter i bądź na bieżąco z nowościami.",
-    "subscribe": "Subskrybuj",
-    "comingSoon": "Wkrótce dostępne"
+    "title": "Nyhedsbrev",
+    "description": "Abonnér på nyhedsbrevet og bliv opdateret med de seneste nyheder.",
+    "subscribe": "Abonnér",
+    "comingSoon": "Kommer snart"
   },
   "social": [
     {
@@ -83,9 +83,9 @@
     }
   ],
   "routeGuard": {
-    "protectedTitle": "Strona chroniona hasłem",
-    "passwordLabel": "Hasło",
-    "submit": "Zatwierdź",
-    "incorrectPassword": "Nieprawidłowe hasło"
+    "protectedTitle": "Denne side er beskyttet med adgangskode",
+    "passwordLabel": "Adgangskode",
+    "submit": "Send",
+    "incorrectPassword": "Forkert adgangskode"
   }
 }

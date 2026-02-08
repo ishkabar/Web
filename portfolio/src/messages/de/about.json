@@ -6,6 +6,9 @@
   "tableOfContent": { "display": true, "subItems": true },
   "avatar": { "display": true },
   "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "Lebenslauf herunterladen",
+  "generatingCV": "Wird generiert...",
+  "downloadCoverLetter": "Anschreiben herunterladen",
 
   "intro": {
     "display": true,

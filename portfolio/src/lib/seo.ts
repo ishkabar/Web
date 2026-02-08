@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import { baseURL } from "@/resources/ui-tokens.config";
 
-const ENABLED_LOCALES = ["pl", "en", "de"] as const;
+const ENABLED_LOCALES = ["pl", "en", "de","da"] as const;
 const DEFAULT_LOCALE = "en";
 
 type Options = {
@@ -54,6 +54,7 @@ export async function buildPageMetadata(
         pl: "pl_PL",
         en: "en_US",
         de: "de_DE",
+        da: "da_DK",
     };
 
     return {

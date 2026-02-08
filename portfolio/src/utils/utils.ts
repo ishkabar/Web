@@ -7,7 +7,7 @@ export type Team = { name: string; role: string; avatar: string; linkedIn: strin
 export type Metadata = {
     title: string; publishedAt: string; summary: string;
     image?: string; images: string[]; tag?: string | string[];
-    team: Team[]; link?: string;
+    team: Team[]; link?: string; order?: number;
 };
 export type ProjectPost = { metadata: Metadata; slug: string; content: string; };
 
@@ -52,6 +52,7 @@ function readProjectFolder(dir: string, locale: string): Omit<ProjectPost, "slug
         tag: data.tag || undefined,
         team: Array.isArray(data.team) ? data.team : [],
         link: data.link || "",
+        order: data.order || undefined,
     };
 
     const content = localeData.content || "";

@@ -1,12 +1,14 @@
-import { Column, Heading, Schema } from "@once-ui-system/core";
+import { Column, Heading, Row, Schema, Text } from "@once-ui-system/core";
 import { baseURL, paths } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { buildPageMetadata } from "@/lib/seo";
 import { loadCommon, replacePlaceholders } from "@/utils/placeholders";
+import { hasAllTranslations } from "@/utils/checkTranslation";
+import { getWorkPostsLocaleAware  } from "@/utils/utils";
 
-// Użyj klucza, który masz w PL (np. work.meta albo common.meta)
+
 export async function generateMetadata(): Promise<Metadata> {
     return buildPageMetadata("common.meta", paths.work, { titleKey: "title" });
 }
@@ -14,14 +16,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Work() {
     const locale = await getLocale();
 
-    // Server API next-intl
     const tWork = await getTranslations("work");
     const tCommon = await getTranslations("common");
 
-    // Wczytaj common.[locale].json do podmiany placeholderów (person.name itd.)
     const common = await loadCommon(locale);
 
-    // Person z namespace "common"
+    // Sprawdź tłumaczenia projektów
+    const projects = getWorkPostsLocaleAware(locale); // <-- ZMIANA
+    const allSlugs = projects.map(p => p.slug);
+    const hasFullTranslation = hasAllTranslations('projects', allSlugs, locale);
+
     const person = (tCommon.raw("person") || {
         name: "",
         avatar: "",
@@ -34,23 +38,16 @@ export default async function Work() {
         languages: string[];
     };
 
-    // Title/description mogą być:
-    // - ICU: "Projects – {name}" => tWork("title", { name: person.name })
-    // - albo z naszymi placeholderami {person.name} => replacePlaceholders(raw, common)
-    //
-    // Poniżej obsłużone oba przypadki – priorytet ICU, fallback na placeholdery.
     const rawTitle = (tWork.raw("title") as string | undefined) ?? "";
     const title = rawTitle.includes("{")
         ? (() => {
             try {
-                // Spróbuj ICU:
                 return tWork("title", { name: person.name });
             } catch {
-                // Fallback: nasze placeholdery {person.name}
                 return replacePlaceholders(rawTitle, common);
             }
         })()
-        : rawTitle || tWork("title"); // gdyby był zwykły string bez placeholderów
+        : rawTitle || tWork("title");
 
     const rawDesc = (tWork.raw("description") as string | undefined) ?? "";
     const description = rawDesc
@@ -78,6 +75,19 @@ export default async function Work() {
                     image: `${baseURL}${person.avatar}`,
                 }}
             />
+
+            {!hasFullTranslation && (
+                <Row
+                    fillWidth
+                    padding="16"
+                    background="warning-alpha-medium"
+                    radius="m"
+                    horizontal="center"
+                    marginBottom="l"
+                >
+                    <Text>{tCommon('translationInProgress')}</Text>
+                </Row>
+            )}
 
             <Heading marginBottom="l" variant="heading-strong-xl" align="center">
                 {title}

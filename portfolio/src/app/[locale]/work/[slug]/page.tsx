@@ -17,6 +17,8 @@ import type { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 import { getLocale, getTranslations } from "next-intl/server";
 import {buildPageMetadata} from "@/lib/seo";
+import { hasTranslation  } from "@/utils/checkTranslation";
+
 
 
 export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
@@ -54,6 +56,12 @@ export default async function Project({
 
     const t = await getTranslations("work");
     const tCommon = await getTranslations("common");
+    const routeParams = await params;
+    const slugPath = Array.isArray(routeParams.slug) ? routeParams.slug.join("/") : routeParams.slug || "";
+
+    const hasContent = hasTranslation('posts', slugPath, locale);
+
+
     const person = (tCommon.raw("person") || {
         name: "",
         avatar: "",
@@ -70,6 +78,11 @@ export default async function Project({
 
     return (
         <Column as="section" maxWidth="m" horizontal="center" gap="l">
+            {!hasContent && (
+                <Row fillWidth padding="16" background="warning-alpha-medium" radius="m" horizontal="center" marginBottom="l">
+                    <Text>{tCommon('translationInProgress')}</Text>
+                </Row>
+            )}
             <Schema
                 as="blogPosting"
                 baseURL={baseURL}

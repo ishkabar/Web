@@ -13,6 +13,11 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 
 import { loadCommon, resolveObjectWithData, replacePlaceholders } from "@/utils/placeholders";
+import { StaticDownloadButton } from '@/components/StaticDownloadButton';
+
+//import { DownloadCVButton } from '@/components/DownloadCvButton';
+
+
 
 export async function generateMetadata(): Promise<Metadata> {
   return buildPageMetadata("common.meta", paths.about, { titleKey: "title" });
@@ -110,19 +115,6 @@ export default async function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-
-      {tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          s={{ hide: true }}
-        >
-          <TableOfContents structure={structure} about={aboutForToc} />
-        </Column>
-      )}
       
       <Row fillWidth s={{ direction: "column" }} horizontal="center">
         {avatar.display && (
@@ -222,6 +214,18 @@ export default async function About() {
                 )}
               </Row>
             )}
+              <Row paddingTop="m" gap="8" className={styles.blockAlign}>
+                  <StaticDownloadButton
+                      href="/Dominik_Karczewski_Backend_Developer.pdf"
+                      label={t("downloadCV")}
+                      prefixIcon="fileText"
+                  />
+                  <StaticDownloadButton
+                      href="/Dominik_Karczewski_Cover_Letter.pdf"
+                      label={t("downloadCoverLetter")}
+                      prefixIcon="mail"
+                  />
+              </Row>
           </Column>
 
           {intro.display && (

@@ -4,10 +4,11 @@ import {
     defaultLocale,
     isLocale,
     type Locale,
-    localeMeta
+    localeMeta,
+    enabledLocales
 } from './locales.generated';
 
-export { locales, defaultLocale, isLocale, type Locale, localeMeta };
+export { locales, defaultLocale, isLocale, type Locale, localeMeta, enabledLocales  };
 
 // Paths that must bypass locale prefix (assets, _next, API, icons, etc.)
 export const LOCALE_BYPASS = [

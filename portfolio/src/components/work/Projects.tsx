@@ -32,7 +32,7 @@ export function Projects({ range, exclude, locale }: ProjectsProps) {
     }
 
     const sorted = [...all].sort(
-        (a, b) => safeDate(b.metadata?.publishedAt) - safeDate(a.metadata?.publishedAt)
+        (a, b) => (a.metadata?.order ?? 999) - (b.metadata?.order ?? 999)
     );
 
     const shown = clampRange(sorted, range);

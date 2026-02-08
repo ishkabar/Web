@@ -15,8 +15,8 @@ const OUT_FILE = path.join(OUT_DIR, 'locales.generated.ts');
 type Meta = { label?: string; flag?: string; default?: boolean };
 type LocaleEntry = { code: string; meta: Meta };
 
-const PRIORITY: string[] = ['pl', 'en', 'de'];
-const ENABLED: string[] = ['pl', 'en', 'de'];  
+const PRIORITY: string[] = ['pl', 'en', 'de','da'];
+const ENABLED: string[] = ['pl', 'en', 'de','da'];
 
 function safeReadJson(p: string): any | null {
     try {

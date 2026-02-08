@@ -25,12 +25,15 @@ import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { paths } from '@/resources/site.config';
 import { buildPageMetadata } from "@/lib/seo";
+import { hasTranslation  } from "@/utils/checkTranslation";
+
 
 
 
 export async function generateStaticParams(): Promise<{ locale: string; slug: string }[]> {
     const { locales } = await import('@/i18n/locales.generated');
     const result: { locale: string; slug: string }[] = [];
+
 
     for (const locale of locales) {
         const posts = getBlogPostsLocaleAware(locale);
@@ -49,10 +52,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
     const locale = await getLocale();
+
     const routeParams = await params;
   const slugPath = Array.isArray(routeParams.slug)
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
+
+    const hasContent = hasTranslation('posts', slugPath, locale);
 
   let post = getBlogPostsLocaleAware(locale).find((post) => post.slug === slugPath);
 
@@ -79,6 +85,11 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       <Row maxWidth={12} m={{ hide: true }} />
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
+            {!hasContent && (
+                <Row fillWidth padding="16" background="warning-alpha-medium" radius="m" horizontal="center" marginBottom="l">
+                    <Text>{tCommon('translationInProgress')}</Text>
+                </Row>
+            )}
           <Schema
             as="blogPosting"
             baseURL={baseURL}
@@ -155,16 +166,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         gap="16"
         m={{ hide: true }}
       >
-        <Row
-          gap="12"
-          paddingLeft="2"
-          vertical="center"
-          onBackground="neutral-medium"
-          textVariant="label-default-s"
-        >
-          <Icon name="document" size="xs" />
-            {t('onPage')}
-        </Row>
+
         <HeadingNav fitHeight />
       </Column>
     </Row>
