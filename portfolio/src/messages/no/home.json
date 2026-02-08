@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Hjem",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET Developer – systemintegrasjoner, løsningsarkitektur, DevOps",
+  "headline": "Bygge pålitelige systemer for bedrifter",
+  "sublineRich": "Jeg er {firstName} – jeg designer og implementerer .NET-løsninger for bedriftssektoren. Jeg spesialiserer meg på ERP-integrasjoner, prosessautomatisering og DevOps-infrastruktur.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Fremhevet prosjekt",
+    "href": "/no/work/ogur-dev"
+  },
+  "blog": { "latest": "Siste innlegg" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

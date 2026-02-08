@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "한국어",
+    "flag": "kr",
+    "default": false
+  },
+  "common": {
+    "hello": "안녕하세요"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "언어 변경: {locale}"
+  }
+}

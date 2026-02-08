@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "label": "Suomi",
+    "flag": "fi",
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Senior .NET-kehittäjä",
+    "description": "Senior .NET-kehittäjä, joka on erikoistunut ERP-järjestelmäintegraatioon, ratkaisuarkkitehtuuriin ja DevOpsiin."
+  },
+  "underConstruction": "Tämä sivu on rakenteilla. Tule takaisin pian.",
+  "translationInProgress": "Tätä sivua käännetään parhaillaan. Pahoittelut haitasta.",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "Senior .NET-kehittäjä",
+    "avatar": "/avatar.png",
+    "email": "mail@dkarczewski.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "Varsova, Puola",
+    "languages": [
+      "Puola",
+      "Englanti",
+      "Saksa"
+    ]
+  },
+  "cookies": {
+    "message": "Tämä sivusto käyttää evästeitä ja Google Analyticsia liikenteen analysointiin.",
+    "accept": "Hyväksy",
+    "decline": "Hylkää"
+  },
+  "header": {
+    "home": "Etusivu",
+    "featured": "Esillä",
+    "about": "Minusta",
+    "work": "Projektit",
+    "blog": "Blogi",
+    "gallery": "Galleria",
+    "sponsor": {
+      "title": "Sponsori",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "Uutiskirje",
+    "description": "Tilaa uutiskirje ja pysy ajan tasalla viimeisimmistä uutisista.",
+    "subscribe": "Tilaa",
+    "comingSoon": "Tulossa pian"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "Tämä sivu on salasanasuojattu",
+    "passwordLabel": "Salasana",
+    "submit": "Lähetä",
+    "incorrectPassword": "Väärä salasana"
+  }
+}

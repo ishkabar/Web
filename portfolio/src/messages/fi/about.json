@@ -1,0 +1,196 @@
+{
+  "path": "/about",
+  "label": "Minusta",
+  "title": "Minusta – {name}",
+  "description": "{name} – {role}, jolla on kokemusta ERP-järjestelmäintegraatioista ja ratkaisuarkkitehtuurista.",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "Lataa CV",
+  "generatingCV": "Luodaan...",
+  "downloadCoverLetter": "Lataa motivaatiokirje",
+
+  "intro": {
+    "display": true,
+    "title": "Esittely",
+    "description": "Senior Backend-kehittäjä (.NET), joka on erikoistunut järjestelmäintegraatioihin ja API-kehitykseen. Kokemusta skaalautuvien backend-palveluiden rakentamisesta, automatisoitujen työnkulkujen toteuttamisesta ja monimutkaisten integraatiohaasteiden ratkaisemisesta. Vahva keskittyminen koodin laatuun, testaukseen ja moderneihin kehityskäytäntöihin mukaan lukien CI/CD ja kontitukseen."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Työkokemus",
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "06.2025 - nykyinen",
+        "role": "Backend-kehittäjä (.NET)",
+        "achievements": [
+          "Backend-integraatioratkaisujen suunnittelu ja kehitys ERP-järjestelmille (Streamsoft Prestiż)",
+          "RESTful Web API:iden ja Windows Services -palveluiden rakentaminen ja ylläpito automatisoituihin liiketoimintaprosesseihin",
+          "Datasynkronoinnin toteuttaminen useiden tietokantojen (Firebird, PostgreSQL, MySQL) välillä LinqToDB ORM:lla",
+          "Desktop-sovellusten kehittäminen WPF:llä ja DevExpress-komponenttikirjastolla",
+          "XML-käsittelytyönkulkujen ja FTP-pohjaisen datasynkronoinnin luominen järjestelmien välillä",
+          "Tietokannan suorituskyvyn optimointi tallennettujen proseduurejen, laukaisimien ja kyselyoptimointien avulla kattavalla lokituksella (NLog)"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend-kehittäjä (.NET)",
+        "achievements": [
+          "RESTful WebAPI-palveluiden kehittäminen Blazor-frontendin kanssa datan tuontiin ja raporttien luontiin",
+          "Automatisoitujen työnkulkujen toteuttaminen Excel/CSV-tiedostojen käsittelyyn ja tietokantaoperaatioihin",
+          "Palvelinpuolen raportointijärjestelmän rakentaminen, joka suorittaa Python- ja PowerShell-skriptejä",
+          "SQL-tietokantarakenteiden, kyselyiden ja tallennettujen proseduurejen suunnittelu ja optimointi",
+          "Datan vientimekanismien luominen Excel-tulosten tuottamiseen",
+          "Olemassa olevien backend-palveluiden ja API-endpointtien ylläpito ja parantaminen"
+        ],
+        "images": []
+      },
+      {
+        "company": "Comarch S.A:n valtuutettu kumppani",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend-integraatiokehittäjä",
+        "achievements": [
+          "Monimutkaisten ERP-järjestelmäintegraatioiden kehittäminen .NET Hydra- ja XLAPI-kehyksillä",
+          "Windows Services -palveluiden rakentaminen automatisoituun datasynkronointiin ja liiketoimintaprosessien automaatioon",
+          "Laajan tietokantakerroksen kehittäminen: tallennetut proseduurit, funktiot, laukaisijat ja SQL-työt",
+          "Business Intelligence -datamallien suunnittelu ja toteutus BI Pointissa",
+          "ERP-moduulien integrointi ulkoisiin järjestelmiin mukautettujen API:iden ja dataliittimien kautta",
+          "Tietokannan hallinnan, kyselyoptimoinnin ja järjestelmän suorituskyvyn virittämisen suorittaminen"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "Sähköpostimarkkinoinnin automaatioasiantuntija",
+        "achievements": [
+          "Data-analyysi ja automaatioprosessien jatkuva parantaminen kampanjoiden tehokkuuden lisäämiseksi",
+          "Mukautettujen ratkaisujen kehittäminen muokkaamalla HTML- ja CSS-koodia sähköpostimallien räätälöintiin",
+          "Yhteistyö myynti-, luova- ja teknisten tiimien kanssa yhtenäisten markkinointitoimien varmistamiseksi",
+          "Työ suurten yhteystietokantojen (yli 600 000 henkilöä) kanssa vaatien tehokasta datan käsittelyä ja analysointia"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Koulutus",
+    "institutions": [
+      {
+        "name": "Warsaw School of Information Technology (WIT)",
+        "description": "Insinöörin tutkinto, tietohallinnon tietojärjestelmät, erikoistuminen soveltavaan tietojenkäsittelytieteeseen (2020-2024)"
+      },
+      {
+        "name": "Elektronisten koulujen kompleksi Radomissa",
+        "description": "Tietotekniikka-asentaja (2013-2017)"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Tekniset taidot",
+    "skills": [
+      {
+        "title": "Backend-kehitys (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Skaalautuvien backend-palveluiden, RESTful API:iden, eräkäsittelyn ja liiketoimintaprosessien automaation suunnittelu ja toteutus.",
+        "tags": [
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - mukautetut takaisinkutsut, tapahtumaohjatut integraatiot, käyttöliittymälaajennukset. Integrointi ulkoisiin palveluihin, Excel-automaatio. Moduulit: DMS (dokumenttien hallinta), BI Point (liiketoimintatiedon hallinta), WMS (varasto), prosessien automaatio, tuotanto.",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Prosessiautomaatiomoduuli" },
+          { "name": "Tuotantomoduuli" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Tietokannat & datan käsittely",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (tallennetut proseduurit, laukaisijat, funktiot, SQL-työt, kyselyoptimointi), ETL, tietokannan hallinta, suorituskyvyn viritys ja järjestelmien välinen synkronointi.",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ERP-järjestelmäintegraatiot",
+        "description": "ERP-järjestelmien (Streamsoft Prestiż, PCBiznes) integrointi ulkoisiin API:eihin, teollisuuslaitteisiin, maksupalveluihin ja EDI-järjestelmiin. REST API, WebSocket, XML/JSON-käsittely, XSLT-transformaatiot, FTP-synkronointi.",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps & infrastruktuuri",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD-putket, Traefik käänteinen välityspalvelin, Watchtower automaattiset päivitykset. Linux (Ubuntu), Windows Server. Käyttöönoton automaatio, kontitus ja tuotantoinfrastruktuurin hallinta.",
+        "tags": [
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & Frontend-kehitys",
+        "description": "WPF, DevExpress-komponenttikirjasto, WinForms. Blazor, React (Next.js). Desktop-sovellusten luominen MVVM-mallin kanssa, responsiiviset käyttöliittymät ja backend-järjestelmien integrointi.",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Työkalut & kehityskäytännöt",
+        "description": "Git/GitHub, PowerShell-skriptaus, Python-automaatio, NLog-lokitus, yksikkötestaus, koodin katselmointi. Excel/CSV-automaatio, raporttien luonti. Modernit kehityskäytännöt ja tiimityöskentely.",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Yksikkötestaus" },
+          { "name": "Koodin katselmointi" },
+          { "name": "Excel-automaatio" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}

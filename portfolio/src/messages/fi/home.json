@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Etusivu",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET-kehittäjä – järjestelmäintegraatiot, ratkaisuarkkitehtuuri, DevOps",
+  "headline": "Luotettavien järjestelmien rakentaminen yrityksille",
+  "sublineRich": "Olen {firstName} – suunnittelen ja toteutan .NET-ratkaisuja yrityssektorille. Erikoistunut ERP-integraatioihin, prosessien automaatioon ja DevOps-infrastruktuuriin.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Esitelty projekti",
+    "href": "/fi/work/ogur-dev"
+  },
+  "blog": { "latest": "Uusimmat julkaisut" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "label": "Projekt",
+  "title": "Projekt – {name}",
+  "description": "Utvalda projekt och implementeringar – {name}",
+  "related": "Relaterade projekt",
+  "projects": "Projekt"
+}

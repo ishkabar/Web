@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "ホーム",
+  "title": "ポートフォリオ – {name}",
+  "description": "シニア.NET開発者 – システム統合、ソリューションアーキテクチャ、DevOps",
+  "headline": "ビジネスのための信頼性の高いシステムを構築",
+  "sublineRich": "私は{firstName}です。企業セクター向けの.NETソリューションを設計・実装しています。ERP統合、プロセス自動化、DevOpsインフラストラクチャを専門としています。",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "注目のプロジェクト",
+    "href": "/ja/work/ogur-dev"
+  },
+  "blog": { "latest": "最新の投稿" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

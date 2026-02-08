@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "label": "Svenska",
+    "flag": "se",
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Senior .NET-utvecklare",
+    "description": "Senior .NET-utvecklare specialiserad på ERP-systemintegration, lösningsarkitektur och DevOps."
+  },
+  "underConstruction": "Denna sida är under uppbyggnad. Vänligen kom tillbaka snart.",
+  "translationInProgress": "Denna sida översätts för närvarande. Ursäkta besväret.",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "Senior .NET-utvecklare",
+    "avatar": "/avatar.png",
+    "email": "mail@dkarczewski.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "Warszawa, Polen",
+    "languages": [
+      "Polska",
+      "Engelska",
+      "Tyska"
+    ]
+  },
+  "cookies": {
+    "message": "Denna webbplats använder cookies och Google Analytics för trafikanalys.",
+    "accept": "Acceptera",
+    "decline": "Avvisa"
+  },
+  "header": {
+    "home": "Hem",
+    "featured": "Utvald",
+    "about": "Om mig",
+    "work": "Projekt",
+    "blog": "Blogg",
+    "gallery": "Galleri",
+    "sponsor": {
+      "title": "Sponsor",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "Nyhetsbrev",
+    "description": "Prenumerera på nyhetsbrevet och håll dig uppdaterad med de senaste nyheterna.",
+    "subscribe": "Prenumerera",
+    "comingSoon": "Kommer snart"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "Denna sida är lösenordsskyddad",
+    "passwordLabel": "Lösenord",
+    "submit": "Skicka",
+    "incorrectPassword": "Felaktigt lösenord"
+  }
+}

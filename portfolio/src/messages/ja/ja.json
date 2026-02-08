@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "日本語",
+    "flag": "jp",
+    "default": false
+  },
+  "common": {
+    "hello": "こんにちは"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "言語を変更：{locale}"
+  }
+}

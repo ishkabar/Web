@@ -1,0 +1,196 @@
+{
+  "path": "/about",
+  "label": "Om meg",
+  "title": "Om meg – {name}",
+  "description": "{name} – {role} med erfaring i ERP-systemintegrasjoner og løsningsarkitektur.",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "Last ned CV",
+  "generatingCV": "Genererer...",
+  "downloadCoverLetter": "Last ned søknadsbrev",
+
+  "intro": {
+    "display": true,
+    "title": "Introduksjon",
+    "description": "Senior Backend Developer (.NET) spesialisert i systemintegrasjoner og API-utvikling. Erfaring med å bygge skalerbare backend-tjenester, implementere automatiserte arbeidsflyter og løse komplekse integrasjonsutfordringer. Sterkt fokus på kodekvalitet, testing og moderne utviklingspraksis inkludert CI/CD og containerisering."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Arbeidserfaring",
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "06.2025 - nåværende",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Design og utvikling av backend-integrasjonsløsninger for ERP-systemer (Streamsoft Prestiż)",
+          "Bygge og vedlikeholde RESTful Web API-er og Windows Services for automatiserte forretningsprosesser",
+          "Implementere datasynkronisering på tvers av flere databaser (Firebird, PostgreSQL, MySQL) ved hjelp av LinqToDB ORM",
+          "Utvikle desktop-applikasjoner ved hjelp av WPF og DevExpress komponentbibliotek",
+          "Opprette XML-behandlingsarbeidsflyter og FTP-basert datasynkronisering mellom systemer",
+          "Optimalisere databaseytelse gjennom lagrede prosedyrer, triggere og spørringsoptimalisering med omfattende logging (NLog)"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Utviklet RESTful WebAPI-tjenester med Blazor frontend for dataimport og rapportgenerering",
+          "Implementert automatiserte arbeidsflyter for behandling av Excel/CSV-filer og databaseoperasjoner",
+          "Bygget serversidebasert rapportgenereringssystem som kjører Python og PowerShell-skript",
+          "Designet og optimalisert SQL-databasestrukturer, spørringer og lagrede prosedyrer",
+          "Opprettet dataeksportmekanismer med Excel-output generering",
+          "Vedlikeholdt og forbedret eksisterende backend-tjenester og API-endepunkter"
+        ],
+        "images": []
+      },
+      {
+        "company": "Autorisert Partner av Comarch S.A.",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend Integration Developer",
+        "achievements": [
+          "Utviklet komplekse ERP-systemintegrasjoner ved hjelp av .NET Hydra og XLAPI rammeverk",
+          "Bygget Windows Services for automatisert datasynkronisering og forretningsprosessautomatisering",
+          "Utviklet omfattende databaselag: lagrede prosedyrer, funksjoner, triggere og SQL-jobber",
+          "Designet og implementert Business Intelligence datamodeller i BI Point",
+          "Integrert ERP-moduler med eksterne systemer via tilpassede API-er og datakoblinger",
+          "Utført databaseadministrasjon, spørringsoptimalisering og systemytelsestuning"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "E-postmarkedsføringsautomatiseringsspesialist",
+        "achievements": [
+          "Dataanalyse og kontinuerlig forbedring av automatiseringsprosesser for å øke kampanjeeffektivitet",
+          "Utvikle tilpassede løsninger ved å modifisere HTML og CSS-kode for å tilpasse e-postmaler",
+          "Samarbeide med salgs-, kreative og tekniske team for å sikre sammenhengende markedsføringshandlinger",
+          "Arbeide med store kontaktdatabaser (over 600 000 personer) som krever effektiv databehandling og analyse"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Utdanning",
+    "institutions": [
+      {
+        "name": "Warsaw School of Information Technology (WIT)",
+        "description": "Bachelor of Engineering, Management Information Systems, spesialisering i Anvendt informatikk (2020-2024)"
+      },
+      {
+        "name": "Elektronisk skolekompleks i Radom",
+        "description": "Datatekniker (2013-2017)"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Tekniske ferdigheter",
+    "skills": [
+      {
+        "title": "Backend Development (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Design og implementering av skalerbare backend-tjenester, RESTful API-er, batch-behandling og forretningsprosessautomatisering.",
+        "tags": [
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - tilpassede callbacks, hendelsesdrevne integrasjoner, UI-utvidelser. Integrasjon med eksterne tjenester, Excel-automatisering. Moduler: DMS (dokumenthåndtering), BI Point (Business Intelligence), WMS (lager), Prosessautomatisering, Produksjon.",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Prosessautomatiseringsmodul" },
+          { "name": "Produksjonsmodul" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Databaser & databehandling",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (lagrede prosedyrer, triggere, funksjoner, SQL-jobber, spørringsoptimalisering), ETL, databaseadministrasjon, ytelsestuning og krysssystemsynkronisering.",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ERP-systemintegrasjoner",
+        "description": "Integrasjon av ERP-systemer (Streamsoft Prestiż, PCBiznes) med eksterne API-er, industrielle enheter, betalingsplattformer og EDI-systemer. REST API, WebSocket, XML/JSON-behandling, XSLT-transformasjoner, FTP-synkronisering.",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps & infrastruktur",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD pipelines, Traefik reverse proxy, Watchtower automatiske oppdateringer. Linux (Ubuntu), Windows Server. Utrullingsautomatisering, containerisering og produksjonsinfrastrukturhåndtering.",
+        "tags": [
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & Frontend Development",
+        "description": "WPF, DevExpress komponentbibliotek, WinForms. Blazor, React (Next.js). Opprette desktop-applikasjoner med MVVM-mønster, responsive brukergrensesnitt og backend-systemintegrasjon.",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Verktøy & utviklingspraksis",
+        "description": "Git/GitHub, PowerShell-skripting, Python-automatisering, NLog-logging, Unit Testing, Code Review. Excel/CSV-automatisering, rapportgenerering. Moderne utviklingspraksis og teamsamarbeid.",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Unit Testing" },
+          { "name": "Code Review" },
+          { "name": "Excel-automatisering" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "path": "/about",
+  "label": "私について",
+  "title": "私について – {name}",
+  "description": "{name} – ERPシステム統合とソリューションアーキテクチャの経験を持つ{role}。",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "履歴書をダウンロード",
+  "generatingCV": "生成中...",
+  "downloadCoverLetter": "カバーレターをダウンロード",
+
+  "intro": {
+    "display": true,
+    "title": "はじめに",
+    "description": "システム統合とAPI開発を専門とするシニアバックエンド開発者（.NET）。スケーラブルなバックエンドサービスの構築、自動化されたワークフローの実装、複雑な統合課題の解決に経験があります。コード品質、テスト、CI/CDとコンテナ化を含む最新の開発手法に重点を置いています。"
+  },
+
+  "work": {
+    "display": true,
+    "title": "職務経歴",
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "2025年6月 - 現在",
+        "role": "バックエンド開発者（.NET）",
+        "achievements": [
+          "ERPシステム（Streamsoft Prestiż）向けバックエンド統合ソリューションの設計と開発",
+          "自動化されたビジネスプロセス向けRESTful Web APIとWindowsサービスの構築と保守",
+          "LinqToDB ORMを使用した複数データベース（Firebird、PostgreSQL、MySQL）間のデータ同期の実装",
+          "WPFとDevExpressコンポーネントライブラリを使用したデスクトップアプリケーションの開発",
+          "XMLワークフロー処理とシステム間のFTPベースデータ同期の作成",
+          "ストアドプロシージャ、トリガー、クエリ最適化と包括的ロギング（NLog）によるデータベースパフォーマンスの最適化"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "2024年6月 - 2025年2月",
+        "role": "バックエンド開発者（.NET）",
+        "achievements": [
+          "データインポートとレポート生成用のBlazorフロントエンドを持つRESTful WebAPIサービスの開発",
+          "Excel/CSVファイル処理とデータベース操作のための自動化ワークフローの実装",
+          "PythonとPowerShellスクリプトを実行するサーバーサイドレポート生成システムの構築",
+          "SQLデータベース構造、クエリ、ストアドプロシージャの設計と最適化",
+          "Excel出力生成を使用したデータエクスポートメカニズムの作成",
+          "既存のバックエンドサービスとAPIエンドポイントの保守と改善"
+        ],
+        "images": []
+      },
+      {
+        "company": "Comarch S.A.認定パートナー",
+        "timeframe": "2022年1月 - 2025年3月",
+        "role": "バックエンド統合開発者",
+        "achievements": [
+          ".NET HydraとXLAPIフレームワークを使用した複雑なERPシステム統合の開発",
+          "自動化されたデータ同期とビジネスプロセス自動化のためのWindowsサービスの構築",
+          "広範なデータベースレイヤーの開発：ストアドプロシージャ、関数、トリガー、SQLジョブ",
+          "BI PointでのBusiness Intelligenceデータモデルの設計と実装",
+          "カスタムAPIとデータコネクタを介した外部システムとのERPモジュールの統合",
+          "データベース管理、クエリ最適化、システムパフォーマンスチューニングの実施"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "2021年4月 - 2021年12月",
+        "role": "メールマーケティング自動化スペシャリスト",
+        "achievements": [
+          "キャンペーン効率を高めるための自動化プロセスのデータ分析と継続的改善",
+          "HTMLとCSSコードを修正してメールテンプレートをカスタマイズするカスタムソリューションの開発",
+          "営業、クリエイティブ、技術チームとの協力により、一貫性のあるマーケティング活動を確保",
+          "効率的なデータ処理と分析を必要とする大規模な連絡先データベース（60万人以上）での作業"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "学歴",
+    "institutions": [
+      {
+        "name": "ワルシャワ情報技術大学（WIT）",
+        "description": "工学士、経営情報システム、応用情報科学専攻（2020-2024）"
+      },
+      {
+        "name": "ラドム電子工業学校複合施設",
+        "description": "コンピュータ技術者（2013-2017）"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "技術スキル",
+    "skills": [
+      {
+        "title": "バックエンド開発（.NET）",
+        "description": "C#（.NET 6-8）、ASP.NET Core Web API、Windowsサービス、Entity Framework Core、LinqToDB ORM。スケーラブルなバックエンドサービス、RESTful API、バッチ処理、ビジネスプロセス自動化の設計と実装。",
+        "tags": [
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windowsサービス" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydraフレームワーク",
+        "description": "Comarch Hydra SDK（.NET Hydra、XLAPI）- カスタムコールバック、イベント駆動型統合、UI拡張。外部サービスとの統合、Excel自動化。モジュール：DMS（ドキュメント管理）、BI Point（ビジネスインテリジェンス）、WMS（倉庫）、プロセス自動化、生産。",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "プロセス自動化モジュール" },
+          { "name": "生産モジュール" }
+        ],
+        "images": []
+      },
+      {
+        "title": "データベース＆データ処理",
+        "description": "SQL Server、PostgreSQL、MySQL、Firebird。T-SQL（ストアドプロシージャ、トリガー、関数、SQLジョブ、クエリ最適化）、ETL、データベース管理、パフォーマンスチューニング、クロスシステム同期。",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ERPシステム統合",
+        "description": "ERPシステム（Streamsoft Prestiż、PCBiznes）と外部API、産業機器、決済プラットフォーム、EDIシステムとの統合。REST API、WebSocket、XML/JSON処理、XSLT変換、FTP同期。",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps＆インフラストラクチャ",
+        "description": "Docker、Docker Compose、GitHub Actions、CI/CDパイプライン、Traefikリバースプロキシ、Watchtower自動更新。Linux（Ubuntu）、Windows Server。デプロイメント自動化、コンテナ化、本番インフラストラクチャ管理。",
+        "tags": [
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "デスクトップ＆フロントエンド開発",
+        "description": "WPF、DevExpressコンポーネントライブラリ、WinForms。Blazor、React（Next.js）。MVVMパターンを使用したデスクトップアプリケーションの作成、レスポンシブなユーザーインターフェース、バックエンドシステム統合。",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ツール＆開発手法",
+        "description": "Git/GitHub、PowerShellスクリプティング、Python自動化、NLogロギング、ユニットテスト、コードレビュー。Excel/CSV自動化、レポート生成。最新の開発手法とチームコラボレーション。",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "ユニットテスト" },
+          { "name": "コードレビュー" },
+          { "name": "Excel自動化" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "label": "Русский",
+    "flag": "ru",
+    "default": false
+  },
+  "common": {
+    "hello": "Привет"
+  },
+  "LocaleSwitcher": {
+    "switchLocale": "Переключить язык на: {locale}"
+  }
+}

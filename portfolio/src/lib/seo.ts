@@ -56,6 +56,16 @@ export async function buildPageMetadata(
         cz: "cs_CZ",
         it: "it_IT",
         nl: "nl_NL",
+        no: "nb_NO",
+        es: "es_ES",
+        pt: "pt_PT",
+        sv: "sv_SE",
+        ua: "uk_UA",
+        fi: "fi_FI",
+        zh: "zh_CN",
+        ko: "ko_KR",
+        ja: "ja_JP",
+        ru: "ru_RU",
     };
 
     return {

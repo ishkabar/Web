@@ -1,13 +1,13 @@
 {
   "meta": {
-    "label": "Norsk",
-    "flag": "no",
+    "label": "Suomi",
+    "flag": "fi",
     "default": false
   },
   "common": {
     "hello": "Hei"
   },
   "LocaleSwitcher": {
-    "switchLocale": "Bytt språk til: {locale}"
+    "switchLocale": "Vaihda kieli: {locale}"
   }
 }

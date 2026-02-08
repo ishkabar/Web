@@ -1,0 +1,10 @@
+{
+  "title": "ブログ – 技術記事",
+  "titleShort": "ブログ",
+  "description": ".NET、DevOps、システムアーキテクチャに関する記事",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "以前の投稿",
+  "onPage": "このページの内容"
+}

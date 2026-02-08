@@ -1,0 +1,10 @@
+{
+  "title": "Blogg – Tekniska artiklar",
+  "titleShort": "Blogg",
+  "description": "Artiklar om .NET, DevOps och systemarkitektur",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "Tidigare inlägg",
+  "onPage": "På denna sida"
+}

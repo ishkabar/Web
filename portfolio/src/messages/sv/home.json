@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Hem",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET-utvecklare – systemintegrationer, lösningsarkitektur, DevOps",
+  "headline": "Bygga pålitliga system för företag",
+  "sublineRich": "Jag är {firstName} – jag designar och implementerar .NET-lösningar för företagssektorn. Jag specialiserar mig på ERP-integrationer, processautomation och DevOps-infrastruktur.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Utvalt projekt",
+    "href": "/sv/work/ogur-dev"
+  },
+  "blog": { "latest": "Senaste inlägg" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

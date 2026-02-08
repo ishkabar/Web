@@ -1,0 +1,10 @@
+{
+  "title": "Blogi – Tekniset artikkelit",
+  "titleShort": "Blogi",
+  "description": "Artikkeleja .NET:stä, DevOpsista ja järjestelmäarkkitehtuurista",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "Aiemmat julkaisut",
+  "onPage": "Tällä sivulla"
+}

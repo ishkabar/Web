@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "label": "日本語",
+    "flag": "jp",
+    "default": false,
+    "siteName": "Dominik Karczewski – ポートフォリオ",
+    "title": "ポートフォリオ – Dominik Karczewski | シニア.NET開発者",
+    "description": "ERPシステム統合、ソリューションアーキテクチャ、DevOpsを専門とするシニア.NET開発者。"
+  },
+  "underConstruction": "このページは現在構築中です。後ほどご確認ください。",
+  "translationInProgress": "このページは現在翻訳中です。ご不便をおかけして申し訳ございません。",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "シニア.NET開発者",
+    "avatar": "/avatar.png",
+    "email": "mail@dkarczewski.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "ワルシャワ、ポーランド",
+    "languages": [
+      "ポーランド語",
+      "英語",
+      "ドイツ語"
+    ]
+  },
+  "cookies": {
+    "message": "このサイトはトラフィック分析のためにCookieとGoogle Analyticsを使用しています。",
+    "accept": "承認",
+    "decline": "拒否"
+  },
+  "header": {
+    "home": "ホーム",
+    "featured": "注目",
+    "about": "私について",
+    "work": "プロジェクト",
+    "blog": "ブログ",
+    "gallery": "ギャラリー",
+    "sponsor": {
+      "title": "スポンサー",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "ニュースレター",
+    "description": "ニュースレターを購読して最新情報を受け取りましょう。",
+    "subscribe": "購読",
+    "comingSoon": "近日公開"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "このページはパスワードで保護されています",
+    "passwordLabel": "パスワード",
+    "submit": "送信",
+    "incorrectPassword": "パスワードが正しくありません"
+  }
+}

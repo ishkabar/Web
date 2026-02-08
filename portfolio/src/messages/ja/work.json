@@ -1,0 +1,7 @@
+{
+  "label": "プロジェクト",
+  "title": "プロジェクト – {name}",
+  "description": "選定されたプロジェクトと実装 – {name}",
+  "related": "関連プロジェクト",
+  "projects": "プロジェクト"
+}
