@@ -2,6 +2,8 @@ import {getBlogPostsLocaleAware, getWorkPostsLocaleAware} from "@/utils/utils";
 import { baseURL, routes as routesConfig } from "@/resources";
 import { enabledLocales } from "@/i18n/locales.generated";
 
+const SITE_CREATED_DATE = "2025-11-06";
+
 export default async function sitemap() {
     const routes: Array<{url: string; lastModified: string}> = [];
 
@@ -15,7 +17,7 @@ export default async function sitemap() {
         for (const route of activeRoutes) {
             routes.push({
                 url: `${baseURL}${prefix}${route !== "/" ? route : ""}`,
-                lastModified: new Date().toISOString().split("T")[0],
+                lastModified: SITE_CREATED_DATE,
             });
         }
 
