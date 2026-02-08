@@ -3,14 +3,15 @@ import styles from "./Footer.module.scss";
 import { useTranslations } from "next-intl";
 
 export const Footer = () => {
+    const START_YEAR = 2025;
     const currentYear = new Date().getFullYear();
     const t = useTranslations("common");
 
-    // Pobierz social z common.social (bez sponsor=true)
     const rawSocial = t.raw('social');
     const social = Array.isArray(rawSocial) && rawSocial[0]?.icon
         ? (rawSocial as Array<{name: string; icon: string; link: string; sponsor?: boolean}>).filter(s => !s.sponsor)
         : [];
+
 
     return (
         <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
@@ -29,7 +30,9 @@ export const Footer = () => {
                 }}
             >
                 <Text variant="body-default-s" onBackground="neutral-strong">
-                    <Text onBackground="neutral-weak">© {currentYear} /</Text>
+                    <Text onBackground="neutral-weak">
+                        © {START_YEAR}{currentYear > START_YEAR ? `-${currentYear}` : ''} /
+                    </Text>
                     <Text paddingX="4">{t('person.name')}</Text>
                     <Text onBackground="neutral-weak">
                         / Build your portfolio with{" "}
