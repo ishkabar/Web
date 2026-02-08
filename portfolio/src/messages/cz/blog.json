@@ -1,0 +1,10 @@
+{
+  "title": "Blog – Technické články",
+  "titleShort": "Blog",
+  "description": "Články o .NET, DevOps a systémové architektuře",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "Starší příspěvky",
+  "onPage": "Na této stránce"
+}

@@ -5,23 +5,34 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ToggleButton } from '@once-ui-system/core';
 import { locales, defaultLocale, type Locale, isLocale, localeMeta, enabledLocales } from '@/i18n/routing';
 
-
-
 type LocaleDef = { code: Locale; label: string; flag: string };
-const LOCALES: LocaleDef[] = locales.map(code => ({
-    code,
-    label: localeMeta[code]?.label ?? code,
-    flag:  localeMeta[code]?.flag  ?? code
-}));
+
+// Sortuj: enabled alfabetycznie | separator | disabled alfabetycznie
+const SORTED_LOCALES: LocaleDef[] = (() => {
+    const all = locales.map(code => ({
+        code,
+        label: localeMeta[code]?.label ?? code,
+        flag: localeMeta[code]?.flag ?? code
+    }));
+
+    const enabled = all
+        .filter(l => (enabledLocales as readonly string[]).includes(l.code))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+    const disabled = all
+        .filter(l => !(enabledLocales as readonly string[]).includes(l.code))
+        .sort((a, b) => a.label.localeCompare(b.label));
+
+    return [...enabled, ...disabled];
+})();
 
 const listHideDelay = 300;
-const PRIORITY = ['pl','en','de','da'];
-//const ENABLED_LOCALES = ['pl','en','de','da'];
 
 function detectLocaleFromPath(pathname: string): Locale {
     const seg = pathname.split('/')[1] ?? '';
     return isLocale(seg) ? seg : defaultLocale;
 }
+
 function switchLocalePath(pathname: string, target: Locale) {
     const segs = pathname.split('/');
     if (isLocale(segs[1] ?? '')) segs[1] = target;
@@ -29,6 +40,7 @@ function switchLocalePath(pathname: string, target: Locale) {
     const next = segs.join('/') || `/${target}`;
     return next.replace(/\/{2,}/g, '/');
 }
+
 function useThemeName() {
     const [theme, setTheme] = React.useState<string>(() =>
         typeof document !== 'undefined'
@@ -60,7 +72,7 @@ export default function LocaleSwitcher() {
     const [menuVisible, setMenuVisible] = React.useState(false);
     const [menuOpen, setMenuOpen] = React.useState(false);
 
-    const currentIdx = React.useMemo(() => LOCALES.findIndex(l => l.code === current), [current]);
+    const currentIdx = React.useMemo(() => SORTED_LOCALES.findIndex(l => l.code === current), [current]);
     const [focusIdx, setFocusIdx] = React.useState<number>(currentIdx);
     const [hoverIdx, setHoverIdx] = React.useState<number | null>(null);
 
@@ -193,13 +205,13 @@ export default function LocaleSwitcher() {
 
     const onListKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         cancelHide();
-        if (e.key === 'ArrowDown') { e.preventDefault(); setFocusIdx(i => (i + 1) % LOCALES.length); setHoverIdx(null); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); setFocusIdx(i => (i - 1 + LOCALES.length) % LOCALES.length); setHoverIdx(null); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); setFocusIdx(i => (i + 1) % SORTED_LOCALES.length); setHoverIdx(null); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setFocusIdx(i => (i - 1 + SORTED_LOCALES.length) % SORTED_LOCALES.length); setHoverIdx(null); }
         else if (e.key === 'Home') { e.preventDefault(); setFocusIdx(0); setHoverIdx(null); }
-        else if (e.key === 'End') { e.preventDefault(); setFocusIdx(LOCALES.length - 1); setHoverIdx(null); }
+        else if (e.key === 'End') { e.preventDefault(); setFocusIdx(SORTED_LOCALES.length - 1); setHoverIdx(null); }
         else if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            const sel = LOCALES[focusIdx];
+            const sel = SORTED_LOCALES[focusIdx];
             if (sel && sel.code !== current) router.push(buildTargetHref(sel.code));
             closeMenu();
         }
@@ -218,7 +230,7 @@ export default function LocaleSwitcher() {
             : '0 10px 30px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08)',
     };
 
-    const cur = LOCALES.find(l => l.code === current)!;
+    const cur = SORTED_LOCALES.find(l => l.code === current)!;
 
     return (
         <div
@@ -274,9 +286,8 @@ export default function LocaleSwitcher() {
                         WebkitOverflowScrolling: 'touch',
                     }}
                 >
-                    {LOCALES.map((l, i) => {
+                    {SORTED_LOCALES.map((l, i) => {
                         const isActive = current === l.code;
-                        //const isEnabled = ENABLED_LOCALES.includes(l.code);
                         const isEnabled = (enabledLocales as readonly string[]).includes(l.code);
                         const isHovered = hoverIdx === i;
                         const isFocused = hoverIdx == null && focusIdx === i;
@@ -311,15 +322,17 @@ export default function LocaleSwitcher() {
                                         transition: 'background .12s ease',
                                     }}
                                 >
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                    <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
-                    <span>{l.label}</span>
-                </span>
+                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                                        <span className={`fi fi-${l.flag}`} aria-hidden="true" style={{ display: 'inline-block', fontSize: 16, borderRadius: 2 }} />
+                                        <span>{l.label}</span>
+                                    </span>
                                     <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
                                 </button>
 
-                                {/* separator po ostatnim języku priorytetowym */}
-                                {i === PRIORITY.length - 1 && i < LOCALES.length - 1 && (
+                                {/* separator po ostatnim enabled */}
+                                {isEnabled &&
+                                 i < SORTED_LOCALES.length - 1 &&
+                                 !(enabledLocales as readonly string[]).includes(SORTED_LOCALES[i+1]?.code) && (
                                     <div
                                         style={{
                                             borderTop: `1px solid ${colors.border}`,

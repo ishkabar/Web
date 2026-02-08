@@ -1,0 +1,10 @@
+{
+  "title": "Blog – Technische Artikelen",
+  "titleShort": "Blog",
+  "description": "Artikelen over .NET, DevOps en systeemarchitectuur",
+  "author": {
+    "name": "Dominik Karczewski"
+  },
+  "earlierPosts": "Eerdere berichten",
+  "onPage": "Op deze pagina"
+}

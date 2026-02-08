@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Home",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET Developer – systeemintegraties, oplossingsarchitectuur, DevOps",
+  "headline": "Betrouwbare systemen bouwen voor bedrijven",
+  "sublineRich": "Ik ben {firstName} – ik ontwerp en implementeer .NET-oplossingen voor de zakelijke sector. Ik specialiseer me in ERP-integraties, procesautomatisering en DevOps-infrastructuur.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Uitgelicht project",
+    "href": "/nl/work/ogur-dev"
+  },
+  "blog": { "latest": "Laatste berichten" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

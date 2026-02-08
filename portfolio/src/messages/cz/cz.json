@@ -8,6 +8,6 @@
     "hello": "Ahoj"
   },
   "LocaleSwitcher": {
-    "switchLocale": "Změnit jazyk na: {locale}"
+    "switchLocale": "Přepnout jazyk na: {locale}"
   }
 }

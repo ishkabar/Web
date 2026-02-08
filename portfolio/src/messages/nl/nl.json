@@ -8,6 +8,6 @@
     "hello": "Hallo"
   },
   "LocaleSwitcher": {
-    "switchLocale": "Taal wijzigen naar: {locale}"
+    "switchLocale": "Schakel taal naar: {locale}"
   }
 }

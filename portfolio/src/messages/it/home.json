@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Home",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET Developer – integrazioni di sistemi, architettura soluzioni, DevOps",
+  "headline": "Costruire sistemi affidabili per le aziende",
+  "sublineRich": "Sono {firstName} – progetto e implemento soluzioni .NET per il settore enterprise. Mi specializzo in integrazioni ERP, automazione processi e infrastruttura DevOps.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Progetto in evidenza",
+    "href": "/it/work/ogur-dev"
+  },
+  "blog": { "latest": "Ultimi articoli" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

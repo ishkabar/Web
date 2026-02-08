@@ -15,8 +15,8 @@ const OUT_FILE = path.join(OUT_DIR, 'locales.generated.ts');
 type Meta = { label?: string; flag?: string; default?: boolean };
 type LocaleEntry = { code: string; meta: Meta };
 
-const PRIORITY: string[] = ['pl', 'en', 'de','da'];
-const ENABLED: string[] = ['pl', 'en', 'de','da'];
+const PRIORITY: string[] = ['pl', 'en', 'de','da','fr','cz','it','nl'];
+const ENABLED: string[] = ['pl', 'en', 'de','da','fr','cz','it','nl'];
 
 function safeReadJson(p: string): any | null {
     try {
@@ -89,6 +89,7 @@ export const defaultLocale: Locale = ${JSON.stringify(defaultLocale)} as Locale;
 
 export const enabledLocales = ${JSON.stringify(enabledLocales)} as const;
 export type EnabledLocale = typeof enabledLocales[number];
+
 
 export const localeMeta: Record<Locale, {label: string; flag: string}> = ${JSON.stringify(metaMap, null, 2)} as any;
 

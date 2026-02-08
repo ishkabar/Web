@@ -1,0 +1,22 @@
+{
+  "path": "/",
+  "image": "/images/home.jpg",
+  "label": "Domů",
+  "title": "Portfolio – {name}",
+  "description": "Senior .NET Developer – systémové integrace, architektura řešení, DevOps",
+  "headline": "Vytváření spolehlivých systémů pro firmy",
+  "sublineRich": "Jsem {firstName} – navrhuji a implementuji .NET řešení pro podnikový sektor. Specializuji se na ERP integrace, automatizaci procesů a DevOps infrastrukturu.",
+  "calendar": { "cta": "" },
+  "featured": {
+    "display": true,
+    "title": "ogur.dev",
+    "subtitle": "Doporučený projekt",
+    "href": "/cz/work/ogur-dev"
+  },
+  "blog": { "latest": "Nejnovější příspěvky" },
+  "intro": {
+    "display": true,
+    "title": "",
+    "description": ""
+  }
+}

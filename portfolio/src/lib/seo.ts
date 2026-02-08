@@ -34,27 +34,28 @@ export async function buildPageMetadata(
     const title = opts.titleOverride ?? t(opts.titleKey ?? "title");
     const description = opts.descriptionOverride ?? t(opts.descriptionKey ?? "description");
 
-    // Canonical z locale
     const canonicalPath = path === "/" || path === "" ? `/${locale}` : `/${locale}${path}`;
     const canonical = new URL(canonicalPath, baseURL).toString();
 
-    // Alternate languages (hreflang)
     const languages: Record<string, string> = {};
     for (const loc of ENABLED_LOCALES) {
         const altPath = path === "/" || path === "" ? `/${loc}` : `/${loc}${path}`;
         languages[loc] = new URL(altPath, baseURL).toString();
     }
-    // x-default wskazuje na domyślny język
+
     languages["x-default"] = new URL(`/${DEFAULT_LOCALE}${path === "/" ? "" : path}`, baseURL).toString();
 
     const ogImage = opts.image ?? `/api/og/generate?title=${encodeURIComponent(title)}&locale=${locale}`;
 
-    // Mapowanie locale na OG locale format
     const ogLocaleMap: Record<string, string> = {
         pl: "pl_PL",
         en: "en_US",
         de: "de_DE",
         da: "da_DK",
+        fr: "fr_FR",
+        cz: "cs_CZ",
+        it: "it_IT",
+        nl: "nl_NL",
     };
 
     return {

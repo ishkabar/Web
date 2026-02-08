@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "label": "Čeština",
+    "flag": "cz",
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Senior .NET Developer",
+    "description": "Senior .NET Developer specializující se na integraci ERP systémů, architekturu řešení a DevOps."
+  },
+  "underConstruction": "Tato stránka je ve výstavbě. Prosím vraťte se brzy.",
+  "translationInProgress": "Tato stránka je v současné době překládána. Omlouváme se za nepříjemnosti.",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "Senior .NET Developer",
+    "avatar": "/avatar.png",
+    "email": "mail@dkarczewski.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "Varšava, Polsko",
+    "languages": [
+      "Polština",
+      "Angličtina",
+      "Němčina"
+    ]
+  },
+  "cookies": {
+    "message": "Tyto stránky používají cookies a Google Analytics pro analýzu návštěvnosti.",
+    "accept": "Přijmout",
+    "decline": "Odmítnout"
+  },
+  "header": {
+    "home": "Domů",
+    "featured": "Doporučené",
+    "about": "O mně",
+    "work": "Projekty",
+    "blog": "Blog",
+    "gallery": "Galerie",
+    "sponsor": {
+      "title": "Sponzor",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "Newsletter",
+    "description": "Přihlaste se k odběru newsletteru a buďte informováni o nejnovějších zprávách.",
+    "subscribe": "Přihlásit se",
+    "comingSoon": "Již brzy"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "Tato stránka je chráněna heslem",
+    "passwordLabel": "Heslo",
+    "submit": "Odeslat",
+    "incorrectPassword": "Nesprávné heslo"
+  }
+}

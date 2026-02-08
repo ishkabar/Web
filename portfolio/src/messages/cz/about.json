@@ -1,0 +1,196 @@
+{
+  "path": "/about",
+  "label": "O mně",
+  "title": "O mně – {name}",
+  "description": "{name} – {role} se zkušenostmi s integrací ERP systémů a architekturou řešení.",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "Stáhnout CV",
+  "generatingCV": "Generování...",
+  "downloadCoverLetter": "Stáhnout motivační dopis",
+
+  "intro": {
+    "display": true,
+    "title": "Úvod",
+    "description": "Senior Backend Developer (.NET) specializující se na systémové integrace a vývoj API. Zkušenosti s vytvářením škálovatelných backend služeb, implementací automatizovaných workflow a řešením složitých integračních výzev. Silné zaměření na kvalitu kódu, testování a moderní vývojové praktiky včetně CI/CD a kontejnerizace."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Pracovní zkušenosti",
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "06.2025 - současnost",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Návrh a vývoj backend integračních řešení pro ERP systémy (Streamsoft Prestiż)",
+          "Vytváření a údržba RESTful Web API a Windows Services pro automatizované obchodní procesy",
+          "Implementace synchronizace dat napříč několika databázemi (Firebird, PostgreSQL, MySQL) pomocí LinqToDB ORM",
+          "Vývoj desktopových aplikací pomocí WPF a knihovny komponent DevExpress",
+          "Vytváření workflow pro zpracování XML a FTP synchronizaci dat mezi systémy",
+          "Optimalizace výkonu databází prostřednictvím uložených procedur, triggerů a optimalizace dotazů s komplexním logováním (NLog)"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Vývoj RESTful WebAPI služeb s Blazor frontendem pro import dat a generování sestav",
+          "Implementace automatizovaných workflow pro zpracování Excel/CSV souborů a databázových operací",
+          "Vytvoření systému generování sestav na straně serveru provádějícího Python a PowerShell skripty",
+          "Návrh a optimalizace SQL databázových struktur, dotazů a uložených procedur",
+          "Vytvoření mechanismů exportu dat s generováním Excel výstupů",
+          "Údržba a vylepšování existujících backend služeb a API endpointů"
+        ],
+        "images": []
+      },
+      {
+        "company": "Autorizovaný partner Comarch S.A.",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend Integration Developer",
+        "achievements": [
+          "Vývoj komplexních integrací ERP systémů pomocí .NET Hydra a XLAPI frameworků",
+          "Vytváření Windows Services pro automatizovanou synchronizaci dat a automatizaci obchodních procesů",
+          "Vývoj rozsáhlé databázové vrstvy: uložené procedury, funkce, triggery a SQL joby",
+          "Návrh a implementace datových modelů Business Intelligence v BI Point",
+          "Integrace ERP modulů s externími systémy pomocí vlastních API a datových konektorů",
+          "Správa databází, optimalizace dotazů a ladění výkonu systému"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "Specialista na automatizaci e-mailového marketingu",
+        "achievements": [
+          "Analýza dat a neustálé zlepšování automatizačních procesů pro zvýšení efektivity kampaní",
+          "Vývoj vlastních řešení úpravou HTML a CSS kódu pro přizpůsobení e-mailových šablon",
+          "Spolupráce s prodejními, kreativními a technickými týmy pro zajištění soudržných marketingových akcí",
+          "Práce s velkými kontaktními databázemi (přes 600 000 osob) vyžadující efektivní zpracování a analýzu dat"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Vzdělání",
+    "institutions": [
+      {
+        "name": "Warsaw School of Information Technology (WIT)",
+        "description": "Bakalář inženýrství, Management Information Systems, specializace Aplikovaná informatika (2020-2024)"
+      },
+      {
+        "name": "Komplex elektronických škol v Radomu",
+        "description": "Počítačový technik (2013-2017)"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Technické dovednosti",
+    "skills": [
+      {
+        "title": "Backend Development (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Návrh a implementace škálovatelných backend služeb, RESTful API, dávkového zpracování a automatizace obchodních procesů.",
+        "tags": [
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - vlastní callbacky, event-driven integrace, UI rozšíření. Integrace s externími službami, automatizace Excel. Moduly: DMS (správa dokumentů), BI Point (Business Intelligence), WMS (sklad), Automatizace procesů, Výroba.",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Modul automatizace procesů" },
+          { "name": "Výrobní modul" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Databáze & zpracování dat",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (uložené procedury, triggery, funkce, SQL joby, optimalizace dotazů), ETL, správa databází, ladění výkonu a mezisystémová synchronizace.",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Integrace ERP systémů",
+        "description": "Integrace ERP systémů (Streamsoft Prestiż, PCBiznes) s externími API, průmyslovými zařízeními, platebními platformami a EDI systémy. REST API, WebSocket, zpracování XML/JSON, XSLT transformace, FTP synchronizace.",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps & infrastruktura",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD pipeline, Traefik reverse proxy, Watchtower automatické aktualizace. Linux (Ubuntu), Windows Server. Automatizace nasazení, kontejnerizace a správa produkční infrastruktury.",
+        "tags": [
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & Frontend Development",
+        "description": "WPF, knihovna komponent DevExpress, WinForms. Blazor, React (Next.js). Vytváření desktopových aplikací s MVVM vzorem, responzivní uživatelská rozhraní a integrace backend systémů.",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Nástroje & vývojové praktiky",
+        "description": "Git/GitHub, PowerShell skriptování, Python automatizace, NLog logování, Unit Testing, Code Review. Excel/CSV automatizace, generování sestav. Moderní vývojové praktiky a týmová spolupráce.",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Unit Testing" },
+          { "name": "Code Review" },
+          { "name": "Excel automatizace" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}

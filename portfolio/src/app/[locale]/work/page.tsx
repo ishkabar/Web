@@ -21,7 +21,6 @@ export default async function Work() {
 
     const common = await loadCommon(locale);
 
-    // Sprawdź tłumaczenia projektów
     const projects = getWorkPostsLocaleAware(locale); // <-- ZMIANA
     const allSlugs = projects.map(p => p.slug);
     const hasFullTranslation = hasAllTranslations('projects', allSlugs, locale);

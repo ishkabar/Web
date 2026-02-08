@@ -1,0 +1,196 @@
+{
+  "path": "/about",
+  "label": "Over mij",
+  "title": "Over mij – {name}",
+  "description": "{name} – {role} met ervaring in ERP-systeemintegraties en oplossingsarchitectuur.",
+  "tableOfContent": { "display": true, "subItems": true },
+  "avatar": { "display": true },
+  "calendar": { "display": false, "link": "", "cta": "" },
+  "downloadCV": "Download CV",
+  "generatingCV": "Genereren...",
+  "downloadCoverLetter": "Download motivatiebrief",
+
+  "intro": {
+    "display": true,
+    "title": "Introductie",
+    "description": "Senior Backend Developer (.NET) gespecialiseerd in systeemintegraties en API-ontwikkeling. Ervaring met het bouwen van schaalbare backend-services, implementeren van geautomatiseerde workflows en oplossen van complexe integratie-uitdagingen. Sterke focus op codekwaliteit, testen en moderne ontwikkelpraktijken inclusief CI/CD en containerisatie."
+  },
+
+  "work": {
+    "display": true,
+    "title": "Werkervaring",
+    "experiences": [
+      {
+        "company": "Artex IT",
+        "timeframe": "06.2025 - heden",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Ontwerpen en ontwikkelen van backend-integratieoplossingen voor ERP-systemen (Streamsoft Prestiż)",
+          "Bouwen en onderhouden van RESTful Web API's en Windows Services voor geautomatiseerde bedrijfsprocessen",
+          "Implementeren van datasynchronisatie over meerdere databases (Firebird, PostgreSQL, MySQL) met LinqToDB ORM",
+          "Ontwikkelen van desktopapplicaties met WPF en DevExpress componentenbibliotheek",
+          "Creëren van XML-verwerkingsworkflows en FTP-gebaseerde datasynchronisatie tussen systemen",
+          "Optimaliseren van databaseprestaties via stored procedures, triggers en query-optimalisatie met uitgebreide logging (NLog)"
+        ],
+        "images": []
+      },
+      {
+        "company": "ProService Finteco",
+        "timeframe": "06.2024 - 02.2025",
+        "role": "Backend Developer (.NET)",
+        "achievements": [
+          "Ontwikkeld RESTful WebAPI-services met Blazor frontend voor data-import en rapportgeneratie",
+          "Geïmplementeerde geautomatiseerde workflows voor verwerking van Excel/CSV-bestanden en database-operaties",
+          "Gebouwd server-side rapportgeneratiesysteem dat Python en PowerShell scripts uitvoert",
+          "Ontworpen en geoptimaliseerd SQL-databasestructuren, queries en stored procedures",
+          "Gecreëerd data-exportmechanismen met Excel-output generatie",
+          "Onderhouden en verbeterd bestaande backend-services en API-endpoints"
+        ],
+        "images": []
+      },
+      {
+        "company": "Geautoriseerde Partner van Comarch S.A.",
+        "timeframe": "01.2022 - 03.2025",
+        "role": "Backend Integration Developer",
+        "achievements": [
+          "Ontwikkeld complexe ERP-systeemintegraties met .NET Hydra en XLAPI frameworks",
+          "Gebouwd Windows Services voor geautomatiseerde datasynchronisatie en bedrijfsprocesautomatisering",
+          "Ontwikkeld uitgebreide databaselaag: stored procedures, functies, triggers en SQL jobs",
+          "Ontworpen en geïmplementeerd Business Intelligence datamodellen in BI Point",
+          "Geïntegreerde ERP-modules met externe systemen via custom API's en dataconnectors",
+          "Uitgevoerd databasebeheer, query-optimalisatie en systeemprestatietuning"
+        ],
+        "images": []
+      },
+      {
+        "company": "Trendmarkt Limited",
+        "timeframe": "04.2021 - 12.2021",
+        "role": "Email Marketing Automatisering Specialist",
+        "achievements": [
+          "Data-analyse en continue verbetering van automatiseringsprocessen om campagne-efficiëntie te verhogen",
+          "Ontwikkelen van aangepaste oplossingen door HTML en CSS code te wijzigen voor e-mailsjablonen",
+          "Samenwerken met verkoop-, creatieve en technische teams om samenhangende marketingacties te garanderen",
+          "Werken met grote contactdatabases (meer dan 600.000 mensen) die efficiënte dataverwerking en analyse vereisen"
+        ],
+        "images": []
+      }
+    ]
+  },
+
+  "studies": {
+    "display": true,
+    "title": "Opleiding",
+    "institutions": [
+      {
+        "name": "Warsaw School of Information Technology (WIT)",
+        "description": "Bachelor of Engineering, Management Information Systems, specialisatie Toegepaste Informatica (2020-2024)"
+      },
+      {
+        "name": "Elektronisch Scholencomplex in Radom",
+        "description": "Computer Technicus (2013-2017)"
+      }
+    ]
+  },
+
+  "technical": {
+    "display": true,
+    "title": "Technische Vaardigheden",
+    "skills": [
+      {
+        "title": "Backend Development (.NET)",
+        "description": "C# (.NET 6-8), ASP.NET Core Web API, Windows Services, Entity Framework Core, LinqToDB ORM. Ontwerp en implementatie van schaalbare backend-services, RESTful API's, batch processing en bedrijfsprocesautomatisering.",
+        "tags": [
+          { "name": "C#" },
+          { "name": ".NET 6-8" },
+          { "name": "ASP.NET Core Web API" },
+          { "name": ".NET Framework 4.8" },
+          { "name": "Windows Services" },
+          { "name": "Entity Framework Core" },
+          { "name": "LinqToDB" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Comarch ERP XL & Hydra Framework",
+        "description": "Comarch Hydra SDK (.NET Hydra, XLAPI) - custom callbacks, event-driven integraties, UI-extensies. Integratie met externe services, Excel-automatisering. Modules: DMS (documentbeheer), BI Point (Business Intelligence), WMS (magazijn), Procesautomatisering, Productie.",
+        "tags": [
+          { "name": "Comarch ERP XL" },
+          { "name": "Comarch Hydra SDK" },
+          { "name": "XLAPI" },
+          { "name": "Comarch DMS" },
+          { "name": "BI Point" },
+          { "name": "Comarch WMS" },
+          { "name": "Procesautomatiseringsmodule" },
+          { "name": "Productiemodule" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Databases & Dataverwerking",
+        "description": "SQL Server, PostgreSQL, MySQL, Firebird. T-SQL (stored procedures, triggers, functies, SQL jobs, query-optimalisatie), ETL, databasebeheer, prestatietuning en cross-system synchronisatie.",
+        "tags": [
+          { "name": "Microsoft SQL Server" },
+          { "name": "PostgreSQL" },
+          { "name": "MySQL" },
+          { "name": "Firebird" },
+          { "name": "T-SQL" },
+          { "name": "ETL" }
+        ],
+        "images": []
+      },
+      {
+        "title": "ERP-systeemintegraties",
+        "description": "Integratie van ERP-systemen (Streamsoft Prestiż, PCBiznes) met externe API's, industriële apparaten, betalingsplatforms en EDI-systemen. REST API, WebSocket, XML/JSON-verwerking, XSLT-transformaties, FTP-synchronisatie.",
+        "tags": [
+          { "name": "Streamsoft Prestiż" },
+          { "name": "REST API" },
+          { "name": "WebSocket" },
+          { "name": "XML/JSON" },
+          { "name": "FTP" },
+          { "name": "EDI" }
+        ],
+        "images": []
+      },
+      {
+        "title": "DevOps & Infrastructuur",
+        "description": "Docker, Docker Compose, GitHub Actions, CI/CD pipelines, Traefik reverse proxy, Watchtower auto-updates. Linux (Ubuntu), Windows Server. Deployment-automatisering, containerisatie en productie-infrastructuurbeheer.",
+        "tags": [
+          { "name": "Docker" },
+          { "name": "GitHub Actions" },
+          { "name": "Traefik" },
+          { "name": "Watchtower" },
+          { "name": "Linux" },
+          { "name": "Windows Server" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Desktop & Frontend Development",
+        "description": "WPF, DevExpress componentenbibliotheek, WinForms. Blazor, React (Next.js). Creëren van desktopapplicaties met MVVM-patroon, responsieve gebruikersinterfaces en backend-systeemintegratie.",
+        "tags": [
+          { "name": "WPF" },
+          { "name": "DevExpress" },
+          { "name": "WinForms" },
+          { "name": "Blazor" },
+          { "name": "React" },
+          { "name": "Next.js" }
+        ],
+        "images": []
+      },
+      {
+        "title": "Tools & Ontwikkelpraktijken",
+        "description": "Git/GitHub, PowerShell scripting, Python automatisering, NLog logging, Unit Testing, Code Review. Excel/CSV automatisering, rapportgeneratie. Moderne ontwikkelpraktijken en teamsamenwerking.",
+        "tags": [
+          { "name": "Git/GitHub" },
+          { "name": "PowerShell" },
+          { "name": "Python" },
+          { "name": "NLog" },
+          { "name": "Unit Testing" },
+          { "name": "Code Review" },
+          { "name": "Excel automatisering" }
+        ],
+        "images": []
+      }
+    ]
+  }
+}
