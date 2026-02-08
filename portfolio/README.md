@@ -1,91 +1,156 @@
-# Magic Portfolio
+# Portfolio
 
-Magic Portfolio is a simple, clean, beginner-friendly portfolio template. It supports an MDX-based content system for projects and blog posts, an about / CV page and a gallery.
+[![wakatime](https://wakatime.com/badge/github/ishkabar/Web.svg?style=flat-square)](https://wakatime.com/badge/github/ishkabar/Web)
+![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat-square&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-06B6D4?style=flat-square&logo=tailwindcss)
 
-View the demo [here](https://demo.magic-portfolio.com).
+Professional developer portfolio built with Next.js 15, featuring MDX-based content management, full internationalization, and downloadable CV.
 
-![Magic Portfolio](public/images/og/home.jpg)
-
-## Getting started
-
-**1. Clone the repository**
-```
-git clone https://github.com/once-ui-system/magic-portfolio.git
-```
-
-**2. Install dependencies**
-```
-npm install
-```
-
-**3. Run dev server**
-```
-npm run dev
-```
-
-**4. Edit config**
-```
-src/resources/once-ui.config.js
-```
-
-**5. Edit content**
-```
-src/resources/content.js
-```
-
-**6. Create blog posts / projects**
-```
-Add a new .mdx file to src/app/blog/posts or src/app/work/projects
-```
-
-Magic Portfolio was built with [Once UI](https://once-ui.com) for [Next.js](https://nextjs.org). It requires Node.js v18.17+.
-
-## Documentation
-
-Docs available at: [docs.once-ui.com](https://docs.once-ui.com/docs/magic-portfolio/quick-start)
+**Live**: [dkarczewski.com](https://dkarczewski.com)
 
 ## Features
 
-### Once UI
-- All tokens, components & features of [Once UI](https://once-ui.com)
+### Content Management
+- **MDX Blog Posts**: Technical articles with syntax highlighting
+  - DevExpress WPF tips and tricks
+  - Firebird ↔ PostgreSQL synchronization
+  - GitHub Actions CI/CD for .NET
+  - Multithreaded ERP integrations
+  - Comarch Hydra API callbacks
+  - FTP-based database sync
 
-### SEO
-- Automatic open-graph and X image generation with next/og
-- Automatic schema and metadata generation based on the content file
+- **Project Showcase**: Portfolio projects with detailed case studies
+  - Autostacja Sync (document synchronization)
+  - Comarch ERP XL Hydra integration
+  - Comarch Kardex inventory management
+  - Database FTP Sync
+  - ogur.dev gaming portfolio
+  - Psie Przedszkole (dog daycare website)
 
-### Design
-- Responsive layout optimized for all screen sizes
-- Timeless design without heavy animations and motion
-- Endless customization options through [data attributes](https://once-ui.com/docs/theming)
+### Internationalization (i18n)
+- 18 language support via next-intl
+- Supported locales: `en, pl, de, fr, es, it, pt, ru, ua, cz, da, fi, ja, ko, nl, no, sv, zh`
+- Automatic locale detection
+- Locale-specific routing (`/en/blog`, `/pl/blog`)
+- Generated locale configs via `scripts/gen-locales.ts`
+
+### Advanced Features
+- **CV Generation**: Downloadable PDF resume with cover letter
+- **Route Protection**: Password-protected pages via middleware
+- **Cookie Consent**: GDPR-compliant banner with localStorage persistence
+- **SEO Optimization**:
+  - Automatic Open Graph image generation
+  - RSS feed (`/api/rss`)
+  - Sitemap and robots.txt
+  - Schema.org markup
+- **Table of Contents**: Auto-generated navigation for blog posts
+- **Social Sharing**: Share buttons for Twitter, LinkedIn, Facebook
+- **Mailchimp Integration**: Newsletter subscription
+
+## Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **UI**: React 19, Tailwind CSS 4.0, SCSS Modules
+- **Content**: MDX with custom components
+- **Styling**: [Once UI](https://once-ui.com) design system
+- **i18n**: next-intl
+- **Deployment**: Docker + Traefik
+
+## Project Structure
+```
+src/
+├── app/
+│   ├── [locale]/          # Localized routes
+│   │   ├── about/         # CV/About page
+│   │   ├── blog/          # Blog listing + posts
+│   │   ├── work/          # Project showcase
+│   │   └── gallery/       # Image gallery
+│   └── api/
+│       ├── og/            # Open Graph image generation
+│       ├── rss/           # RSS feed
+│       └── authenticate/  # Route protection
+├── content/
+│   ├── posts/             # MDX blog posts
+│   └── projects/          # MDX project case studies
+├── messages/              # i18n translations (18 locales)
+├── components/
+│   ├── blog/              # Post rendering, sharing
+│   ├── work/              # Project cards
+│   ├── gallery/           # Image viewer
+│   ├── CVDocument.tsx     # PDF CV generator
+│   ├── LocaleSwitcher.tsx # Language selector
+│   └── RouteGuard.tsx     # Auth middleware
+└── resources/
+    ├── site.config.ts     # Site metadata
+    └── ui-tokens.config.ts # Design tokens
+```
+
+## Getting Started
+
+### Installation
+```bash
+pnpm install
+```
+
+### Development
+```bash
+pnpm dev              # http://localhost:3000
+```
+
+### Build
+```bash
+pnpm build
+pnpm start
+```
+
+### Generate Locale Configs
+```bash
+pnpm tsx scripts/gen-locales.ts
+```
+
+## Configuration
+
+### Site Settings
+Edit `src/resources/site.config.ts`:
+```typescript
+export const siteConfig = {
+  name: "Dominik Karczewski",
+  title: "Senior .NET Developer",
+  description: "ERP integrations & automation specialist",
+  // ...
+}
+```
 
 ### Content
-- Render sections conditionally based on the content file
-- Enable or disable pages for blog, work, gallery and about / CV
-- Generate and display social links automatically
-- Set up password protection for URLs
+- **Blog posts**: Add `.mdx` files to `src/content/posts/`
+- **Projects**: Add `.mdx` files to `src/content/projects/`
+- **Images**: Store in `public/images/blog/` or `public/images/projects/`
 
-### Localization
-- A localized, earlier version of Magic Portfolio is available with the next-intl library
-- To use localization, switch to the 'i18n' branch
+### Translations
+- Add new keys to `src/messages/{locale}/` folders
+- Supported languages configured in `src/i18n/routing.ts`
+- Auto-generate locale types: `pnpm tsx scripts/gen-locales.ts`
 
-## Creators
+## Environment Variables
+Create `.env.local`:
+```bash
+# Route protection (optional)
+NEXT_PUBLIC_PASSWORD_PROTECTED_ROUTES=
 
-Lorant One: [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
+# Mailchimp (optional)
+MAILCHIMP_API_KEY=
+MAILCHIMP_LIST_ID=
+```
 
-## Get involved
+## Docker Deployment
+```bash
+# Build image
+docker build -t portfolio .
 
-- Join the Design Engineers Club on [Discord](https://discord.com/invite/5EyAQ4eNdS) and share your project with us!
-- Deployed your docs? Share it on the [Once UI Hub](https://once-ui.com/hub) too! We feature our favorite apps on our landing page.
+# Run container
+docker run -p 3000:3000 portfolio
+```
 
 ## License
-
-Distributed under the CC BY-NC 4.0 License.
-- Attribution is required.
-- Commercial usage is not allowed.
-- You can extend the license to [Dopler CC](https://dopler.app/license) by purchasing a [Once UI Pro](https://once-ui.com/pricing) license.
-
-See `LICENSE.txt` for more information.
-
-## Deploy with Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&project-name=portfolio&repository-name=portfolio&redirect-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fmagic-portfolio&demo-title=Magic%20Portfolio&demo-description=Showcase%20your%20designers%20or%20developer%20portfolio&demo-url=https%3A%2F%2Fdemo.magic-portfolio.com&demo-image=%2F%2Fraw.githubusercontent.com%2Fonce-ui-system%2Fmagic-portfolio%2Fmain%2Fpublic%2Fimages%2Fog%2Fhome.jpg)
+CC BY-NC 4.0 - Attribution required, commercial usage not allowed.
