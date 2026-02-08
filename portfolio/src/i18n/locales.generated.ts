@@ -3,7 +3,7 @@ export const locales = ["pl","en","de","da","fr","cz","it","nl","no","fi","sv","
 export type Locale = typeof locales[number];
 export const defaultLocale: Locale = "en" as Locale;
 
-export const enabledLocales = ["pl","en","de","da","fr","cz","it","nl","no","fi","sv","ja"] as const;
+export const enabledLocales = ["pl","en","de","da","fr","cz","it","nl","no","fi","sv","ja","es"] as const;
 export type EnabledLocale = typeof enabledLocales[number];
 
 

@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "label": "Español",
+    "flag": "es",
+    "default": false,
+    "siteName": "Dominik Karczewski – Portfolio",
+    "title": "Portfolio – Dominik Karczewski | Desarrollador Senior .NET",
+    "description": "Desarrollador Senior .NET especializado en integración de sistemas ERP, arquitectura de soluciones y DevOps."
+  },
+  "underConstruction": "Esta página está en construcción. Por favor, vuelva pronto.",
+  "translationInProgress": "Esta página está siendo traducida actualmente. Disculpe las molestias.",
+  "person": {
+    "firstName": "Dominik",
+    "lastName": "Karczewski",
+    "name": "Dominik Karczewski",
+    "role": "Desarrollador Senior .NET",
+    "avatar": "/avatar.png",
+    "email": "mail@dkarczewski.com",
+    "location": "Europe/Warsaw",
+    "locationDisplay": "Varsovia, Polonia",
+    "languages": [
+      "Polaco",
+      "Inglés",
+      "Alemán"
+    ]
+  },
+  "cookies": {
+    "message": "Este sitio utiliza cookies y Google Analytics para análisis de tráfico.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
+  },
+  "header": {
+    "home": "Inicio",
+    "featured": "Destacado",
+    "about": "Acerca de",
+    "work": "Proyectos",
+    "blog": "Blog",
+    "gallery": "Galería",
+    "sponsor": {
+      "title": "Patrocinar",
+      "github": "GitHub Sponsors",
+      "patreon": "Patreon"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} Dominik Karczewski"
+  },
+  "newsletter": {
+    "display": true,
+    "disabled": true,
+    "title": "Boletín",
+    "description": "Suscríbase al boletín y manténgase actualizado con las últimas noticias.",
+    "subscribe": "Suscribirse",
+    "comingSoon": "Próximamente"
+  },
+  "social": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "link": "https://github.com/ishkabar"
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "linkedin",
+      "link": "https://www.linkedin.com/in/dominik-karczewski-1b850b209/"
+    },
+    {
+      "name": "Email",
+      "icon": "email",
+      "link": "mailto:mail@dkarczewski.com"
+    },
+    {
+      "name": "GitHub Sponsors",
+      "icon": "heart",
+      "link": "https://github.com/sponsors/ishkabar/",
+      "sponsor": true
+    },
+    {
+      "name": "Patreon",
+      "icon": "heart",
+      "link": "https://www.patreon.com/cw/DominikKarczewski",
+      "sponsor": true
+    }
+  ],
+  "routeGuard": {
+    "protectedTitle": "Esta página está protegida con contraseña",
+    "passwordLabel": "Contraseña",
+    "submit": "Enviar",
+    "incorrectPassword": "Contraseña incorrecta"
+  }
+}

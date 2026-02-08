@@ -7,7 +7,9 @@ import { locales, defaultLocale, type Locale, isLocale, localeMeta, enabledLocal
 
 type LocaleDef = { code: Locale; label: string; flag: string };
 
-// Sortuj: enabled alfabetycznie | separator | disabled alfabetycznie
+// 3 SEKCJE: priority enabled | other enabled | disabled
+const PRIORITY_CODES = ['pl', 'en'] as const;
+
 const SORTED_LOCALES: LocaleDef[] = (() => {
     const all = locales.map(code => ({
         code,
@@ -15,15 +17,25 @@ const SORTED_LOCALES: LocaleDef[] = (() => {
         flag: localeMeta[code]?.flag ?? code
     }));
 
-    const enabled = all
-        .filter(l => (enabledLocales as readonly string[]).includes(l.code))
+    const enabled = all.filter(l => (enabledLocales as readonly string[]).includes(l.code));
+    const disabled = all.filter(l => !(enabledLocales as readonly string[]).includes(l.code));
+
+    // Podziel enabled na priority i other
+    const priority = enabled
+        .filter(l => (PRIORITY_CODES as readonly string[]).includes(l.code))
+        .sort((a, b) => {
+            const aIdx = PRIORITY_CODES.indexOf(a.code as any);
+            const bIdx = PRIORITY_CODES.indexOf(b.code as any);
+            return aIdx - bIdx;
+        });
+
+    const other = enabled
+        .filter(l => !(PRIORITY_CODES as readonly string[]).includes(l.code))
         .sort((a, b) => a.label.localeCompare(b.label));
 
-    const disabled = all
-        .filter(l => !(enabledLocales as readonly string[]).includes(l.code))
-        .sort((a, b) => a.label.localeCompare(b.label));
+    const sortedDisabled = disabled.sort((a, b) => a.label.localeCompare(b.label));
 
-    return [...enabled, ...disabled];
+    return [...priority, ...other, ...sortedDisabled];
 })();
 
 const listHideDelay = 300;
@@ -232,6 +244,17 @@ export default function LocaleSwitcher() {
 
     const cur = SORTED_LOCALES.find(l => l.code === current)!;
 
+    // Znajdź indeksy separatorów
+    const priorityCount = SORTED_LOCALES.filter(l =>
+        (enabledLocales as readonly string[]).includes(l.code) &&
+        (PRIORITY_CODES as readonly string[]).includes(l.code)
+    ).length;
+
+    const otherEnabledCount = SORTED_LOCALES.filter(l =>
+        (enabledLocales as readonly string[]).includes(l.code) &&
+        !(PRIORITY_CODES as readonly string[]).includes(l.code)
+    ).length;
+
     return (
         <div
             ref={wrapperRef}
@@ -289,9 +312,15 @@ export default function LocaleSwitcher() {
                     {SORTED_LOCALES.map((l, i) => {
                         const isActive = current === l.code;
                         const isEnabled = (enabledLocales as readonly string[]).includes(l.code);
+                        const isPriority = (PRIORITY_CODES as readonly string[]).includes(l.code);
                         const isHovered = hoverIdx === i;
                         const isFocused = hoverIdx == null && focusIdx === i;
                         const bg = isActive ? colors.active : isHovered && isEnabled ? colors.hover : isFocused && isEnabled ? colors.focus : 'transparent';
+
+                        // Separator po priority enabled
+                        const showSep1 = i === priorityCount - 1 && otherEnabledCount > 0;
+                        // Separator po other enabled
+                        const showSep2 = i === priorityCount + otherEnabledCount - 1 && i < SORTED_LOCALES.length - 1;
 
                         return (
                             <React.Fragment key={l.code}>
@@ -329,16 +358,14 @@ export default function LocaleSwitcher() {
                                     <span style={{ opacity: isActive ? 1 : 0, transition: 'opacity .12s ease' }}>✓</span>
                                 </button>
 
-                                {/* separator po ostatnim enabled */}
-                                {isEnabled &&
-                                 i < SORTED_LOCALES.length - 1 &&
-                                 !(enabledLocales as readonly string[]).includes(SORTED_LOCALES[i+1]?.code) && (
-                                    <div
-                                        style={{
-                                            borderTop: `1px solid ${colors.border}`,
-                                            margin: '4px 0',
-                                        }}
-                                    />
+                                {/* Separator 1: po priority enabled */}
+                                {showSep1 && (
+                                    <div style={{ borderTop: `1px solid ${colors.border}`, margin: '4px 0' }} />
+                                )}
+
+                                {/* Separator 2: po other enabled */}
+                                {showSep2 && (
+                                    <div style={{ borderTop: `1px solid ${colors.border}`, margin: '4px 0' }} />
                                 )}
                             </React.Fragment>
                         );

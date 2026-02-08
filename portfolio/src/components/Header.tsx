@@ -5,7 +5,7 @@ import {useEffect, useState, useLayoutEffect, useRef, Suspense} from "react";
 import React from "react";
 import LocaleSwitcher from "@/components/LocaleSwitcher";
 
-import {Fade, Flex, Line, Row, ToggleButton} from "@once-ui-system/core";
+import {Fade, Flex, Line, Row, ToggleButton, IconButton, Column} from "@once-ui-system/core";
 
 import {routes, display} from "@/resources";
 import {ThemeToggle} from "./ThemeToggle";
@@ -19,7 +19,7 @@ const DEFAULT_TIMEZONE = "Europe/Warsaw";
 
 type TimeDisplayProps = {
     timeZone: string;
-    locale?: string; // Optionally allow locale, defaulting to 'en-GB'
+    locale?: string;
 };
 
 const TimeDisplay: React.FC<TimeDisplayProps> = ({timeZone, locale = "en-GB"}) => {
@@ -73,15 +73,21 @@ export const Header = () => {
 
     const t = useTranslations('common.header');
     const tPerson = useTranslations('common.person');
+    const tCommon = useTranslations('common');
+
+    // Social links z common.social (bez sponsor=true)
+    const rawSocial = tCommon.raw('social');
+    const social = Array.isArray(rawSocial) && rawSocial[0]?.icon
+        ? (rawSocial as Array<{name: string; icon: string; link: string; sponsor?: boolean}>).filter(s => !s.sponsor)
+        : [];
 
     const H = (p: string) => normalize(withLocale(p, locale));
     const isAt = (p: string) => pathname === H(p);
     const isUnder = (p: string) => pathname === H(p) || pathname.startsWith(H(p) + "/");
 
     const isHomeActive = () => {
-        const homeLocalized = H("/");       // np. "/pl"
-        return pathname === homeLocalized   // "/pl" lub "/pl/"
-            || pathname === "/";            // root bez prefixu
+        const homeLocalized = H("/");
+        return pathname === homeLocalized || pathname === "/";
     };
 
     const headerRef = useRef<HTMLDivElement | null>(null);
@@ -92,9 +98,8 @@ export const Header = () => {
             const el = headerRef.current;
             if (!el) return;
             const cs = getComputedStyle(el);
-            // jeżeli bottom != 'auto' → CSS przypiął do dołu
             const isBottom = cs.bottom !== 'auto' && cs.bottom !== '0px' ? true
-                : cs.bottom === '0px'; // najczęstszy wariant
+                : cs.bottom === '0px';
             setDock(isBottom ? 'bottom' : 'top');
         };
         update();
@@ -113,6 +118,44 @@ export const Header = () => {
         <>
             <Fade s={{hide: true}} fillWidth position="fixed" height="80" zIndex={9}/>
             <Fade hide s={{hide: false}} fillWidth position="fixed" bottom="0" to="top" height="80" zIndex={9}/>
+
+            {/* Osobna sekcja - Social icons po lewej (pod barem) */}
+            {display.location && social.length > 0 && (
+                <Column
+                    position="fixed"
+                    style={{
+                        left: '24px',
+                        top: '96px',
+                        zIndex: 10,
+                        pointerEvents: 'auto'
+                    }}
+                    gap="16"
+                    s={{hide: true}}
+                >
+                    <Column gap="20">
+                        {social.map(item =>
+                            item.link ? (
+                                <div
+                                    key={item.name}
+                                    style={{
+                                        transform: 'scale(1.3)',  // <--- Skalowanie całego buttona
+                                        transformOrigin: 'center'
+                                    }}
+                                >
+                                    <IconButton
+                                        href={item.link}
+                                        icon={item.icon}
+                                        tooltip={item.name}
+                                        size="s"
+                                        variant="ghost"
+                                    />
+                                </div>
+                            ) : null
+                        )}
+                    </Column>
+                </Column>
+            )}
+
             <Row
                 ref={headerRef as any}
                 data-header-dock={dock}
@@ -127,10 +170,12 @@ export const Header = () => {
                 data-border="rounded"
                 s={{position: "fixed"}}
             >
+                {/* Lewa strona - lokalizacja (timezone) */}
                 <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
                     {display.location && <Row s={{hide: true}}>{tPerson('location')}</Row>}
                 </Row>
 
+                {/* Środek - główne menu */}
                 <Row fillWidth horizontal="center">
                     <Row
                         background="page"
@@ -146,7 +191,6 @@ export const Header = () => {
                                 <ToggleButton
                                     prefixIcon="home"
                                     href={withLocale("/", locale)}
-                                    //label={t('')}
                                     title={t('home')}
                                     aria-label={t('home')}
                                     selected={isHomeActive()}
@@ -156,120 +200,92 @@ export const Header = () => {
                             <Line background="neutral-alpha-medium" vert maxHeight="24"/>
 
                             {routes["/about"] && (
-    <>
-        <Row s={{hide: true}}>
-            <ToggleButton
-                prefixIcon="person"
-                href={H("/about")}
-                label={t('about')}
-                title={t('about')}
-                aria-label={t('about')}
-                selected={isAt("/about")}
-            />
-        </Row>
-        <Row hide s={{hide: false}}>
-            <ToggleButton
-                prefixIcon="person"
-                href={H("/about")}
-                //label={t('about')}
-                title={t('about')}
-                aria-label={t('about')}
-                selected={isAt("/about")}
-            />
-        </Row>
-    </>
-)}
+                                <>
+                                    <Row s={{hide: true}}>
+                                        <ToggleButton
+                                            prefixIcon="person"
+                                            href={H("/about")}
+                                            label={t('about')}
+                                            title={t('about')}
+                                            aria-label={t('about')}
+                                            selected={isAt("/about")}
+                                        />
+                                    </Row>
+                                    <Row hide s={{hide: false}}>
+                                        <ToggleButton
+                                            prefixIcon="person"
+                                            href={H("/about")}
+                                            title={t('about')}
+                                            aria-label={t('about')}
+                                            selected={isAt("/about")}
+                                        />
+                                    </Row>
+                                </>
+                            )}
 
-{routes["/work"] && (
-    <>
-        <Row s={{hide: true}}>
-            <ToggleButton
-                prefixIcon="grid"
-                href={H("/work")}
-                label={t('work')}
-                title={t('work')}
-                aria-label={t('work')}
-                selected={isUnder("/work")}
-            />
-        </Row>
-        <Row hide s={{hide: false}}>
-            <ToggleButton
-                prefixIcon="grid"
-                href={H("/work")}
-                //label={t('work')}
-                title={t('work')}
-                aria-label={t('work')}
-                selected={isUnder("/work")}
-            />
-        </Row>
-    </>
-)}
+                            {routes["/work"] && (
+                                <>
+                                    <Row s={{hide: true}}>
+                                        <ToggleButton
+                                            prefixIcon="grid"
+                                            href={H("/work")}
+                                            label={t('work')}
+                                            title={t('work')}
+                                            aria-label={t('work')}
+                                            selected={isUnder("/work")}
+                                        />
+                                    </Row>
+                                    <Row hide s={{hide: false}}>
+                                        <ToggleButton
+                                            prefixIcon="grid"
+                                            href={H("/work")}
+                                            title={t('work')}
+                                            aria-label={t('work')}
+                                            selected={isUnder("/work")}
+                                        />
+                                    </Row>
+                                </>
+                            )}
 
-{routes["/blog"] && (
-    <>
-        <Row s={{hide: true}}>
-            <ToggleButton
-                prefixIcon="book"
-                href={H("/blog")}
-                label={t('blog')}
-                title={t('blog')}
-                aria-label={t('blog')}
-                selected={isUnder("/blog")}
-            />
-        </Row>
-        <Row hide s={{hide: false}}>
-            <ToggleButton
-                prefixIcon="book"
-                href={H("/blog")}
-                //label={t('blog')}
-                title={t('blog')}
-                aria-label={t('blog')}
-                selected={isUnder("/blog")}
-            />
-        </Row>
-    </>
-)}
+                            {routes["/blog"] && (
+                                <>
+                                    <Row s={{hide: true}}>
+                                        <ToggleButton
+                                            prefixIcon="book"
+                                            href={H("/blog")}
+                                            label={t('blog')}
+                                            title={t('blog')}
+                                            aria-label={t('blog')}
+                                            selected={isUnder("/blog")}
+                                        />
+                                    </Row>
+                                    <Row hide s={{hide: false}}>
+                                        <ToggleButton
+                                            prefixIcon="book"
+                                            href={H("/blog")}
+                                            title={t('blog')}
+                                            aria-label={t('blog')}
+                                            selected={isUnder("/blog")}
+                                        />
+                                    </Row>
+                                </>
+                            )}
 
-{/*{routes["/gallery"] && (
-    <>
-        <Row s={{hide: true}}>
-            <ToggleButton
-                prefixIcon="gallery"
-                href={H("/gallery")}
-                label={t('gallery')}
-                title={t('gallery')}
-                aria-label={t('gallery')}
-                selected={isUnder("/gallery")}
-            />
-        </Row>
-        <Row hide s={{hide: false}}>
-            <ToggleButton
-                prefixIcon="gallery"
-                href={H("/gallery")}
-                //label={t('gallery')}
-                title={t('gallery')}
-                aria-label={t('gallery')}
-                selected={isUnder("/gallery")}
-            />
-        </Row>
-    </>
-)}*/}
-
-{/* Sponsor buttons */}
-<Row s={{hide: true}}>
-    <Suspense fallback={
-        <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
-    }>
-        <SponsorSwitcher showLabel={true} />
-    </Suspense>
-</Row>
-<Row hide s={{hide: false}}>
-    <Suspense fallback={
-        <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
-    }>
-        <SponsorSwitcher showLabel={false} />
-    </Suspense>
-</Row>
+                            {/* Sponsor buttons */}
+                            <Row s={{hide: true}}>
+                                <Suspense fallback={
+                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+                                }>
+                                    <SponsorSwitcher showLabel={true} />
+                                </Suspense>
+                            </Row>
+                            <Row hide s={{hide: false}}>
+                                <Suspense fallback={
+                                    <div style={{width: 40, height: 40}} aria-label="Loading sponsor options"/>
+                                }>
+                                    <SponsorSwitcher showLabel={false} />
+                                </Suspense>
+                            </Row>
 
                             <Line background="neutral-alpha-medium" vert maxHeight="24"/>
 
@@ -290,6 +306,7 @@ export const Header = () => {
                     </Row>
                 </Row>
 
+                {/* Prawa strona - czas */}
                 <Flex fillWidth horizontal="end" vertical="center">
                     <Flex paddingRight="12" horizontal="end" vertical="center" textVariant="body-default-s" gap="20">
                         <Flex s={{hide: true}}>
