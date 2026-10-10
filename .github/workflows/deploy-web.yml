@@ -140,7 +140,7 @@ jobs:
                   - NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
                 networks:
                   - web
-                  - ogursentinel_internal
+                  - ogur-internal
                 labels:
                   traefik.enable: "true"
                   traefik.docker.network: "web"
@@ -160,7 +160,7 @@ jobs:
             networks:
               web:
                 external: true
-              ogursentinel_internal:
+              ogur_internal:
                 external: true
             YML
             cat > ~/web/ogur/.env <<EOF
