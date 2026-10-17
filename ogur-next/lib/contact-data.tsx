@@ -1,4 +1,5 @@
-import { SiDiscord, SiGithub, SiLinkedin, SiInstagram, SiTelegram, SiMaildotcom } from "react-icons/si";
+import { SiDiscord, SiGithub, SiInstagram, SiTelegram, SiMaildotcom } from "react-icons/si";
+import { FaLinkedin } from "react-icons/fa";
 import { Globe } from "lucide-react";
 
 // Surowe dane (bez React komponentów)
@@ -38,7 +39,7 @@ export const getIcon = (type: 'website' | 'email' | 'discord' | 'linkedin') => {
         website: <Globe size={20} />,
         email: <SiMaildotcom size={20} />,
         discord: <SiDiscord size={20} />,
-        linkedin: <SiLinkedin size={20} />,
+        linkedin: <FaLinkedin size={20} />,
     };
     return icons[type];
 };
@@ -53,7 +54,7 @@ export const socials = [
         copyable: true,
     },
     {
-        icon: <SiLinkedin size={20} />,
+        icon: <FaLinkedin size={20} />,
         href: contactData.linkedin.href,
         label: "LinkedIn",
         handle: contactData.linkedin.handle,
