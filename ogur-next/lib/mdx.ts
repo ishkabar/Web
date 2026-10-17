@@ -22,6 +22,8 @@ export interface Project {
     date?: string;
     url?: string;
     repository?: string;
+        order?: number;
+        image?: string;
     category: 'commercial' | 'personal' | 'archived';
     body: {
         code: string; // HTML string

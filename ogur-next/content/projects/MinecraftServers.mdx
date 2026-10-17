@@ -1,0 +1,34 @@
+---
+title: "Minecraft Servers"
+description: "Postawienie i prowadzenie serwerów Minecraft: Paper w Dockerze na VPS, rozbudowana konfiguracja pluginów, mapa 3D na stronie i własne systemy."
+date: "2026-07-20"
+category: "personal"
+published: true
+---
+
+# Minecraft Servers
+
+Powtarzalny sposób na stawianie serwerów Minecraft od zera i prowadzenie ich na co dzień. Działający przykład to prywatny serwer SMP pod mc.ogur.dev.
+
+## Infrastruktura
+
+- Paper uruchamiany w Dockerze na VPS u OVH.
+- Plan postawienia proxy Velocity pod drugi, modowany shard.
+- Własne API w .NET do monitoringu zasobów serwera (jego wydajność poprawiłem po wycieku pamięci wywołanym nieograniczonymi zapytaniami EF Core).
+
+## Pluginy i konfiguracja
+
+Serwer ma rozbudowany zestaw pluginów, które konfiguruję i edytuję ręcznie:
+- LuckPerms (uprawnienia) i AuthMe (logowanie),
+- EssentialsX, WorldGuard, TAB,
+- QuickShop-Hikari (sklepy graczy) i UJobs (prace),
+- AuraSkills (umiejętności) i EliteMobs (moby i dungeony),
+- SimpleDeathChest, voicechat.
+
+## Mapa 3D
+
+Świat jest dostępny na stronie jako interaktywna mapa 3D dzięki pluginowi BlueMap.
+
+## Cel
+
+Gotowy zestaw konfiguracji, dzięki któremu nowy serwer nie wymaga składania wszystkiego od początku.

@@ -205,7 +205,7 @@ export default async function ProjectsPage() {
                                 Projekty realizowane dla klientów i firm (wspominam bo prezes pozwolił)
                             </p>
                         </div>
-                        {archived.length > 0 ? (
+                        {commercial.length > 0 ? (
                         renderGrid(commercial)
                     ) : (
                         <div className="max-w-2xl mx-auto lg:mx-0">

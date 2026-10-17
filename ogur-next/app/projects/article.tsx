@@ -1,6 +1,7 @@
 import type { Project } from "@/lib/mdx";
+import Image from "next/image";
 import Link from "next/link";
-import { Eye, View } from "lucide-react";
+import { Eye } from "lucide-react";
 
 type Props = {
     project: Project;
@@ -11,6 +12,17 @@ export const Article: React.FC<Props> = ({ project, views }) => {
     return (
         <Link href={`/projects/${project.slug}`}>
             <article className="p-4 md:p-8">
+                {project.image && (
+                    <div className="relative w-full mb-4 overflow-hidden rounded-md aspect-video">
+                        <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            sizes="(min-width: 768px) 33vw, 100vw"
+                            className="object-cover"
+                        />
+                    </div>
+                )}
                 <div className="flex justify-between gap-2 items-center">
                 <span className="text-xs duration-1000 text-zinc-200 group-hover:text-white group-hover:border-zinc-200 drop-shadow-orange">
                    {project.date ? (

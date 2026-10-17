@@ -1,0 +1,27 @@
+---
+title: "LolClientTool"
+description: "Aplikacja WPF nad lokalnym API klienta League of Legends (LCU): akcje w kliencie i pick postaci w champion select na ARAM-ie z pominięciem cooldownu."
+date: "2026-08-10"
+category: "archived"
+published: true
+---
+
+# LolClientTool
+
+Aplikacja desktopowa w WPF, która komunikuje się z lokalnym API klienta League of Legends (LCU) i wykonuje akcje w kliencie.
+
+## Funkcje
+
+- Wywoływanie akcji w kliencie, m.in. dodge przez `POST /lol-gameflow/v1/session/dodge`.
+- Główna funkcja: pickowanie postaci w champion select na ARAM-ie z pominięciem cooldownu.
+
+## Architektura
+
+Trzy warstwy:
+- Core: kontrakty i modele,
+- Infrastructure: odnajdywanie portu i tokenu klienta przez WMI oraz HttpClient z obejściem samopodpisanego certyfikatu,
+- Desktop: WPF, w którym ViewModele widzą wyłącznie interfejsy z Core.
+
+## Status
+
+Projekt zarchiwizowany.

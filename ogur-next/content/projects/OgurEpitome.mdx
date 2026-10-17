@@ -1,0 +1,54 @@
+---
+title: "Ogur.Epitome"
+description: "Edukacyjny framework w .NET 8: własna biblioteka odczytu pamięci procesu, przezroczysta nakładka DirectX11/Direct2D w osobnym procesie, komunikacja przez pamięć współdzieloną i panel WPF w MVVM."
+date: "2026-02-18"
+category: "archived"
+published: true
+---
+
+# Ogur.Epitome
+
+Projekt edukacyjny na styku programowania systemowego, grafiki i inżynierii wstecznej, zbudowany wokół gry Epitome (Unreal Engine 5.7). Celem było zrozumienie, jak od podstaw zbudować narzędzie łączące odczyt pamięci obcego procesu, renderowanie nakładki i osobny interfejs sterujący. Projekt zarchiwizowany.
+
+## Architektura
+
+Rozwiązanie składa się z czterech projektów:
+
+- **Core**: biblioteka odczytu i zapisu pamięci procesu, skanowanie wzorców (AOB), struktury i menedżery danych gry oraz warstwa komunikacji międzyprocesowej.
+- **UI**: aplikacja WPF w architekturze MVVM, z usługami orkiestrującymi pracę narzędzia.
+- **Overlay**: osobny proces renderujący nakładkę.
+- **Internal**: moduł działający wewnątrz procesu docelowego.
+
+Podział na osobne procesy był świadomą decyzją: renderowanie nie blokuje interfejsu, a awaria nakładki nie zamyka aplikacji sterującej.
+
+## Biblioteka pamięci
+
+- Własna implementacja na P/Invoke do Windows API, bez zewnętrznych zależności.
+- Odczyt i zapis pamięci procesu oraz skanowanie wzorców bajtów (AOB), żeby adresy dało się odnajdywać po aktualizacjach gry zamiast trzymać je na sztywno.
+- Automatyczne wykrywanie procesu gry i dołączanie do niego.
+- Adresy i offsety zebrane w jednym miejscu, żeby po patchu gry aktualizować tylko jedną klasę.
+
+## Nakładka
+
+- Przezroczyste okno Win32 komponowane przez DWM.
+- Renderowanie sprzętowe w DirectX11, tekst i kształty w Direct2D (SharpDX).
+- Działa jako oddzielny proces uruchamiany automatycznie z aplikacji sterującej.
+
+## Komunikacja międzyprocesowa
+
+UI i nakładka wymieniają dane przez pamięć współdzieloną. To rozwiązanie jest szybsze od pipe'ów czy gniazd przy częstym odświeżaniu danych na ekranie.
+
+## Interfejs
+
+- .NET 8, WPF, MaterialDesignInXaml.
+- CommunityToolkit.Mvvm: ViewModele nie znają widoków, stan jest oddzielony od prezentacji.
+
+## Stack
+
+.NET 8, WPF, MaterialDesignInXaml, CommunityToolkit.Mvvm, P/Invoke, SharpDX (DirectX11, Direct2D), pamięć współdzielona.
+
+## Status
+
+Zakończona infrastruktura: biblioteka pamięci, dołączanie do procesu, UI, nakładka i IPC. Etap inżynierii wstecznej struktur gry nie został domknięty, a projekt jest zarchiwizowany.
+
+Projekt wyłącznie edukacyjny.

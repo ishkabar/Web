@@ -1,0 +1,39 @@
+---
+title: "Baerim"
+description: "Ekosystem narzędzi wokół społeczności streamera Metin2: viewer kostiumów 3D z pipeline'em GR2 do GLB, administracja serwerem Discord i skaner rynku."
+date: "2026-09-20"
+category: "personal"
+published: true
+---
+
+# Baerim
+
+Zbiór projektów budowanych wokół społeczności streamera grającego na serwerze Metin2 Baerim.
+
+## Viewer kostiumów 3D
+
+Strona pod `/baerim/costumes/`, część serwisu Ogur.Sentinel, pozwalająca oglądać kostiumy i pancerze z gry w 3D. Renderowanie odbywa się w przeglądarce w Three.js.
+
+Pipeline modeli:
+- modele `.gr2` wyciągam z paczek klienta gry,
+- konwertuję je do `.glb` skryptem uruchamianym w Blenderze bez interfejsu, z użyciem dodatku `m2_granny_tools`,
+- gotowe pliki serwuje backend z katalogu `wwwroot/files/costumes/`.
+
+Stan: osiem bazowych modeli postaci (cztery klasy, każda w dwóch płciach) z działającymi teksturami. Cały katalog kostiumów i fryzur z klienta został wsadowo przekonwertowany skryptami PowerShell, które same wyszukują pliki i uruchamiają konwersję.
+
+## Serwer Discord
+
+Administruję serwerem społeczności graczy Baerim:
+- kanały zasilane oficjalnymi ogłoszeniami serwera (ogłoszenia, change logi, preview), każde lustrzane do osobnego kanału,
+- role z reakcji nadawane przez Carl-bota (powiadomienia o streamach, wybór akademii),
+- model whitelisty: rola członka daje dostęp, a @everyone widzi tylko kanał z regulaminem,
+- kategoria z własnymi rolami zarządzania i kanałami tekstowymi oraz głosowymi,
+- struktura pod rekrutację do gildii głównej i akademii.
+
+## Skaner rynku
+
+Narzędzie do przeglądania i badania ofert z rynku w grze. Opisane osobno: [Marketplace Scanner](/projects/MarketplaceScanner).
+
+## Strona streamera
+
+Strona dla kanału slepyakasnajper: [Strona slepyakasnajper](/projects/SlepyakaSnajper).

@@ -1,0 +1,33 @@
+---
+title: "Marketplace Scanner"
+description: "Aplikacja WPF do odczytu i przeszukiwania ofert z rynku w grze, z katalogiem przedmiotów PL/EN. Pierwszy przypadek użycia: rynek Metin2 na serwerze Baerim."
+date: "2026-10-02"
+category: "personal"
+published: true
+---
+
+# Marketplace Scanner
+
+Narzędzie do badania rynku w grach MMO: odczytuje oferty wystawione przez graczy, wyświetla je w tabeli i pozwala je przeszukiwać. Jest ogólne, a rynek Metin2 na serwerze Baerim to pierwszy konkretny przykład, na którym powstało.
+
+## Widok ofert
+
+- Tabela ofert z kolumną ikon przedmiotów.
+- Nazwy przedmiotów domyślnie po polsku, z przełącznikiem PL/EN.
+- Lista rozwijana wyboru zestawu ofert oraz dodatkowa pozycja łącząca wszystkie zestawy w jednej tabeli.
+
+## Katalog przedmiotów
+
+Aplikacja ma wbudowany katalog przedmiotów w CSV i JSON. Każdy wpis zawiera:
+- `vnum` (identyfikator przedmiotu w grze),
+- nazwę polską i angielską,
+- typ przedmiotu,
+- ścieżkę do ikony.
+
+Dzięki temu surowe identyfikatory z oferty zamieniają się na czytelne nazwy i obrazki.
+
+## Cel
+
+Podstawa do analizy cen i trendów na rynku, a nie tylko przeglądarka ofert.
+
+Powiązane: ekosystem [Baerim](/projects/Baerim).

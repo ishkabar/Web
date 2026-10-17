@@ -114,7 +114,7 @@ jobs:
                   traefik.http.middlewares.forcehttps.redirectscheme.permanent: "true"
                   traefik.http.routers.portfolio.middlewares: "www2apex@docker"
                   traefik.http.middlewares.www2apex.redirectregex.regex: "^https?://www\\.(.*)"
-                  traefik.http.middlewares.www2apex.redirectregex.replacement: "https://$1"
+                  traefik.http.middlewares.www2apex.redirectregex.replacement: "https://$$1"
                   traefik.http.middlewares.www2apex.redirectregex.permanent: "true"
             networks:
               web:
@@ -140,7 +140,7 @@ jobs:
                   - NEXT_PUBLIC_GA_ID=${NEXT_PUBLIC_GA_ID}
                 networks:
                   - web
-                  - ogur-internal
+                  - ogur-internal:
                 labels:
                   traefik.enable: "true"
                   traefik.docker.network: "web"

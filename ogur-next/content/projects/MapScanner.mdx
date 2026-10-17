@@ -1,0 +1,38 @@
+---
+title: "Map Scanner"
+description: "Ogólne narzędzie WPF do odczytu pamięci gry i rysowania na mapie bossów, metinów, graczy, rud, NPC i roślin. Pierwszy przypadek użycia: serwer Metin2 Beavium."
+date: "2026-10-16"
+category: "personal"
+published: true
+---
+
+# Map Scanner
+
+Aplikacja desktopowa w WPF, która odczytuje z procesu gry pozycje obiektów i nanosi je na mapę w czasie rzeczywistym. Narzędzie jest zaprojektowane jako ogólne: zmienia się klient i offsety, reszta aplikacji zostaje. Pierwsze wdrożenie powstało pod klienta serwera Metin2 Beavium.
+
+## Co pokazuje mapa
+
+- bossy,
+- metiny,
+- gracze,
+- rudy,
+- NPC,
+- rośliny.
+
+Każdy typ obiektu ma osobną warstwę i własny znacznik, więc widok można ograniczyć do tego, co akurat jest potrzebne.
+
+## Jak to działa
+
+- Offsety struktur w pamięci klienta wyszukuję w Cheat Engine, a układ struktur odtwarzam w ReClass.NET.
+- Odczytane współrzędne obiektów są przeliczane na współrzędne mapy i rysowane na obrazie mapy w oknie WPF.
+- Warstwa odczytu pamięci jest oddzielona od widoku, żeby pod inną grę lub inny klient podmieniać tylko definicje offsetów.
+
+## Plany
+
+- Obrazy map dołączone do repozytorium, żeby nowy użytkownik nie musiał niczego konfigurować.
+- Paczka dźwięków alertów (np. pojawienie się bossa).
+- Integracja z Ogur.Hub.
+
+## Przykład: Beavium
+
+Beavium to osobny serwer Metin2, niezwiązany z Baerim. To na jego kliencie narzędzie jest dziś dopracowywane i testowane.

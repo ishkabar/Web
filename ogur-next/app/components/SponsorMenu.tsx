@@ -14,6 +14,11 @@ const sponsors = [
         href: "https://www.patreon.com/cw/DominikKarczewski",
         icon: "❤️",
     },
+        {
+            name: "Zrzutka",
+            href: "https://zrzutka.pl/fhyeca",
+            icon: "💚",
+        },
 ];
 
 export const SponsorMenu: React.FC<{
