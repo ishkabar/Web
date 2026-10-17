@@ -7,7 +7,7 @@ ENV NEXT_PUBLIC_GA_ID_PORTFOLIO=$NEXT_PUBLIC_GA_ID_PORTFOLIO
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY portfolio/package.json ./portfolio/
 
-RUN corepack enable && corepack prepare pnpm@latest --activate && \
+RUN corepack enable && corepack prepare pnpm@10.18.2 --activate && \
     pnpm install --frozen-lockfile
 
 COPY portfolio ./portfolio
