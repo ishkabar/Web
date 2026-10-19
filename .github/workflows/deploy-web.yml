@@ -153,7 +153,7 @@ jobs:
                   traefik.http.routers.ogur_http.middlewares: "forcehttps@docker"
                   traefik.http.middlewares.forcehttps.redirectscheme.scheme: "https"
                   traefik.http.middlewares.forcehttps.redirectscheme.permanent: "true"
-                  traefik.http.routers.ogur.middlewares: "www2apex@docker"
+                  traefik.http.routers.ogur.middlewares: "www2apex@docker,rate-limit-web@file,inflight-web@file"
                   traefik.http.middlewares.www2apex.redirectregex.regex: "^https?://www\\.(.*)"
                   traefik.http.middlewares.www2apex.redirectregex.replacement: "https://$$1"
                   traefik.http.middlewares.www2apex.redirectregex.permanent: "true"
